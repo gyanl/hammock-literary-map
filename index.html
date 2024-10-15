@@ -290,41 +290,34 @@
       });
 
 
-      // @angad - how do I run this function as soon as the map loads?
-      // @angad - The search sometimes misses out on some results, and shows some results as duplicates how do I fix that?
-      // @angad - Also probably related but clustered results don't show up at all.
+
 
       function searchAndShowResults(e) {
-        clearSidebar(); // Clear the sidebar before updating with new results
-        if (e.type === 'input') {
-          e?.preventDefault();
-          const searchValue = e?.target?.value?.toLowerCase();
-          if (searchValue?.length ?? 0 > 2) {
-            const filteredFeatures = window.data.features.filter(f => f?.properties?.author_name?.toLowerCase().includes(searchValue) || f?.properties?.work_1?.toLowerCase().includes(searchValue) || f?.properties?.work_2?.toLowerCase().includes(searchValue));
-            // Update the sidebar with the search results
-            if (sidebarauthordetails.style.display === 'none') {
-              setSidebarTitle(filteredFeatures.length + " results");
-            }
-            filteredFeatures.forEach(feature => {
-              addAuthorResult(
-                feature.properties.author_name,
-                feature.properties.city_birth,
-                feature.properties.city_residence,
-                feature.properties.country,
-                feature.properties.year_birth,
-                feature.properties.year_death,
-                feature.properties.work_1,
-                feature.properties.work_2,
-                feature.geometry.coordinates[0],
-                feature.geometry.coordinates[1]
-              );
-            });
+        clearSidebar();
+        let features;
+
+        if (e && e.type === 'input') {
+          e.preventDefault();
+          const searchValue = e.target.value.toLowerCase();
+          if (searchValue.length > 2) {
+            features = window.data.features.filter(f =>
+              f.properties.author_name.toLowerCase().includes(searchValue) ||
+              f.properties.work_1.toLowerCase().includes(searchValue) ||
+              f.properties.work_2.toLowerCase().includes(searchValue)
+            );
+            setSidebarTitle(features.length + " results");
           } else {
             setSidebarTitle("Search for your favourite author");
+            return;
           }
         } else {
-          const visibleFeatures = map.queryRenderedFeatures({ layers: ['unclustered-point', 'clusters'] });
-          visibleFeatures.forEach(feature => {
+          features = map.querySourceFeatures('authors');
+        }
+
+        const uniqueFeatures = _.uniqBy(features, f => f.properties.author_name);
+
+        uniqueFeatures.forEach(feature => {
+          if (feature.properties) {
             addAuthorResult(
               feature.properties.author_name,
               feature.properties.city_birth,
@@ -337,15 +330,34 @@
               feature.geometry.coordinates[0],
               feature.geometry.coordinates[1]
             );
-          });
+          }
+        });
+
+        if (!e || e.type !== 'input') {
+          setSidebarTitle(uniqueFeatures.length + " results");
         }
       }
 
       const throttledSearch = _.throttle(searchAndShowResults, 500);
 
       document.getElementById('search-bar').addEventListener('input', throttledSearch);
-      map.on('moveend', searchAndShowResults);
+      // map.on('moveend', searchAndShowResults);
       map.on('zoomend', searchAndShowResults);
+
+      // Run the search function when the map loads
+      searchAndShowResults();
+    });
+
+    document.getElementById('btnRandom').addEventListener('click', () => {
+      const features = window.data.features;
+      const randomFeature = features[Math.floor(Math.random() * features.length)];
+      
+      if (randomFeature && randomFeature.geometry) {
+        map.flyTo({
+          center: randomFeature.geometry.coordinates,
+          zoom: 5
+        });
+      }
     });
 
   </script>
