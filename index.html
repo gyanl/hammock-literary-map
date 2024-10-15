@@ -26,11 +26,50 @@
   <header class="glass">
     <div class="header-links">
       <img class="logo" src="hammock-white.svg">
-      <div class="header-link">Continent</div>
-      <div class="header-link">Century</div>
-      <div class="header-link">Gender</div>
-      <div class="header-link">Tags</div>
-      <div class="header-link">Awards</div>
+      <div class="header-link dropdown" id="continent-dropdown">
+        Continent
+        <div class="dropdown-content">
+          <label><input type="checkbox" id="africa-checkbox"> Africa</label>
+          <label><input type="checkbox" id="asia-checkbox"> Asia</label>
+          <label><input type="checkbox" id="europe-checkbox"> Europe</label>
+          <label><input type="checkbox" id="north-america-checkbox"> North America</label>
+          <label><input type="checkbox" id="south-america-checkbox"> South America</label>
+          <label><input type="checkbox" id="australia-checkbox"> Australia</label>
+        </div>
+      </div>
+      <div class="header-link dropdown" id="century-dropdown">
+        Century
+        <div class="dropdown-content">
+          <label><input type="checkbox" id="19th-century-checkbox"> 19th Century</label>
+          <label><input type="checkbox" id="20th-century-checkbox"> 20th Century</label>
+          <label><input type="checkbox" id="21st-century-checkbox"> 21st Century</label>
+        </div>
+      </div>
+      <div class="header-link dropdown" id="gender-dropdown">
+        Gender
+        <div class="dropdown-content">
+          <label><input type="checkbox" id="male-checkbox"> Male</label>
+          <label><input type="checkbox" id="female-checkbox"> Female</label>
+          <label><input type="checkbox" id="other-checkbox"> Other</label>
+        </div>
+      </div>
+      <div class="header-link dropdown" id="tags-dropdown">
+        Tags
+        <div class="dropdown-content">
+          <label><input type="checkbox" id="fiction-checkbox"> Fiction</label>
+          <label><input type="checkbox" id="non-fiction-checkbox"> Non-Fiction</label>
+          <label><input type="checkbox" id="poetry-checkbox"> Poetry</label>
+          <label><input type="checkbox" id="drama-checkbox"> Drama</label>
+        </div>
+      </div>
+      <div class="header-link dropdown" id="awards-dropdown">
+        Awards
+        <div class="dropdown-content">
+          <label><input type="checkbox" id="nobel-checkbox"> Nobel Prize</label>
+          <label><input type="checkbox" id="pulitzer-checkbox"> Pulitzer Prize</label>
+          <label><input type="checkbox" id="booker-checkbox"> Booker Prize</label>
+        </div>
+      </div>
     </div>
     <div class="header-controls">
       <input type="text" id="search-bar" placeholder="Search for your favourite author"></input>
@@ -52,6 +91,37 @@
   </div>
 
   <script>
+
+    // Function to toggle dropdown content visibility
+    function toggleDropdown(dropdownId) {
+      const dropdown = document.getElementById(dropdownId);
+      const dropdownContent = dropdown.querySelector('.dropdown-content');
+      dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Add click event listeners to all dropdown headers
+    document.querySelectorAll('.dropdown').forEach(dropdown => {
+      dropdown.addEventListener('click', (event) => {
+        // Prevent the click from propagating to the document
+        event.stopPropagation();
+        toggleDropdown(dropdown.id);
+      });
+    });
+
+    // Close all dropdowns when clicking outside
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.dropdown-content').forEach(content => {
+        content.style.display = 'none';
+      });
+    });
+
+    // Prevent clicks inside dropdown content from closing the dropdown
+    document.querySelectorAll('.dropdown-content').forEach(content => {
+      content.addEventListener('click', (event) => {
+        event.stopPropagation();
+      });
+    });
+
     var title = document.getElementById('sidebar-title');
     var sidebar = document.getElementById('sidebar-body');
     var sidebarauthordetails = document.getElementById('sidebar-author-details');
@@ -299,7 +369,7 @@
         if (e && e.type === 'input') {
           e.preventDefault();
           const searchValue = e.target.value.toLowerCase();
-          if (searchValue.length > 2) {
+          if (searchValue.length > 1) {
             features = window.data.features.filter(f =>
               f.properties.author_name.toLowerCase().includes(searchValue) ||
               f.properties.work_1.toLowerCase().includes(searchValue) ||
@@ -351,7 +421,7 @@
     document.getElementById('btnRandom').addEventListener('click', () => {
       const features = window.data.features;
       const randomFeature = features[Math.floor(Math.random() * features.length)];
-      
+
       if (randomFeature && randomFeature.geometry) {
         map.flyTo({
           center: randomFeature.geometry.coordinates,
