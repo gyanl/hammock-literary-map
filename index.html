@@ -68,6 +68,9 @@
 
     </div>
     <div class="header-controls">
+      <button onclick="toggleFilters()" class="button-primary mobile-only">
+        <img id="filter" width="16px" src="icons/filter.svg"></button>
+    </div>
       <input type="text" id="search-bar" placeholder="Search for your favourite author"></input>
       <button class="button-primary" id="btnRandom"><img src="icons/shuffle.svg"></button>
     </div>
@@ -458,6 +461,38 @@
         updateDropdownCount(dropdownId);
       });
     });
+
+    // Add this function to your existing JavaScript
+    function setupMobileDropdowns() {
+        if (window.innerWidth <= 768) {
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (event) => {
+                if (!event.target.closest('.dropdown')) {
+                    document.querySelectorAll('.dropdown-content').forEach(content => {
+                        content.style.display = 'none';
+                    });
+                    document.querySelectorAll('.dropdown').forEach(dropdown => {
+                        dropdown.classList.remove('header-link-active');
+                    });
+                }
+            });
+
+            // Prevent body scroll when dropdown is open
+            document.querySelectorAll('.dropdown').forEach(dropdown => {
+                dropdown.addEventListener('click', () => {
+                    if (dropdown.classList.contains('header-link-active')) {
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+        }
+    }
+
+    // Call this function when the page loads and on resize
+    window.addEventListener('load', setupMobileDropdowns);
+    window.addEventListener('resize', setupMobileDropdowns);
 
   </script>
 
