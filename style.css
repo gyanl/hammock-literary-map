@@ -1,22 +1,71 @@
 :root {
-    /* Dark Mode Colors */
+    /* Brand Colors */
     --color-primary: #0F6340;
-    --color-green-mid: #2E9A6D;
     --color-secondary: #00ff00;
+    --color-green-mid: #2E9A6D;
     --color-green-light: #67FAAF;
-    --color-background: #000000;
-    --color-mid-gray: #727272;
+    --color-active-green: #28493C;
     --color-accent: #67FAAF;
-    --color-card: rgba(250, 250, 250, 0.95);
+    
+    /* Base Colors */
+    --color-background: #000000;
+    --color-text-primary: #FFFFFF;
+    --color-mid-gray: #727272;
+    
+    /* Transparent Colors */
     --color-foreground: rgba(34, 34, 34, 0.85);
     --color-foreground-2: rgba(96, 96, 96, 0.45);
-    --color-text-primary: #FFFFFF;
+    --color-card: rgba(250, 250, 250, 0.95);
+    --bg-transparent-05: rgba(255, 255, 255, 0.05);
+    --bg-transparent-45: rgba(96, 96, 96, 0.45);
+    
+    /* Dropdown Theme */
+    --dropdown-bg: rgba(23, 23, 23, 0.95);
+    --dropdown-hover: rgba(255, 255, 255, 0.1);
+    --dropdown-badge: rgba(255, 255, 255, 0.2);
+    --dropdown-shadow: rgba(0, 0, 0, 0.2);
+    --dropdown-active-bg: rgba(103, 250, 175, 0.2);
+    
+    /* Spacing & Padding */
     --pad-s: 4px;
     --pad-m: 8px;
     --pad-l: 12px;
     --pad-xl: 16px;
+    --pad-xxl: 24px;
+    
+    /* Border Radius */
+    --radius-s: 4px;
+    --radius-m: 8px;
+    --radius-l: 12px;
+    --radius-xl: 16px;
+    --radius-pill: 24px;
+    
+    /* Typography */
+    --font-size-xs: 12px;
+    --font-size-s: 14px;
+    --font-size-m: 18px;
+    
+    /* Layout Dimensions */
+    --header-height: 84px;
+    --sidebar-width: 360px;
+    --header-link-height: 48px;
+    --border-width: 1px;
+    
+    /* Component-Specific */
+    --header-link-padding: 12px 24px;
+    --header-link-margin: 0 8px;
+    
+    /* Opacity Levels */
+    --opacity-50: 0.5;
+    --opacity-95: 0.95;
+    
+    /* Scrollbar */
     --scroll-active: var(--color-primary);
     --scroll-inactive: rgba(103, 250, 175, 0.6);
+    
+    /* Animation */
+    --transition-default: 0.2s;
+    --animation-timing: cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 @media (prefers-color-scheme: light) {
@@ -38,31 +87,31 @@
 }
 
 .dropdown-content {
-    padding: 4px;
+    padding: var(--pad-s);
     display: none;
     position: absolute;
     top: 100%;
     background-color: var(--color-foreground);
-    border-radius: 0 0 4px 4px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-s) var(--radius-s) var(--radius-s) var(--radius-s);
+    box-shadow: 0 var(--pad-s) var(--pad-m) rgba(0, 0, 0, 0.1);
 }
 
 .dropdown-content label {
     display: block;
-    padding: 4px 8px;
+    padding: var(--pad-s) var(--pad-m);
 }
 
 .glass {
     backdrop-filter: blur(10px);
-    box-shadow: 0 0 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 var(--pad-xl) rgba(0, 0, 0, 0.1);
 }
 
 #chevron {
-    transition: .2s;
+    transition: var(--transition-default);
 }
 
 .fade-in-up {
-    animation: fadeInUp 0.5s ease-in-out;
+    animation: fadeInUp 0.5s var(--animation-timing);
 }
 
 @keyframes fadeInUp {
@@ -111,7 +160,7 @@
 
 h3 {
     font-weight: 400;
-    font-size: 18px;
+    font-size: var(--font-size-m);
     line-height: 1.3em;
     margin-block-start: .8em;
     margin-block-end: .8em;
@@ -127,12 +176,12 @@ body {
     font-optical-sizing: auto;
     font-weight: 500;
     font-style: normal;
-    font-variation-settings:
-        "wdth" 100;
+    font-variation-settings: "wdth" 100;
     background-color: var(--color-background);
     color: var(--color-text-primary);
     line-height: 1.2em;
-    margin: 0 paddding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 
@@ -159,42 +208,42 @@ header {
     top: 0;
     right: 0;
     left: 0;
-    height: 84px;
-    padding-left: 24px;
-    padding-right: 24px;
+    height: var(--header-height);
+    padding-left: var(--pad-xxl);
+    padding-right: var(--pad-xxl);
 }
 
 .header-links {
     display: flex;
-    height: 48px;
+    height: var(--header-link-height);
 }
 
 .header-link {
     line-height: 1.4;
     display: inline-block;
-    padding: 12px 24px 12px 24px;
+    padding: var(--header-link-padding);
     height: auto;
-    margin: 0 8px;
-    border-radius: 24px;
-    transition: .2s;
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0);
+    margin: var(--header-link-margin);
+    border-radius: var(--radius-pill);
+    transition: var(--transition-default);
+    background-color: var(--bg-transparent-05);
+    border: var(--border-width) solid transparent;
 }
 
 .header-link:hover {
-    border: 1px solid var(--color-green-light);
+    border: var(--border-width) solid var(--color-green-light);
 }
 
-.header-link:active{
-    background: #28493C;
+.header-link:active {
+    background: var(--color-active-green);
     color: var(--color-green-light);
-    border: 1px solid rgba(255, 255, 255, 0);
+    border: var(--border-width) solid transparent;
 }
 
-.header-link-active{
-    background: #28493C;
+.header-link-active {
+    background: var(--color-active-green);
     color: var(--color-green-light);
-    border: 1px solid rgba(255, 255, 255, 0);
+    border: var(--border-width) solid transparent;
 }
 
 .header-controls {
@@ -205,15 +254,13 @@ header {
 
 .sidebar {
     position: absolute;
-    width: 360px;
+    width: var(--sidebar-width);
     right: 20px;
     top: 30px;
     max-height: calc(100vh - 140px);
     background-color: var(--color-foreground);
-    margin-top: 80px;
-    border-radius: 16px;
-
-    /* Styling the scrollbar */
+    margin-top: var(--header-height);
+    border-radius: var(--radius-xl);
     scrollbar-width: thin;
     scrollbar-color: var(--color-primary) transparent;
     overflow-y: scroll;
@@ -221,14 +268,14 @@ header {
 
 
 .sidebar-title {
-    padding: 12px 20px;
+    padding: var(--pad-l) var(--pad-xl);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .sidebar-body {
-    margin-bottom: 8px;
+    margin-bottom: var(--pad-m);
 }
 
 /* Track */
