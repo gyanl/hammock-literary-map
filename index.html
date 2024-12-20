@@ -29,12 +29,12 @@
       <div class="header-link dropdown" id="continent-dropdown">
         Continent
         <div class="dropdown-content">
-          <label><input type="checkbox" id="africa-checkbox"> Africa</label>
-          <label><input type="checkbox" id="asia-checkbox"> Asia</label>
           <label><input type="checkbox" id="europe-checkbox"> Europe</label>
           <label><input type="checkbox" id="north-america-checkbox"> North America</label>
           <label><input type="checkbox" id="south-america-checkbox"> South America</label>
-          <label><input type="checkbox" id="australia-checkbox"> Australia</label>
+          <label><input type="checkbox" id="africa-checkbox"> Africa</label>
+          <label><input type="checkbox" id="australia-checkbox"> Australia and Pacific</label>
+          <label><input type="checkbox" id="asia-checkbox"> Asia</label>
         </div>
       </div>
       <div class="header-link dropdown" id="century-dropdown">
@@ -95,6 +95,7 @@
     // Function to toggle dropdown content visibility
     function toggleDropdown(dropdownId) {
       const dropdown = document.getElementById(dropdownId);
+      dropdown.classList.toggle('header-link-active');
       const dropdownContent = dropdown.querySelector('.dropdown-content');
       dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
     }
@@ -411,7 +412,7 @@
       const throttledSearch = _.throttle(searchAndShowResults, 500);
 
       document.getElementById('search-bar').addEventListener('input', throttledSearch);
-      // map.on('moveend', searchAndShowResults);
+      map.on('moveend', searchAndShowResults);
       map.on('zoomend', searchAndShowResults);
 
       // Run the search function when the map loads

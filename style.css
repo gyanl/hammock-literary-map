@@ -4,6 +4,7 @@
         --color-primary: #0F6340;
         --color-green-mid: #2E9A6D;
         --color-secondary: #00ff00;
+        --color-green-light: #67FAAF;
         --color-background: #000000;
         --color-mid-gray: #727272;
         --color-accent: #67FAAF;
@@ -53,7 +54,7 @@
 }
 
 .glass {
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(10px);
     box-shadow: 0 0 16px rgba(0, 0, 0, 0.1);
 }
 
@@ -176,11 +177,25 @@ header {
     height: auto;
     margin: 0 8px;
     border-radius: 24px;
-    transition: .4s;
+    transition: .2s;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0);
 }
 
 .header-link:hover {
-    background-color: var(--color-background);
+    border: 1px solid var(--color-green-light);
+}
+
+.header-link:active{
+    background: #28493C;
+    color: var(--color-green-light);
+    border: 1px solid rgba(255, 255, 255, 0);
+}
+
+.header-link-active{
+    background: #28493C;
+    color: var(--color-green-light);
+    border: 1px solid rgba(255, 255, 255, 0);
 }
 
 .header-controls {
