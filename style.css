@@ -102,8 +102,24 @@
 }
 
 .glass {
-    backdrop-filter: blur(10px);
-    box-shadow: 0 0 var(--pad-xl) rgba(0, 0, 0, 0.1);
+    /* Add hardware acceleration */
+    transform: translateZ(0);
+    will-change: transform;
+    
+    /* Reduce blur radius and add background for better performance */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px); /* Safari support */
+    background-color: rgba(20, 20, 20, 0.75);
+    
+    /* Use more performant box-shadow */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+}
+
+/* Fallback for browsers that don't support backdrop-filter */
+@supports not (backdrop-filter: blur(8px)) {
+    .glass {
+        background-color: rgba(255, 255, 255, 0.8);
+    }
 }
 
 #chevron {
