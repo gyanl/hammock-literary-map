@@ -556,14 +556,16 @@ button {
     display: flex;
     align-items: center;
     gap: var(--pad-m);
-    padding: var(--pad-m) var(--pad-l);
+    padding: var(--pad-m);
     color: var(--color-text-primary);
     cursor: pointer;
     border-radius: var(--radius-s);
+    transition: .15s;
 }
 
 .dropdown-content label:hover {
     background: var(--dropdown-hover);
+    transform: translateY(-2px);
 }
 
 .dropdown-content input[type="checkbox"] {
