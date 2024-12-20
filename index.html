@@ -27,7 +27,7 @@
     <div class="header-links">
       <img class="logo" src="hammock-white.svg">
       <div class="header-link dropdown" id="continent-dropdown">
-        Continent
+        Continents
         <div class="dropdown-content">
           <label><input type="checkbox" id="europe-checkbox"> Europe</label>
           <label><input type="checkbox" id="north-america-checkbox"> North America</label>
@@ -113,6 +113,7 @@
     document.addEventListener('click', () => {
       document.querySelectorAll('.dropdown-content').forEach(content => {
         content.style.display = 'none';
+        dropdown.classList.remove('header-link-active');
       });
     });
 
@@ -429,6 +430,28 @@
           zoom: 5
         });
       }
+    });
+
+    // Function to update the count badge for a dropdown
+    function updateDropdownCount(dropdownId) {
+      const dropdown = document.getElementById(dropdownId);
+      const checkedBoxes = dropdown.querySelectorAll('input[type="checkbox"]:checked').length;
+      
+      if (checkedBoxes > 0) {
+        dropdown.setAttribute('data-count', checkedBoxes);
+        dropdown.classList.add('has-count');
+      } else {
+        dropdown.removeAttribute('data-count');
+        dropdown.classList.remove('has-count');
+      }
+    }
+
+    // Add event listeners to all checkboxes in dropdowns
+    document.querySelectorAll('.dropdown input[type="checkbox"]').forEach(checkbox => {
+      checkbox.addEventListener('change', (event) => {
+        const dropdownId = event.target.closest('.dropdown').id;
+        updateDropdownCount(dropdownId);
+      });
     });
 
   </script>
