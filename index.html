@@ -24,11 +24,11 @@
     Explore the Globe’s Literary Legacy <br>One City at a Time
   </h1>
 
-<div class="center-align">
-  <button id="introButton" type="button" class="bottom-center button-tertiary header-fade-in-down">
-    Get Started
-  </button>
-</div>
+  <div class="center-align">
+    <button id="introButton" type="button" class="bottom-center button-tertiary header-fade-in-down">
+      Get Started
+    </button>
+  </div>
 
   <div id="map"></div>
   <script src="https://unpkg.com/@mapbox/mapbox-sdk/umd/mapbox-sdk.min.js"></script>
@@ -82,26 +82,34 @@
       <button onclick="toggleFilters()" class="button-primary mobile-only">
         <img id="filter" width="16px" src="icons/filter.svg"></button>
     </div>
-      <div id="search-bar">
-        <input type="text" placeholder="Search for your favourite author">
-        <button type="button" class="search-clear" aria-label="Clear search"><img class="icon-x" src="icons/x.svg"></button>
-      </div>
-      <button class="button-secondary" id="btnRandom">
-          <span>Feeling lucky</span>
-          <div class="icon-circle"><img width="16px" src="icons/shuffle.svg" alt="Shuffle icon"></div>
-      </button>
+    <div id="search-bar">
+      <input type="text" placeholder="Search for your favourite author">
+      <button type="button" class="search-clear" aria-label="Clear search"><img class="icon-x"
+          src="icons/x.svg"></button>
+    </div>
+    <button class="button-secondary" id="btnRandom">
+      <span>Feeling lucky</span>
+      <div class="icon-circle"><img width="16px" src="icons/shuffle.svg" alt="Shuffle icon"></div>
+    </button>
     </div>
   </header>
 
-  <div id="sidebar" class="sidebar glass">
+  <div id="sidebar" class="sidebar glass displaynone fade-in-up">
 
-    <div class="sidebar-title">
-      <span id="sidebar-title">Result</span>
+    <div id="sidebar-search-title-container">
+      <span id="sidebar-search-title">
+        Result
+      </span>
       <button onclick="toggleSidebar()" class="button-primary">
         <img id="chevron" width="16px" src="icons/chevron-up.svg"></button>
     </div>
 
-    <div id="sidebar-body" class="sidebar-body"></div>
+    <div id="sidebar-search-results" class="sidebar-body"></div>
+    
+    <div id="sidebar-author-title" class="sidebar-title fade-in-right" onclick="showSearchResults()">
+      <img class="icon-left" src="icons/chevron-left.svg" alt="back"> Back
+    </div>
+    
     <div id="sidebar-author-details" class="sidebar-author-details"></div>
 
   </div>
@@ -150,9 +158,13 @@
       });
     });
 
-    var title = document.getElementById('sidebar-title');
-    var sidebar = document.getElementById('sidebar-body');
-    var sidebarauthordetails = document.getElementById('sidebar-author-details');
+    const searchtitle = document.getElementById('sidebar-search-title');
+    const searchtitlecontainer = document.getElementById('sidebar-search-title-container');
+    const searchresults = document.getElementById('sidebar-search-results');
+
+    const sidebarauthortitle = document.getElementById('sidebar-author-title');
+    const sidebarauthordetails = document.getElementById('sidebar-author-details');
+    
     var titlechevron = document.getElementById('chevron');
 
     fetch('data.geojson').then(response => response.json()).then(data => {
@@ -160,30 +172,36 @@
     });
 
     function toggleSidebar() {
-      sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none';
+      searchresults.style.display = searchresults.style.display === 'none' ? 'block' : 'none';
       titlechevron.style.rotate = titlechevron.style.rotate === '180deg' ? '0deg' : '180deg';
     }
 
     function setSidebarTitle(input) {
-      title.innerHTML = input;
+      searchtitle.innerHTML = input;
     }
 
     function clearSidebar() {
-      sidebar.innerHTML = "";
+      searchresults.innerHTML = "";
     }
 
     function showAuthorDetails() {
-      sidebar.style.display = "none";
+      searchtitlecontainer.style.display = "none";
+      searchresults.style.display = "none";
+
+      sidebarauthortitle.style.display = "flex";
       sidebarauthordetails.style.display = "block";
     }
 
-    function showSidebar() {
-      sidebar.style.display = "block";
+    function showSearchResults() {
+      searchtitlecontainer.style.display = "flex";
+      searchresults.style.display = "block";
+
+      sidebarauthortitle.style.display = "none";
       sidebarauthordetails.style.display = "none";
     }
 
     function backToTheResults() {
-      showSidebar();
+      showSearchResults();
       map.flyTo({
         zoom: 4
       });
@@ -198,7 +216,7 @@
             <p>${work1}</p>
             <p>${work2}</p>
           </div>`;
-      sidebar.innerHTML += authorDetails;
+          searchresults.innerHTML += authorDetails;
     }
 
     function getCentury(year) {
@@ -215,10 +233,9 @@
 
     //shows full author details in sidebar
     function setAuthorDetails(name, city_birth, city_residence, country, year_birth, year_death, work1, work2, lat, long) {
-      flyTo(long, lat, 7);
+      map.flyTo(long, lat, 7);
       showAuthorDetails();
 
-      title.innerHTML = "<div onclick='backToTheResults()'>Back to Results</div>";
       sidebarauthordetails.innerHTML = `
         <h3>${name}</h3>
         <p class="text-label padtop">Author of</p>
@@ -258,7 +275,7 @@
     // Add this after map initialization
     map.on('load', function () {
       // Animate to the desired zoom level
-      document.getElementById('introButton').addEventListener('click', function() {
+      document.getElementById('introButton').addEventListener('click', function () {
 
         console.log("Hi");
         document.getElementById('introButton').classList.remove("header-fade-in-down");
@@ -272,10 +289,11 @@
           duration: 1600 // Duration in milliseconds
         });
 
-      setTimeout(() => {
-        document.getElementById('introButton').style.display = 'none';
-        document.getElementById('introText').style.display = 'none';
-      }, 1000);
+        setTimeout(() => {
+          document.getElementById('sidebar').classList.remove('displaynone');
+          document.getElementById('introButton').style.display = 'none';
+          document.getElementById('introText').style.display = 'none';
+        }, 1000);
 
       });
 
@@ -364,7 +382,7 @@
           coordinates[0],
           coordinates[1]
         );
-        showSidebar();
+        showSearchResults();
 
         // Ensure that if the map is zoomed out such that multiple copies of the feature are visible, the popup appears over the copy being pointed to.
         while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
@@ -399,7 +417,7 @@
             );
           });
         });
-        showSidebar();
+        showSearchResults();
       });
 
 
@@ -477,7 +495,7 @@
     function updateDropdownCount(dropdownId) {
       const dropdown = document.getElementById(dropdownId);
       const checkedBoxes = dropdown.querySelectorAll('input[type="checkbox"]:checked').length;
-      
+
       if (checkedBoxes > 0) {
         dropdown.setAttribute('data-count', checkedBoxes);
         dropdown.classList.add('has-count');
@@ -497,30 +515,30 @@
 
     // Add this function to your existing JavaScript
     function setupMobileDropdowns() {
-        if (window.innerWidth <= 768) {
-            // Close dropdown when clicking outside
-            document.addEventListener('click', (event) => {
-                if (!event.target.closest('.dropdown')) {
-                    document.querySelectorAll('.dropdown-content').forEach(content => {
-                        content.style.display = 'none';
-                    });
-                    document.querySelectorAll('.dropdown').forEach(dropdown => {
-                        dropdown.classList.remove('header-link-active');
-                    });
-                }
+      if (window.innerWidth <= 768) {
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (event) => {
+          if (!event.target.closest('.dropdown')) {
+            document.querySelectorAll('.dropdown-content').forEach(content => {
+              content.style.display = 'none';
             });
-
-            // Prevent body scroll when dropdown is open
             document.querySelectorAll('.dropdown').forEach(dropdown => {
-                dropdown.addEventListener('click', () => {
-                    if (dropdown.classList.contains('header-link-active')) {
-                        document.body.style.overflow = 'hidden';
-                    } else {
-                        document.body.style.overflow = '';
-                    }
-                });
+              dropdown.classList.remove('header-link-active');
             });
-        }
+          }
+        });
+
+        // Prevent body scroll when dropdown is open
+        document.querySelectorAll('.dropdown').forEach(dropdown => {
+          dropdown.addEventListener('click', () => {
+            if (dropdown.classList.contains('header-link-active')) {
+              document.body.style.overflow = 'hidden';
+            } else {
+              document.body.style.overflow = '';
+            }
+          });
+        });
+      }
     }
 
     // Call this function when the page loads and on resize
@@ -528,26 +546,26 @@
     window.addEventListener('resize', setupMobileDropdowns);
 
     document.addEventListener('DOMContentLoaded', () => {
-        const searchBar = document.querySelector('#search-bar');
-        const searchInput = searchBar.querySelector('input[type="text"]');
-        const clearButton = searchBar.querySelector('.search-clear');
+      const searchBar = document.querySelector('#search-bar');
+      const searchInput = searchBar.querySelector('input[type="text"]');
+      const clearButton = searchBar.querySelector('.search-clear');
 
-        // Show/hide clear button based on input content
-        searchInput.addEventListener('input', () => {
-            clearButton.style.display = searchInput.value ? 'block' : 'none';
-        });
+      // Show/hide clear button based on input content
+      searchInput.addEventListener('input', () => {
+        clearButton.style.display = searchInput.value ? 'block' : 'none';
+      });
 
-        // Clear input when button is clicked
-        clearButton.addEventListener('click', () => {
-            searchInput.value = '';
-            clearButton.style.display = 'none';
-            searchInput.focus();
-            // Trigger the search update
-            searchInput.dispatchEvent(new Event('input'));
-        });
-
-        // Initialize clear button visibility
+      // Clear input when button is clicked
+      clearButton.addEventListener('click', () => {
+        searchInput.value = '';
         clearButton.style.display = 'none';
+        searchInput.focus();
+        // Trigger the search update
+        searchInput.dispatchEvent(new Event('input'));
+      });
+
+      // Initialize clear button visibility
+      clearButton.style.display = 'none';
     });
 
   </script>
