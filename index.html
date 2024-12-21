@@ -318,15 +318,7 @@
         filter: ['has', 'point_count'],
         //Probably don't need this actually
         paint: {
-          'circle-color': [
-            'step',
-            ['get', 'point_count'],
-            '#67FAAF',
-            100,
-            '#f1f075',
-            750,
-            '#f28cb1'
-          ],
+          'circle-color': '#67FAAF',
           //Step function to set radius of unclustered circles
           'circle-radius': [
             'step',
