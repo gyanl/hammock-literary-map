@@ -169,6 +169,7 @@
 
     const sidebarauthortitle = document.getElementById('sidebar-author-title');
     const sidebarauthordetails = document.getElementById('sidebar-author-details');
+    
 
     var titlechevron = document.getElementById('chevron');
 
@@ -287,10 +288,8 @@
       document.getElementById('introButton').addEventListener('click', function () {
 
         console.log("Hi");
-        document.getElementById('introButton').classList.remove("header-fade-in-down");
-        document.getElementById('introButton').classList.add("goAwayBottom");
-        document.getElementById('introText').classList.remove("header-fade-in-up");
-        document.getElementById('introText').classList.add("goAwayTop");
+        introButton.classList.replace("header-fade-in-down", "goAwayBottom");
+        introText.classList.replace("header-fade-in-up", "goAwayTop");
 
         map.easeTo({
           zoom: 3,
