@@ -1,0 +1,428 @@
+/* ============================== */
+/* 1. Root Variables & Preferences */
+/* ============================== */
+
+:root {
+  /* Brand Colors */
+  --color-primary: #0F6340;
+  --color-secondary: #00ff00;
+  --color-green-mid: #2E9A6D;
+  --color-green-light: #67FAAF;
+  --color-active-green: #28493C;
+  --color-accent: #67FAAF;
+
+  /* Base Colors */
+  --color-background: #000000;
+  --color-text-primary: #FFFFFF;
+  --color-mid-gray: #727272;
+
+  /* Transparent Colors */
+  --color-foreground: rgba(34, 34, 34, 0.85);
+  --color-foreground-2: rgba(96, 96, 96, 0.45);
+  --color-card: rgba(250, 250, 250, 0.95);
+  --bg-transparent-05: rgba(255, 255, 255, 0.05);
+  --bg-transparent-45: rgba(96, 96, 96, 0.45);
+
+  /* Dropdown Theme */
+  --dropdown-bg: rgba(23, 23, 23, 0.95);
+  --dropdown-hover: rgba(255, 255, 255, 0.1);
+  --dropdown-badge: rgba(0, 0, 0, 0.75);
+  --dropdown-shadow: rgba(0, 0, 0, 0.25);
+  --dropdown-active-bg: rgba(103, 250, 175, 0.2);
+
+  /* Spacing & Padding */
+  --pad-s: 4px;
+  --pad-m: 8px;
+  --pad-l: 12px;
+  --pad-xl: 16px;
+  --pad-xxl: 20px;
+
+  /* Border Radius */
+  --radius-s: 4px;
+  --radius-m: 8px;
+  --radius-l: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 100px;
+
+  /* Typography */
+  --font-size-xs: 12px;
+  --font-size-s: 14px;
+  --font-size-m: 18px;
+
+  /* Layout Dimensions */
+  --header-height: 84px;
+  --sidebar-width: 360px;
+  --header-link-height: 48px;
+  --border-width: 1px;
+
+  /* Opacity Levels */
+  --opacity-50: 0.5;
+  --opacity-95: 0.95;
+
+  /* Scrollbar */
+  --scroll-active: var(--color-primary);
+  --scroll-inactive: rgba(103, 250, 175, 0.6);
+
+  /* Animation */
+  --transition-default: 0.2s;
+  --animation-timing: cubic-bezier(0.075, 0.82, 0.165, 1);
+
+  /* Mobile Specific */
+  --mobile-header-height: 60px;
+  --mobile-padding: 16px;
+  --mobile-dropdown-width: calc(100% - 32px);
+}
+
+/* Respect user preference: reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* OPTIONAL: Light-mode overrides (commented out for now)
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-primary: #FFFFFF;
+    --color-green-mid: #2E9A6D;
+    --color-secondary: #00ff00;
+    --color-background: #F0F0F0;
+    --color-mid-gray: #727272;
+    --color-accent: #67FAAF;
+    --color-card: rgba(34, 34, 34, 0.85);
+    --color-foreground: rgba(250, 250, 250, 0.95);
+    --color-foreground-2: rgba(96, 96, 96, 0.45);
+    --color-text-primary: #000000;
+    --scroll-active: var(--color-primary);
+    --scroll-inactive: rgba(103, 250, 175, 0.6);
+  }
+}
+*/
+
+/* ====================== */
+/* 2. Global Base & Setup */
+/* ====================== */
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Body setup */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Instrument Sans", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+  font-optical-sizing: auto;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  line-height: 1.2em;
+}
+
+/* Utility classes */
+.displaynone { display: none; }
+.center-align {
+  display: flex;
+  justify-content: center;
+}
+.mobile-only { display: none; }
+.bottom-center {
+  z-index: 100;
+  position: absolute;
+  bottom: 40px;
+}
+
+/* Basic default scrollbar styling */
+.scrollbar {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: var(--scroll-active) transparent;
+}
+.scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.scrollbar::-webkit-scrollbar-thumb {
+  background: var(--scroll-active);
+  border-radius: 8px;
+}
+
+/* ====================== */
+/* 3. Headings & Text */
+/* ====================== */
+
+h1 {
+  z-index: 100;
+  font-size: 36px;
+  font-weight: 100;
+  position: absolute;
+  line-height: 1.3;
+  text-align: center;
+  width: 100%;
+  top: 12%;
+}
+
+h3 {
+  font-weight: 400;
+  font-size: var(--font-size-m);
+  line-height: 1.3em;
+  margin-block-start: 0.8em;
+  margin-block-end: 0.8em;
+}
+
+p {
+  margin-block-start: 0.8em;
+  margin-block-end: 0.8em;
+}
+
+/* ====================== */
+/* 4. Layout Elements */
+/* ====================== */
+
+/* Map positioning */
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 0;
+}
+
+/* Navigation / Glass Panel */
+.glass {
+  background-color: var(--color-foreground);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Header links styles (dropdown triggers) */
+.header-link {
+  background-color: var(--bg-transparent-05);
+  padding: var(--pad-m) var(--pad-l);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--color-text-primary);
+  border: var(--border-width) solid transparent;
+  transition: var(--transition-default) var(--animation-timing);
+}
+.header-link:hover {
+  border: var(--border-width) solid var(--color-green-light);
+  transform: translateY(-2px);
+}
+.header-link-active {
+  background: var(--color-active-green);
+  color: var(--color-green-light);
+  border: var(--border-width) solid transparent;
+}
+
+/* Header Controls */
+.header-controls {
+  display: flex;
+}
+
+/* Dropdown component */
+.dropdown {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  padding: var(--pad-m) var(--pad-xl);
+  border-radius: var(--radius-pill);
+  background: var(--dropdown-hover);
+}
+.dropdown.header-link-active {
+  background: var(--dropdown-active-bg);
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: var(--pad-m);
+  min-width: 200px;
+  background: var(--dropdown-bg);
+  border-radius: var(--radius-l);
+  padding: var(--pad-m);
+  box-shadow: 0 4px 12px var(--dropdown-shadow);
+  z-index: 1000;
+}
+.dropdown-content label {
+  display: flex;
+  align-items: center;
+  gap: var(--pad-m);
+  padding: var(--pad-m);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  border-radius: var(--radius-s);
+  transition: 0.15s;
+}
+.dropdown-content label:hover {
+  background: var(--dropdown-hover);
+  transform: translateY(-2px);
+}
+.dropdown-content input[type="checkbox"] {
+  accent-color: var(--color-accent);
+}
+
+/* Badge for dropdowns */
+.dropdown::after {
+  content: none; /* Default is none unless needed */
+}
+.dropdown.has-count::after {
+  content: attr(data-count);
+  background: var(--dropdown-badge);
+  border-radius: var(--radius-pill);
+  padding: 2px 6px;
+  margin-left: var(--pad-s);
+  font-size: var(--font-size-xs);
+  box-shadow: 0px 4px 4px var(--dropdown-shadow);
+}
+
+/* Sidebar Styles */
+.sidebar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--sidebar-width);
+  height: 100%;
+  padding: var(--pad-m);
+  overflow-y: auto;
+  background-color: var(--color-foreground);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 10;
+}
+
+/* Sidebar Header */
+#sidebar-search-title-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#sidebar-search-title {
+  font-size: var(--font-size-m);
+  font-weight: bold;
+}
+.sidebar-body {
+  margin-top: var(--pad-m);
+}
+
+/* Button styles */
+.button-primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-primary);
+  border: none;
+  padding: var(--pad-s) var(--pad-l);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+.button-secondary {
+  background-color: var(--bg-transparent-05);
+  color: var(--color-text-primary);
+  padding: var(--pad-s) var(--pad-l);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+.button-tertiary {
+  background-color: var(--color-active-green);
+  color: var(--color-green-light);
+  padding: var(--pad-s) var(--pad-l);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+/* Search Bar Styles */
+#search-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--pad-m);
+}
+#search-bar input[type="text"] {
+  width: 200px;
+  padding: var(--pad-s) var(--pad-m);
+  border-radius: var(--radius-pill);
+  border: var(--border-width) solid var(--bg-transparent-05);
+  background-color: var(--bg-transparent-05);
+  color: var(--color-text-primary);
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  html {
+    overscroll-behavior: none;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    z-index: 100;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--mobile-padding);
+    height: auto;
+    gap: var(--pad-m);
+  }
+
+  .header-links {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: auto;
+    gap: var(--pad-s);
+  }
+
+  .header-controls {
+    width: 100%;
+    display: flex;
+    gap: var(--pad-s);
+  }
+
+  nav.glass {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pad-m);
+  }
+
+  #search-bar {
+    width: 100%;
+    padding: 0 var(--pad-s);
+  }
+  #search-bar input[type="text"] {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .mobile-only {
+    display: block;
+  }
+
+  #map {
+    position: inline;
+    top: 0;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    margin: 0;
+    border-radius: var(--radius-l);
+  }
+
+  .sidebar {
+    width: 100%;
+    max-height: 40%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    border-radius: var(--radius-l) var(--radius-l) 0 0;
+  }
+
+  #sidebar-search-title-container {
+    padding: var(--pad-m);
+  }
+} 
