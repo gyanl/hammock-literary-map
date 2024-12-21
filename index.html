@@ -105,11 +105,11 @@
     </div>
 
     <div id="sidebar-search-results" class="sidebar-body"></div>
-    
-    <div id="sidebar-author-title" class="sidebar-title fade-in-right" onclick="showSearchResults()">
+
+    <div id="sidebar-author-title" class="sidebar-title fade-in-right" onclick="backToTheResults()">
       <img class="icon-left" src="icons/chevron-left.svg" alt="back"> Back
     </div>
-    
+
     <div id="sidebar-author-details" class="sidebar-author-details"></div>
 
   </div>
@@ -164,7 +164,7 @@
 
     const sidebarauthortitle = document.getElementById('sidebar-author-title');
     const sidebarauthordetails = document.getElementById('sidebar-author-details');
-    
+
     var titlechevron = document.getElementById('chevron');
 
     fetch('data.geojson').then(response => response.json()).then(data => {
@@ -203,7 +203,7 @@
     function backToTheResults() {
       showSearchResults();
       map.flyTo({
-        zoom: 4
+        zoom: 3
       });
     }
 
@@ -216,7 +216,7 @@
             <p>${work1}</p>
             <p>${work2}</p>
           </div>`;
-          searchresults.innerHTML += authorDetails;
+      searchresults.innerHTML += authorDetails;
     }
 
     function getCentury(year) {
@@ -233,8 +233,12 @@
 
     //shows full author details in sidebar
     function setAuthorDetails(name, city_birth, city_residence, country, year_birth, year_death, work1, work2, lat, long) {
-      map.flyTo(long, lat, 7);
+      map.flyTo({
+        center: [lat, long], // Corrected to use an object with 'center' property
+        zoom: 6
+      });
       showAuthorDetails();
+
 
       sidebarauthordetails.innerHTML = `
         <h3>${name}</h3>
