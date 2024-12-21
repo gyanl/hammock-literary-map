@@ -69,6 +69,33 @@
     --mobile-dropdown-width: calc(100% - 32px);
 }
 
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none;
+        transition: none;
+    }
+}
+
+/* Add smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Cross-browser scrollbar styles */
+.scrollbar {
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: var(--scroll-active) transparent;
+}
+
+.scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    background: var(--scroll-active);
+    border-radius: 8px;
+}
+
 @media (prefers-color-scheme: light) {
     :root {
         /* Light Mode Colors */
@@ -135,7 +162,7 @@ h1 {
 /* Fallback for browsers that don't support backdrop-filter */
 @supports not (backdrop-filter: blur(8px)) {
     .glass {
-        background-color: rgba(255, 255, 255, 0.8);
+        background-color: rgba(20, 20, 20, 0.85); /* Fallback */
     }
 }
 
