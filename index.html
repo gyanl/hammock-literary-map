@@ -24,6 +24,8 @@
     Explore the Globe’s Literary Legacy <br>One City at a Time
   </h1>
 
+
+
   <div id="map"></div>
   <script src="https://unpkg.com/@mapbox/mapbox-sdk/umd/mapbox-sdk.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
@@ -130,7 +132,8 @@
 
     // Close all dropdowns when clicking outside
     document.addEventListener('click', () => {
-      document.querySelectorAll('.dropdown-content').forEach(content => {
+      document.querySelectorAll('.dropdown').forEach(dropdown => {
+        const content = dropdown.querySelector('.dropdown-content');
         content.style.display = 'none';
         dropdown.classList.remove('header-link-active');
       });
@@ -251,13 +254,13 @@
     // Add this after map initialization
     map.on('load', function () {
       // Animate to the desired zoom level
-      setTimeout(() => {
-        map.easeTo({
-          zoom: 3,
-          center: [78.0000, 29.0000],
-          duration: 3000 // Duration in milliseconds (3 seconds)
-        });
-      }, 2000); // Wait 3 seconds before starting animation
+      // setTimeout(() => {
+      //   map.easeTo({
+      //     zoom: 3,
+      //     center: [78.0000, 29.0000],
+      //     duration: 3000 // Duration in milliseconds (3 seconds)
+      //   });
+      // }, 2000); // Wait 3 seconds before starting animation
 
       // Rest of your existing map.on('load') code...
       map.addSource('authors', {
