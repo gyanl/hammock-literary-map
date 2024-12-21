@@ -18,15 +18,7 @@
   <!-- Scripts -->
 
   <script src="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.js"></script>
-  <script src="https://raw.githubusercontent.com/Airtable/airtable.js/master/build/airtable.browser.js"></script>
   <script src="https://unpkg.com/@mapbox/mapbox-sdk/umd/mapbox-sdk.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
-
-  <!-- Custom Scripts (also deferred) -->
-  <script defer src="js/map.js"></script>
-  <script defer src="js/dropdown.js"></script>
-  <script defer src="js/search.js"></script>
-  <script defer src="js/main.js"></script>
 
 </head>
 
@@ -451,9 +443,7 @@
           features = map.querySourceFeatures('authors');
         }
 
-        const uniqueFeatures = _.uniqBy(features, f => f.properties.author_name);
-
-        uniqueFeatures.forEach(feature => {
+        features.forEach(feature => {
           if (feature.properties) {
             addAuthorResult(
               feature.properties.author_name,
@@ -471,13 +461,11 @@
         });
 
         if (!e || e.type !== 'input') {
-          setSidebarTitle(uniqueFeatures.length + " results");
+          setSidebarTitle(features.length + " results");
         }
       }
 
-      const throttledSearch = _.throttle(searchAndShowResults, 500);
-
-      document.getElementById('search-bar').addEventListener('input', throttledSearch);
+      document.getElementById('search-bar').addEventListener('input', searchAndShowResults);
       map.on('moveend', searchAndShowResults);
       map.on('zoomend', searchAndShowResults);
 
