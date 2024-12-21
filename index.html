@@ -20,11 +20,15 @@
 
 <body>
 
-  <h1 class="landing header-fade-in-up">
+  <h1 id="introText" class="landing header-fade-in-up">
     Explore the Globe’s Literary Legacy <br>One City at a Time
   </h1>
 
-
+<div class="center-align">
+  <button id="introButton" type="button" class="bottom-center button-tertiary header-fade-in-down">
+    Get Started
+  </button>
+</div>
 
   <div id="map"></div>
   <script src="https://unpkg.com/@mapbox/mapbox-sdk/umd/mapbox-sdk.min.js"></script>
@@ -254,13 +258,26 @@
     // Add this after map initialization
     map.on('load', function () {
       // Animate to the desired zoom level
-      // setTimeout(() => {
-      //   map.easeTo({
-      //     zoom: 3,
-      //     center: [78.0000, 29.0000],
-      //     duration: 3000 // Duration in milliseconds (3 seconds)
-      //   });
-      // }, 2000); // Wait 3 seconds before starting animation
+      document.getElementById('introButton').addEventListener('click', function() {
+
+        console.log("Hi");
+        document.getElementById('introButton').classList.remove("header-fade-in-down");
+        document.getElementById('introButton').classList.add("goAwayBottom");
+        document.getElementById('introText').classList.remove("header-fade-in-up");
+        document.getElementById('introText').classList.add("goAwayTop");
+
+        map.easeTo({
+          zoom: 3,
+          center: [78.0000, 29.0000],
+          duration: 1600 // Duration in milliseconds
+        });
+
+      setTimeout(() => {
+        document.getElementById('introButton').style.display = 'none';
+        document.getElementById('introText').style.display = 'none';
+      }, 1000);
+
+      });
 
       // Rest of your existing map.on('load') code...
       map.addSource('authors', {
