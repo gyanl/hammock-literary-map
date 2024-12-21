@@ -19,6 +19,11 @@
 </head>
 
 <body>
+
+  <h1 class="landing header-fade-in-up">
+    Explore the Globe’s Literary Legacy <br>One City at a Time
+  </h1>
+
   <div id="map"></div>
   <script src="https://unpkg.com/@mapbox/mapbox-sdk/umd/mapbox-sdk.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
@@ -73,6 +78,7 @@
     </div>
       <div id="search-bar">
         <input type="text" placeholder="Search for your favourite author">
+        <button type="button" class="search-clear" aria-label="Clear search"><img class="icon-x" src="icons/x.svg"></button>
       </div>
       <button class="button-secondary" id="btnRandom">
           <span>Feeling lucky</span>
@@ -237,21 +243,23 @@
 
     const map = new mapboxgl.Map({
       container: 'map',
-      style: 'mapbox://styles/gyanl/cls90czva01au01pld9fc7b5x', // Style defined via mapbox editor
-      center: [78.0000, 28.0000], // Approximately India. @angad would be nice to have this automatically set to the user's location.
-      zoom: 3
+      style: 'mapbox://styles/gyanl/cls90czva01au01pld9fc7b5x',
+      center: [2.0000, 89.0000],
+      zoom: .5
     });
 
-    // Fly to a specific location on the map
-    function flyTo(latitude, longitude, zoom) {
-      map.flyTo({
-        center: [longitude, latitude],
-        zoom: zoom
-      });
-    }
-
+    // Add this after map initialization
     map.on('load', function () {
-      // Add a new source from our GeoJSON data and set the 'cluster' option to true.
+      // Animate to the desired zoom level
+      setTimeout(() => {
+        map.easeTo({
+          zoom: 3,
+          center: [78.0000, 29.0000],
+          duration: 3000 // Duration in milliseconds (3 seconds)
+        });
+      }, 2000); // Wait 3 seconds before starting animation
+
+      // Rest of your existing map.on('load') code...
       map.addSource('authors', {
         type: 'geojson',
         data: 'data.geojson', // Path to GeoJSON file
@@ -498,6 +506,29 @@
     // Call this function when the page loads and on resize
     window.addEventListener('load', setupMobileDropdowns);
     window.addEventListener('resize', setupMobileDropdowns);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchBar = document.querySelector('#search-bar');
+        const searchInput = searchBar.querySelector('input[type="text"]');
+        const clearButton = searchBar.querySelector('.search-clear');
+
+        // Show/hide clear button based on input content
+        searchInput.addEventListener('input', () => {
+            clearButton.style.display = searchInput.value ? 'block' : 'none';
+        });
+
+        // Clear input when button is clicked
+        clearButton.addEventListener('click', () => {
+            searchInput.value = '';
+            clearButton.style.display = 'none';
+            searchInput.focus();
+            // Trigger the search update
+            searchInput.dispatchEvent(new Event('input'));
+        });
+
+        // Initialize clear button visibility
+        clearButton.style.display = 'none';
+    });
 
   </script>
 
