@@ -421,54 +421,28 @@
 
 
 
-      // Add debounce function
-      function debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-          const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-          };
-          clearTimeout(timeout);
-          timeout = setTimeout(later, wait);
-        };
-      }
-
-      // Optimize search function
       function searchAndShowResults(e) {
         clearSidebar();
-        
+        let features;
+
         if (e && e.type === 'input') {
-          const searchValue = e.target.value.toLowerCase().trim();
-          if (searchValue.length <= 1) {
+          e.preventDefault();
+          const searchValue = e.target.value.toLowerCase();
+          if (searchValue.length > 1) {
+            features = window.data.features.filter(f =>
+              f.properties.author_name.toLowerCase().includes(searchValue) ||
+              f.properties.work_1.toLowerCase().includes(searchValue) ||
+              f.properties.work_2.toLowerCase().includes(searchValue)
+            );
+            setSidebarTitle(features.length + " results");
+          } else {
             setSidebarTitle("Search for your favourite author");
             return;
           }
-
-          // Create search index if it doesn't exist
-          if (!window.searchIndex) {
-            window.searchIndex = window.data.features.map(f => ({
-              ...f,
-              searchText: `${f.properties.author_name} ${f.properties.work_1} ${f.properties.work_2}`.toLowerCase()
-            }));
-          }
-
-          // More efficient filtering
-          const features = window.searchIndex.filter(f => 
-            f.searchText.includes(searchValue)
-          );
-          
-          setSidebarTitle(`${features.length} results`);
-          displayResults(features);
         } else {
-          const features = map.querySourceFeatures('authors');
-          displayResults(features);
-          setSidebarTitle(`${features.length} results`);
+          features = map.querySourceFeatures('authors');
         }
-      }
 
-      // Separate display logic
-      function displayResults(features) {
         features.forEach(feature => {
           if (feature.properties) {
             addAuthorResult(
@@ -485,11 +459,15 @@
             );
           }
         });
+
+        if (!e || e.type !== 'input') {
+          setSidebarTitle(features.length + " results");
+        }
       }
 
-      // Use debounced search for input
-      const debouncedSearch = debounce(searchAndShowResults, 250);
-      document.getElementById('search-bar').addEventListener('input', debouncedSearch);
+      document.getElementById('search-bar').addEventListener('input', searchAndShowResults);
+      map.on('moveend', searchAndShowResults);
+      map.on('zoomend', searchAndShowResults);
 
       // Run the search function when the map loads
       searchAndShowResults();
