@@ -39,7 +39,7 @@
 
 
   <header class="glass">
-    <img id="logo" class="logo" src="hammock-white.svg">
+    <img id="logo" class="logo" src="hammock-white.png">
     <div class="header-links">
 
 
@@ -79,22 +79,22 @@
           <label><input type="checkbox" id="english-checkbox"> English</label>
           <label><input type="checkbox" id="hindi-checkbox"> Hindi</label>
           <label><input type="checkbox" id="french-checkbox"> French</label>
-        </div>w
+        </div>
       </div>
 
     </div>
 
     <div id="search-bar">
-      <input type="text" placeholder="Search for authors or books" enterkeyhint="search">
-      <button type="button" class="search-clear" aria-label="Clear search"><img class="icon-x"
-          src="icons/x.svg"></button>
-      </div>
+      <input id="search-input" type="text" placeholder="Search" enterkeyhint="search">
+      <button id="search-clear" type="button" class="search-clear" aria-label="Clear search">
+        <img class="icon-x" src="icons/x.svg"></button>
+    </div>
     <button class="button-secondary desktop-only" id="btnRandom">
       <span>Feeling lucky</span>
       <div class="icon-circle"><img width="16px" src="icons/shuffle.svg" alt="Shuffle icon"></div>
     </button>
 
-    <div id="filter" class="header-controls">
+    <div id="filter" class="header-controls mobile-only">
       <button onclick="toggleFilters()" class="button-primary mobile-only">
         <img width="16px" src="icons/filter.svg">
       </button>
@@ -126,8 +126,12 @@
   <script>
 
     // Convenient names for the elements
-    const searchbar = document.getElementById('search-bar');
+    const logo = document.getElementById('logo');
     const filter = document.getElementById('filter');
+
+    const searchBar = document.querySelector('#search-bar');
+    const searchInput = document.getElementById('search-input');
+    const clearButton = document.getElementById('search-clear');
 
     const searchtitle = document.getElementById('sidebar-search-title');
     const searchtitlecontainer = document.getElementById('sidebar-search-title-container');
@@ -138,10 +142,11 @@
 
     const titlechevron = document.getElementById('chevron');
 
-    const logo = document.getElementById('logo');
+
 
     const mobileBreakpoint = 768;
 
+    const headerLinks = document.querySelector('.header-links');
 
 
     // Function to toggle dropdown content visibility
@@ -229,10 +234,13 @@
 
     // Shows results in sidebar and zooms out on map
     function backToTheResults() {
+      console.log('%c[backToTheResults] Called', 'color: #0af');
+
       showSearchResults();
       map.flyTo({
         zoom: 3
       });
+      console.log('[backToTheResults] -> showSearchResults() called, map flyTo zoom=3');
     }
 
     // Appends author result to sidebar
@@ -647,36 +655,109 @@
     window.addEventListener('load', setupMobileDropdowns);
     window.addEventListener('resize', setupMobileDropdowns);
 
+
+
     document.addEventListener('DOMContentLoaded', () => {
-      const searchBar = document.querySelector('#search-bar');
-      const searchInput = searchBar.querySelector('input[type="text"]');
-      const clearButton = searchBar.querySelector('.search-clear');
 
       // Show/hide clear button based on input content
       searchInput.addEventListener('input', () => {
-        clearButton.style.display = searchInput.value ? 'block' : 'none';
-      });
-
-      // Clear input when button is clicked
-      clearButton.addEventListener('click', () => {
-        searchInput.value = '';
-        clearButton.style.display = 'none';
-
-        // Show logo and filter on mobile when x is clicked
-      if (window.innerWidth <= mobileBreakpoint) {
-        logo.style.display = 'block';
-        searchbar.style.width = 'auto';
-        filter.style.display = 'block';
-      }
-
-        backToTheResults();
-        searchInput.focus();
-        // Trigger the search update
-        searchInput.dispatchEvent(new Event('input'));
+        if (window.innerWidth >= mobileBreakpoint) {
+          clearButton.style.display = searchInput.value ? 'block' : 'none';
+        }
       });
 
       // Initialize clear button visibility
-      clearButton.style.display = 'none';
+      if (window.innerWidth >= mobileBreakpoint) {
+        clearButton.style.display = searchInput.value ? 'block' : 'none';
+      }
+
+    // When search bar is clicked, hide logo and filter on mobile
+    searchBar.addEventListener('click', () => {
+      if (window.innerWidth <= mobileBreakpoint) {
+        logo.style.display = 'none';
+        filter.style.display = 'none';
+        clearButton.style.display = 'block';
+      }
+    });
+
+    clearButton.addEventListener('click', () => {
+      console.log('%c[clearButton] Clicked', 'color: #0af');
+
+      console.log(
+        '[clearButton]',
+        'searchInput.value before clearing:', 
+        searchInput.value
+      );
+
+      // Check if we have a value. If so, call backToTheResults().
+      if (searchInput.value !== '') {
+        console.log('[clearButton] Calling backToTheResults()');
+        backToTheResults();
+      }
+
+      // Remove focus from the input
+      searchInput.blur();
+
+      // Force an 'input' event to re-trigger search logic
+      console.log('[clearButton] Dispatching "input" event on searchInput');
+      searchInput.dispatchEvent(new Event('input'));
+
+      // Clear the search box
+      searchInput.value = '';
+
+      // Check the mobile breakpoint
+      console.log('[clearButton]', 'window.innerWidth:', window.innerWidth, 'mobileBreakpoint:', mobileBreakpoint);
+
+      // Debug the current inline display for logo and filter BEFORE we modify them
+      console.log(
+        '[clearButton]',
+        'logo.style.display BEFORE:', `"${logo.style.display}"`,
+        'filter.style.display BEFORE:', `"${filter.style.display}"`
+      );
+
+      // Depending on your intended logic, you might revert or set them to block here
+      if (window.innerWidth >= mobileBreakpoint) {
+        // Desktop
+        console.log('[clearButton] Desktop logic - setting display to block');
+        logo.style.display = 'block';
+        filter.style.display = 'block';
+        clearButton.style.display = 'none';
+      } else {
+        // Mobile
+        console.log('[clearButton] Mobile logic - removing inline display override');
+        logo.style.display = '';
+        filter.style.display = '';
+        clearButton.style.display = 'block';
+      }
+
+      // Debug the final inline display for logo and filter AFTER we modify them
+      console.log(
+        '[clearButton]',
+        'logo.style.display AFTER:', `"${logo.style.display}"`,
+        'filter.style.display AFTER:', `"${filter.style.display}"`
+      );
+    });
+
+    filter.addEventListener('click', showFilters);
+
+    function showFilters() {
+      console.log('%c[showFilters] Called', 'color: #0af');
+      console.log(
+        '[showFilters]',
+        'headerLinks.style.display before:', `"${headerLinks.style.display}"`,
+        'logo.style.display before:', `"${logo.style.display}"`
+      );
+
+      headerLinks.style.display = 'flex';
+      logo.style.display = 'none';
+
+      console.log(
+        '[showFilters]',
+        'headerLinks.style.display after:', `"${headerLinks.style.display}"`,
+        'logo.style.display after:', `"${logo.style.display}"`
+      );
+    }
+
     });
 
   </script>
