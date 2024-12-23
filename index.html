@@ -507,7 +507,7 @@
       });
     });
 
-    // Add this function to your existing JavaScript
+    // Handling mobile dropdowns differently
     function setupMobileDropdowns() {
       if (window.innerWidth <= 768) {
         // Close dropdown when clicking outside
@@ -553,6 +553,7 @@
       clearButton.addEventListener('click', () => {
         searchInput.value = '';
         clearButton.style.display = 'none';
+        backToTheResults();
         searchInput.focus();
         // Trigger the search update
         searchInput.dispatchEvent(new Event('input'));
