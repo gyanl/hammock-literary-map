@@ -161,6 +161,7 @@
       });
     });
 
+    // Convenient names for the elements
     const searchtitle = document.getElementById('sidebar-search-title');
     const searchtitlecontainer = document.getElementById('sidebar-search-title-container');
     const searchresults = document.getElementById('sidebar-search-results');
@@ -168,26 +169,30 @@
     const sidebarauthortitle = document.getElementById('sidebar-author-title');
     const sidebarauthordetails = document.getElementById('sidebar-author-details');
     
+    const titlechevron = document.getElementById('chevron');
 
-    var titlechevron = document.getElementById('chevron');
-
+    // Fetch the data.geojson file with the authors data
     fetch('data.geojson').then(response => response.json()).then(data => {
       window.data = data;
     });
 
+    // Toggles the sidebar
     function toggleSidebar() {
       searchresults.style.display = searchresults.style.display === 'none' ? 'block' : 'none';
       titlechevron.style.rotate = titlechevron.style.rotate === '180deg' ? '0deg' : '180deg';
     }
 
+    // Sets the sidebar title
     function setSidebarTitle(input) {
       searchtitle.innerHTML = input;
     }
 
+    // Clears the sidebar
     function clearSidebar() {
       searchresults.innerHTML = "";
     }
 
+    // Shows author details in sidebar
     function showAuthorDetails() {
       searchtitlecontainer.style.display = "none";
       searchresults.style.display = "none";
@@ -196,6 +201,7 @@
       sidebarauthordetails.style.display = "block";
     }
 
+    // Shows results in sidebar
     function showSearchResults() {
       searchtitlecontainer.style.display = "flex";
       searchresults.style.display = "block";
@@ -204,6 +210,7 @@
       sidebarauthordetails.style.display = "none";
     }
 
+    // Shows results in sidebar and zooms out on map
     function backToTheResults() {
       showSearchResults();
       map.flyTo({
@@ -223,11 +230,13 @@
       searchresults.innerHTML += authorDetails;
     }
 
+    // Function to get the century of a year
     function getCentury(year) {
       const century = Math.ceil(year / 100);
       return `${century}${getOrdinalSuffix(century)} Century`;
     }
 
+    // Function to get the ordinal suffix of a number
     function getOrdinalSuffix(number) {
       const suffixes = ["th", "st", "nd", "rd"];
       const remainder = number % 100;
@@ -243,7 +252,7 @@
       });
       showAuthorDetails();
 
-
+      // Show author details in sidebar
       sidebarauthordetails.innerHTML = `
         <h3>${name}</h3>
         <p class="text-label padtop">Author of</p>
@@ -271,8 +280,10 @@
       `;
     }
 
+    // Mapbox access token
     mapboxgl.accessToken = 'pk.eyJ1IjoiZ3lhbmwiLCJhIjoiY2swNmNoY29kMDA2ZzNjbWN4MmRvbHlmYiJ9.HJHfadzLE1cNqce2G51BEQ';
 
+    // Initialize the map
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/gyanl/cls90czva01au01pld9fc7b5x',
@@ -285,16 +296,19 @@
       // Animate to the desired zoom level
       document.getElementById('introButton').addEventListener('click', function () {
 
-        console.log("Hi");
+        // Animate out the 
         introButton.classList.replace("header-fade-in-down", "goAwayBottom");
         introText.classList.replace("header-fade-in-up", "goAwayTop");
 
+        // Animate map to the desired zoom level
         map.easeTo({
           zoom: 3,
           center: [78.0000, 29.0000],
           duration: 1600 // Duration in milliseconds
         });
 
+        // Wait some time and then show the sidebar and remove the intro button and text
+        // The invisible elements cause problems if they are not removed
         setTimeout(() => {
           document.getElementById('sidebar').classList.remove('displaynone');
           document.getElementById('introButton').style.display = 'none';
@@ -361,7 +375,7 @@
         }
       });
 
-      // When a click event occurs on a feature in the 'unclustered-point' layer, open a popup at the location of the feature, with description HTML from its properties.
+      // Clicking on a point displays the author details in the sidebar
       map.on('click', 'unclustered-point', function (e) {
         var coordinates = e.features[0].geometry.coordinates.slice();
         var description = e.features[0].properties.author_name;
@@ -420,7 +434,7 @@
 
 
 
-
+      // Function to search and show results
       function searchAndShowResults(e) {
         clearSidebar();
         let features;
@@ -463,16 +477,20 @@
         if (!e || e.type !== 'input') {
           setSidebarTitle(features.length + " results");
         }
-      }
+      } 
 
+      // On typing in search bar, run searchAndShowResults  
       document.getElementById('search-bar').addEventListener('input', searchAndShowResults);
+      // On moving the map, run searchAndShowResults
       map.on('moveend', searchAndShowResults);
+      // On zooming the map, run searchAndShowResults
       map.on('zoomend', searchAndShowResults);
 
       // Run the search function when the map loads
       searchAndShowResults();
     });
 
+    // Fly to a random location on the map when feeling lucky button is clicked
     document.getElementById('btnRandom').addEventListener('click', () => {
       const features = window.data.features;
       const randomFeature = features[Math.floor(Math.random() * features.length)];
