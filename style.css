@@ -515,8 +515,12 @@
   /* ====================== */
   
   input[type="text"] {
-    width: 340px;
-    padding: var(--pad-l) 0 var(--pad-l) 36px;
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    margin: 0;
+    padding-left: 32px; /* Reduced padding to accommodate icon */
+    font-size: 16px; /* Ensure font size is at least 16px to prevent zoom */
     border: 1px solid rgba(0, 0, 0, 0);
     border-radius: 48px;
     background-color: var(--color-foreground-2);
@@ -829,6 +833,11 @@
   
   /* For screens <= 768px */
   @media (max-width: 768px) {
+
+    .desktop-only{
+      display: none;
+    }
+
     html {
       overscroll-behavior: none;
     }
@@ -840,24 +849,51 @@
   
     header {
       z-index: 100;
-      flex-direction: column;
+      flex-direction: row;
       padding: var(--mobile-padding);
       height: auto;
-      gap: var(--pad-m);
+      gap: 0;
     }
   
     .header-links {
-      display: flex;
-      flex-wrap: wrap;
-      width: 100%;
+      display: none;
+      flex-wrap: nowrap;
+      width: auto;
       height: auto;
       gap: var(--pad-s);
     }
   
     .header-controls {
-      width: 100%;
       display: flex;
       gap: var(--pad-s);
+    }
+
+    .icon-x {
+      width: 20px;
+      height: 20px;
+      padding: 8px;
+      display: block;
+      border-radius: var(--radius-pill);
+    }
+
+    #search-bar{
+      border: none;
+      width: 50%;
+      overflow-x: hidden;
+    }
+
+    #search-bar:hover {
+      -webkit-transform: none;
+      -moz-transform: none;
+      -ms-transform: none;
+      -o-transform: none;
+      transform: none;
+      border: 1px solid transparent;
+    }
+
+    #search-bar input[type="text"]:focus {
+      border: none;
+      background: transparent;
     }
   
     input[type="text"] {
@@ -865,9 +901,14 @@
       min-width: 0;
       width: 100%;
       margin: 0;
-      padding-left: 32px; /* Reduced padding to accommodate icon */
+      padding: var(--pad-s) var(--pad-s) var(--pad-s) 36px;
+      font-size: 16px;
+      background: none;
     }
-  
+
+    #search-bar input[type="text"]:focus {
+      border: 1px solid transparent;
+    }
     .button-primary {
       flex-shrink: 0;
     }
@@ -875,16 +916,14 @@
     /* Dropdown mobile styles */
     .dropdown {
       flex: 1;
-      min-width: calc(50% - var(--pad-s)); /* 2 columns with gap */
       text-align: center;
-      padding: var(--pad-s) var(--pad-m);
+      padding: var(--pad-m) var(--pad-l);
+      border-radius: var(--radius-s);
     }
     .dropdown-content {
       position: fixed;
-      top: auto;
       bottom: 0;
       left: 0;
-      width: 100%;
       margin: 0;
       border-radius: var(--radius-l) var(--radius-l) 0 0;
       max-height: 50vh;

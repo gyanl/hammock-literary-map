@@ -13,7 +13,8 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;1,500&display=swap">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;1,500&display=swap">
 
   <!-- Scripts -->
 
@@ -38,8 +39,9 @@
 
 
   <header class="glass">
+    <img id="logo" class="logo" src="hammock-white.svg">
     <div class="header-links">
-      <img class="logo" src="hammock-white.svg">
+
 
       <div class="header-link dropdown" id="continent-dropdown">
         Continents
@@ -77,23 +79,27 @@
           <label><input type="checkbox" id="english-checkbox"> English</label>
           <label><input type="checkbox" id="hindi-checkbox"> Hindi</label>
           <label><input type="checkbox" id="french-checkbox"> French</label>
-        </div>
+        </div>w
       </div>
 
     </div>
-    <div class="header-controls">
-      <button onclick="toggleFilters()" class="button-primary mobile-only">
-        <img id="filter" width="16px" src="icons/filter.svg"></button>
-    </div>
+
     <div id="search-bar">
-      <input type="text" placeholder="Search for your favourite author">
+      <input type="text" placeholder="Search for authors or books" enterkeyhint="search">
       <button type="button" class="search-clear" aria-label="Clear search"><img class="icon-x"
           src="icons/x.svg"></button>
-    </div>
-    <button class="button-secondary" id="btnRandom">
+      </div>
+    <button class="button-secondary desktop-only" id="btnRandom">
       <span>Feeling lucky</span>
       <div class="icon-circle"><img width="16px" src="icons/shuffle.svg" alt="Shuffle icon"></div>
     </button>
+
+    <div id="filter" class="header-controls">
+      <button onclick="toggleFilters()" class="button-primary mobile-only">
+        <img width="16px" src="icons/filter.svg">
+      </button>
+    </div>
+
     </div>
   </header>
 
@@ -118,6 +124,25 @@
   </div>
 
   <script>
+
+    // Convenient names for the elements
+    const searchbar = document.getElementById('search-bar');
+    const filter = document.getElementById('filter');
+
+    const searchtitle = document.getElementById('sidebar-search-title');
+    const searchtitlecontainer = document.getElementById('sidebar-search-title-container');
+    const searchresults = document.getElementById('sidebar-search-results');
+
+    const sidebarauthortitle = document.getElementById('sidebar-author-title');
+    const sidebarauthordetails = document.getElementById('sidebar-author-details');
+
+    const titlechevron = document.getElementById('chevron');
+
+    const logo = document.getElementById('logo');
+
+    const mobileBreakpoint = 768;
+
+
 
     // Function to toggle dropdown content visibility
     function toggleDropdown(dropdownId) {
@@ -161,15 +186,7 @@
       });
     });
 
-    // Convenient names for the elements
-    const searchtitle = document.getElementById('sidebar-search-title');
-    const searchtitlecontainer = document.getElementById('sidebar-search-title-container');
-    const searchresults = document.getElementById('sidebar-search-results');
 
-    const sidebarauthortitle = document.getElementById('sidebar-author-title');
-    const sidebarauthordetails = document.getElementById('sidebar-author-details');
-    
-    const titlechevron = document.getElementById('chevron');
 
     // Fetch the data.geojson file with the authors data
     fetch('data.geojson').then(response => response.json()).then(data => {
@@ -450,7 +467,7 @@
         clearSidebar();
         e.preventDefault();
         const searchValue = e.target.value.toLowerCase();
-        
+
         if (searchValue.length > 1) {
           // Make sure we're using the raw GeoJSON data, not the clustered features
           const features = window.data.features.filter(f =>
@@ -469,7 +486,7 @@
       async function showVisibleFeatures() {
         clearSidebar();
         const features = [];
-        
+
         // Get all visible features
         const visibleFeatures = map.queryRenderedFeatures({
           layers: ['clusters', 'unclustered-point']
@@ -515,7 +532,7 @@
             seen.add(authorName);
             return true;
           });
-          
+
           showResults(uniqueFeatures);
           setSidebarTitle(uniqueFeatures.length + " results");
         } catch (error) {
@@ -527,14 +544,14 @@
       function showResults(features) {
         // Clear existing results first
         clearSidebar();
-        
+
         // Track authors we've already added
         const addedAuthors = new Set();
-        
+
         features.forEach(feature => {
-          if (feature.properties && 
-              feature.properties.author_name && 
-              !addedAuthors.has(feature.properties.author_name)) {  // Only add if not already added
+          if (feature.properties &&
+            feature.properties.author_name &&
+            !addedAuthors.has(feature.properties.author_name)) {  // Only add if not already added
             addAuthorResult(
               feature.properties.author_name,
               feature.properties.city_birth,
@@ -554,14 +571,14 @@
 
       // Update event listeners
       document.getElementById('search-bar').addEventListener('input', handleSearch);
-      map.on('moveend', () => showVisibleFeatures());
-      map.on('zoomend', () => showVisibleFeatures());
+      map.on('moveend', debounce(showVisibleFeatures, 200));
+      map.on('zoomend', debounce(showVisibleFeatures, 200));
 
       // Initial load
       showVisibleFeatures();
     });
 
-    
+
 
     // Fly to a random location on the map when feeling lucky button is clicked
     document.getElementById('btnRandom').addEventListener('click', () => {
@@ -644,6 +661,14 @@
       clearButton.addEventListener('click', () => {
         searchInput.value = '';
         clearButton.style.display = 'none';
+
+        // Show logo and filter on mobile when x is clicked
+      if (window.innerWidth <= mobileBreakpoint) {
+        logo.style.display = 'block';
+        searchbar.style.width = 'auto';
+        filter.style.display = 'block';
+      }
+
         backToTheResults();
         searchInput.focus();
         // Trigger the search update
