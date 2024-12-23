@@ -296,7 +296,7 @@
       // Animate to the desired zoom level
       document.getElementById('introButton').addEventListener('click', function () {
 
-        // Animate out the 
+        // Animate out the intro button and text
         introButton.classList.replace("header-fade-in-down", "goAwayBottom");
         introText.classList.replace("header-fade-in-up", "goAwayTop");
 
@@ -313,7 +313,7 @@
           document.getElementById('sidebar').classList.remove('displaynone');
           document.getElementById('introButton').style.display = 'none';
           document.getElementById('introText').style.display = 'none';
-        }, 1000);
+        }, 1000); // Duration in milliseconds
 
       });
 
@@ -432,33 +432,109 @@
         showSearchResults();
       });
 
+      // Debounce helper function
+      function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      }
 
-
-      // Function to search and show results
-      function searchAndShowResults(e) {
+      // Function to handle search input
+      const handleSearch = debounce((e) => {
         clearSidebar();
-        let features;
-
-        if (e && e.type === 'input') {
-          e.preventDefault();
-          const searchValue = e.target.value.toLowerCase();
-          if (searchValue.length > 1) {
-            features = window.data.features.filter(f =>
-              f.properties.author_name.toLowerCase().includes(searchValue) ||
-              f.properties.work_1.toLowerCase().includes(searchValue) ||
-              f.properties.work_2.toLowerCase().includes(searchValue)
-            );
-            setSidebarTitle(features.length + " results");
-          } else {
-            setSidebarTitle("Search for your favourite author");
-            return;
-          }
+        e.preventDefault();
+        const searchValue = e.target.value.toLowerCase();
+        
+        if (searchValue.length > 1) {
+          // Make sure we're using the raw GeoJSON data, not the clustered features
+          const features = window.data.features.filter(f =>
+            f.properties.author_name.toLowerCase().includes(searchValue) ||
+            f.properties.work_1.toLowerCase().includes(searchValue) ||
+            f.properties.work_2.toLowerCase().includes(searchValue)
+          );
+          showResults(features);
+          setSidebarTitle(features.length + " results");
         } else {
-          features = map.querySourceFeatures('authors');
+          setSidebarTitle("Search for your favourite author");
         }
+      }, 150); // Reduced debounce delay to 150ms for better responsiveness
 
+      // Function to handle map movement and show visible features
+      async function showVisibleFeatures() {
+        clearSidebar();
+        const features = [];
+        
+        // Get all visible features
+        const visibleFeatures = map.queryRenderedFeatures({
+          layers: ['clusters', 'unclustered-point']
+        });
+
+        // Create promises for all cluster expansions
+        const clusterPromises = visibleFeatures
+          .filter(feature => feature.properties.cluster)
+          .map(feature => {
+            return new Promise((resolve, reject) => {
+              map.getSource('authors').getClusterLeaves(
+                feature.properties.cluster_id,
+                100,  // Maximum number of points to retrieve
+                0,    // Offset
+                (err, leaves) => {
+                  if (err) reject(err);
+                  else resolve(leaves);
+                }
+              );
+            });
+          });
+
+        // Add unclustered points directly
+        visibleFeatures
+          .filter(feature => !feature.properties.cluster && feature.properties.author_name)
+          .forEach(feature => features.push(feature));
+
+        try {
+          // Wait for all cluster data
+          const clusterResults = await Promise.all(clusterPromises);
+          // Add all cluster points to features array
+          clusterResults.forEach(clusterPoints => {
+            features.push(...clusterPoints);
+          });
+
+          // More thorough deduplication using a Set to track seen authors
+          const seen = new Set();
+          const uniqueFeatures = features.filter(feature => {
+            const authorName = feature.properties.author_name;
+            if (!authorName || seen.has(authorName)) {
+              return false;
+            }
+            seen.add(authorName);
+            return true;
+          });
+          
+          showResults(uniqueFeatures);
+          setSidebarTitle(uniqueFeatures.length + " results");
+        } catch (error) {
+          console.error('Error getting cluster data:', error);
+        }
+      }
+
+      // Helper function to display results
+      function showResults(features) {
+        // Clear existing results first
+        clearSidebar();
+        
+        // Track authors we've already added
+        const addedAuthors = new Set();
+        
         features.forEach(feature => {
-          if (feature.properties) {
+          if (feature.properties && 
+              feature.properties.author_name && 
+              !addedAuthors.has(feature.properties.author_name)) {  // Only add if not already added
             addAuthorResult(
               feature.properties.author_name,
               feature.properties.city_birth,
@@ -471,24 +547,21 @@
               feature.geometry.coordinates[0],
               feature.geometry.coordinates[1]
             );
+            addedAuthors.add(feature.properties.author_name);
           }
         });
+      }
 
-        if (!e || e.type !== 'input') {
-          setSidebarTitle(features.length + " results");
-        }
-      } 
+      // Update event listeners
+      document.getElementById('search-bar').addEventListener('input', handleSearch);
+      map.on('moveend', () => showVisibleFeatures());
+      map.on('zoomend', () => showVisibleFeatures());
 
-      // On typing in search bar, run searchAndShowResults  
-      document.getElementById('search-bar').addEventListener('input', searchAndShowResults);
-      // On moving the map, run searchAndShowResults
-      map.on('moveend', searchAndShowResults);
-      // On zooming the map, run searchAndShowResults
-      map.on('zoomend', searchAndShowResults);
-
-      // Run the search function when the map loads
-      searchAndShowResults();
+      // Initial load
+      showVisibleFeatures();
     });
+
+    
 
     // Fly to a random location on the map when feeling lucky button is clicked
     document.getElementById('btnRandom').addEventListener('click', () => {
