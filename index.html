@@ -334,7 +334,7 @@
       
       sidebarauthordetails.innerHTML = `
         <h2>${author_name}</h2>
-        <div class="lifetime">(${year_birth} - ${year_death})</div>
+        <div class="lifetime">(${year_birth} - ${year_death ? year_death : 'Present'})</div>
 
         <div class="pill-container">
           <span class="pill">${continent}</span>
