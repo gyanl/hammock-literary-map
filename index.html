@@ -94,12 +94,6 @@
       <div class="icon-circle"><img width="16px" src="icons/shuffle.svg" alt="Shuffle icon"></div>
     </button>
 
-    <div id="filter" class="header-controls mobile-only">
-      <button onclick="toggleFilters()" class="button-primary mobile-only">
-        <img width="16px" src="icons/filter.svg">
-      </button>
-    </div>
-
     </div>
   </header>
 
@@ -238,20 +232,41 @@
 
       showSearchResults();
       map.flyTo({
-        zoom: 3
+        zoom: 4
       });
       console.log('[backToTheResults] -> showSearchResults() called, map flyTo zoom=3');
     }
 
-    // Appends author result to sidebar
-    function addAuthorResult(name, city_birth, city_residence, country, year_birth, year_death, work1, work2, lat, long) {
+    // Update the addAuthorResult function to include more details
+    function addAuthorResult(properties, coordinates) {
+      const {
+        author_name,
+        city_birth,
+        city_residence,
+        country,
+        continent,
+        year_birth,
+        year_death,
+        work_1,
+        work_2,
+        gender,
+        language,
+        awards,
+        bio,
+        list_title,
+        list_bookname,
+        list_copy,
+        list_url
+      } = properties;
+
       var authorDetails = `
-            <div onclick="setAuthorDetails('${name}', '${city_birth}', '${city_residence}', '${country}', ${year_birth}, ${year_death}, '${work1}', '${work2}', ${lat}, ${long})" class="sidebar-author">
-            <h3>${name}<br><span class="color-mid-green">${city_birth}</span></h3>
-            <p class="text-label padtop">Author of</p>
-            <p>${work1}</p>
-            <p>${work2}</p>
-          </div>`;
+        <div onclick="setAuthorDetails(${JSON.stringify(properties).replace(/"/g, '&quot;')}, ${coordinates[0]}, ${coordinates[1]})" 
+             class="sidebar-author">
+          <h3>${author_name}<br><span class="color-mid-green">${city_birth}</span></h3>
+          <p class="text-label padtop">Author of</p>
+          <p>${work_1}</p>
+          <p>${work_2 || ''}</p>
+        </div>`;
       searchresults.innerHTML += authorDetails;
     }
 
@@ -269,20 +284,68 @@
       return suffix;
     }
 
-    //shows full author details in sidebar
-    function setAuthorDetails(name, city_birth, city_residence, country, year_birth, year_death, work1, work2, lat, long) {
+    // Update setAuthorDetails to show more information
+    function setAuthorDetails(properties, lat, long) {
+      const {
+        author_name,
+        city_birth,
+        city_residence,
+        country,
+        continent,
+        year_birth,
+        year_death,
+        work_1,
+        work_2,
+        gender,
+        language,
+        awards,
+        bio,
+        list_title,
+        list_bookname,
+        list_copy,
+        list_url
+      } = properties;
+
       map.flyTo({
-        center: [lat, long], // Corrected to use an object with 'center' property
+        center: [lat, long],
         zoom: 6
       });
+      
       showAuthorDetails();
 
-      // Show author details in sidebar
+      // Create awards pill if awards exist
+      const awardPills = awards ? awards.split(';').map(award => `<span class="pill">${award}</span>`).join('') : '';
+      
+      // Create language pill(s)
+      const languagePills = language.split(';').map(lang => 
+        `<span class="pill">${lang.trim()}</span>`
+      ).join('');
+
+      const featuredIn = list_title ? `
+      
+        <div class="card-title"><a href="${list_url}" target="_blank">${list_title}</a>
+          <img src="icons/arrow-up-right.svg" alt="arrow-up-right">
+          </div>
+        <div class="card-content">
+          <span class="book-title">${list_bookname}</span>
+          <span>${list_copy}</span>
+        </div>
+      ` : '';
+      
       sidebarauthordetails.innerHTML = `
-        <h3>${name}</h3>
+        <h2>${author_name}</h2>
+        <div class="lifetime">(${year_birth} - ${year_death})</div>
+
+        <div class="pill-container">
+          <span class="pill">${continent}</span>
+          <span class="pill">${gender}</span>
+          ${languagePills}
+          ${awardPills}
+        </div>
+
         <p class="text-label padtop">Author of</p>
-        <p>${work1}</p>
-        <p>${work2}</p>
+        <p class="book">${work_1}</p>
+        ${work_2 ? `<p class="book">${work_2}</p>` : ''}
 
         <div class="flex-equal">
           <div class="flex-1">
@@ -294,15 +357,11 @@
             <span class="color-mid-green">${city_residence}</span>
           </div>
         </div>
-        <div class="pill-container">
-          <span class="pill pill-country">${country}</span>
-          <span class="pill pill-sex">Female</span>
-          <span class="pill pill-era">${getCentury(year_birth)}</span>
-          ${year_death && getCentury(year_death) !== getCentury(year_birth) ? `<span class="pill pill-era">${getCentury(year_death)}</span>` : ''}
-        </div>
-        <p class="text-label padtop">Bio</p>
-        <p class="bio">Author of the famous book ${work1} and ${work2}. Born in ${city_birth} ${year_birth ? `in ${year_birth}` : "god knows when"}${year_death ? ` and died in ${year_death}` : " and is still alive and kicking"}.</p>
+
+        ${bio ? `<p class="text-label padtop">Bio</p><p class="bio">${bio}</p>` : ''}
+        ${featuredIn}
       `;
+
     }
 
     // Mapbox access token
@@ -327,7 +386,7 @@
 
         // Animate map to the desired zoom level
         map.easeTo({
-          zoom: 3,
+          zoom: 4,
           center: [78.0000, 29.0000],
           duration: 1600 // Duration in milliseconds
         });
@@ -403,25 +462,13 @@
       // Clicking on a point displays the author details in the sidebar
       map.on('click', 'unclustered-point', function (e) {
         var coordinates = e.features[0].geometry.coordinates.slice();
-        var description = e.features[0].properties.author_name;
+        var properties = e.features[0].properties;
 
         setSidebarTitle("1 result");
         clearSidebar();
-        addAuthorResult(
-          e.features[0].properties.author_name,
-          e.features[0].properties.city_birth,
-          e.features[0].properties.city_residence,
-          e.features[0].properties.country,
-          e.features[0].properties.year_birth,
-          e.features[0].properties.year_death,
-          e.features[0].properties.work_1,
-          e.features[0].properties.work_2,
-          coordinates[0],
-          coordinates[1]
-        );
+        addAuthorResult(properties, coordinates);
         showSearchResults();
 
-        // Ensure that if the map is zoomed out such that multiple copies of the feature are visible, the popup appears over the copy being pointed to.
         while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
           coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
@@ -441,16 +488,8 @@
           setSidebarTitle(leaves.length + " results");
           leaves.forEach(function (leaf) {
             addAuthorResult(
-              leaf.properties.author_name,
-              leaf.properties.city_birth,
-              leaf.properties.city_residence,
-              leaf.properties.country,
-              leaf.properties.year_birth,
-              leaf.properties.year_death,
-              leaf.properties.work_1,
-              leaf.properties.work_2,
-              leaf.geometry.coordinates[0],
-              leaf.geometry.coordinates[1]
+              leaf.properties,
+              leaf.geometry.coordinates
             );
           });
         });
@@ -561,16 +600,8 @@
             feature.properties.author_name &&
             !addedAuthors.has(feature.properties.author_name)) {  // Only add if not already added
             addAuthorResult(
-              feature.properties.author_name,
-              feature.properties.city_birth,
-              feature.properties.city_residence,
-              feature.properties.country,
-              feature.properties.year_birth,
-              feature.properties.year_death,
-              feature.properties.work_1,
-              feature.properties.work_2,
-              feature.geometry.coordinates[0],
-              feature.geometry.coordinates[1]
+              feature.properties,
+              feature.geometry.coordinates
             );
             addedAuthors.add(feature.properties.author_name);
           }

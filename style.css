@@ -10,16 +10,17 @@
   --color-green-light: #67FAAF;
   --color-active-green: #28493C;
   --color-accent: #67FAAF;
+  --color-pill-bg: #F3F3F3;
 
   /* Base Colors */
   --color-background: #000000;
   --color-text-primary: #FFFFFF;
-  --color-mid-gray: #727272;
-
+  --color-mid-gray: #323232;
+  --color-dark-gray: #232323;
   /* Transparent Colors */
-  --color-foreground: rgba(34, 34, 34, 0.85);
+  --color-foreground: rgba(52, 52, 52, 0.85);
   --color-foreground-2: rgba(96, 96, 96, 0.45);
-  --color-card: rgba(250, 250, 250, 0.95);
+  --color-card: #ffffff;
   --bg-transparent-05: rgba(255, 255, 255, 0.05);
   --bg-transparent-45: rgba(96, 96, 96, 0.45);
 
@@ -47,7 +48,8 @@
   /* Typography */
   --font-size-xs: 12px;
   --font-size-s: 14px;
-  --font-size-m: 18px;
+  --font-size-m: 16px;
+  --font-size-l: 30px;
 
   /* Layout Dimensions */
   --header-height: 84px;
@@ -123,6 +125,43 @@ body {
   line-height: 1.2em;
 }
 
+.card-title{
+  padding-right: var(--pad-l);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-dark-gray);
+  border-radius: var(--radius-l) var(--radius-l) 0 0;
+}
+
+.card-title a{
+  padding: var(--pad-l) var(--pad-s) var(--pad-l) var(--pad-xl);
+  text-decoration: none;
+  color: var(--color-text-primary);
+  display: block;
+}
+
+.card-title img{
+  width: 20px;
+  height: 20px;
+  padding: 4px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.card-title a:hover + img {
+  transform: scale(1.1);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-active-green);
+}
+
+.card-content{
+  font-size: var(--font-size-s);
+  padding: var(--pad-l) var(--pad-xl);
+  background-color: var(--color-mid-gray);
+  border-radius: 0 0 var(--radius-l) var(--radius-l);
+  color: var(--color-text-primary);
+}
+
 .logo {
   height: 24px;
 }
@@ -130,6 +169,13 @@ body {
 /* Utility classes */
 .displaynone {
   display: none !important;
+}
+
+.book-title{
+  color: var(--color-accent);
+  font-weight: 600;
+  margin-bottom: 5px;
+  display: block;
 }
 
 .center-align {
@@ -176,6 +222,14 @@ h1 {
   text-align: center;
   width: 100%;
   top: 12%;
+}
+
+h2{
+  font-weight: 400;
+  font-size: var(--font-size-l);
+  line-height: 1.3em;
+  margin-block-start: 0.8em;
+  margin-block-end: 0.1em;
 }
 
 h3 {
@@ -301,6 +355,11 @@ header {
 /* Typo fix: .sidebar-auther-details -> .sidebar-author-details? */
 .sidebar-auther-details p {
   margin: 6px 0;
+}
+
+.book{
+  margin-block-start: 0.25em;
+  margin-block-end: 0.25em;
 }
 
 /* ====================== */
@@ -502,22 +561,11 @@ header {
   margin-right: 8px;
   margin-bottom: 8px;
   display: inline-block;
+  background-color: var(--color-pill-bg);
+  color: var(--color-background);
+
 }
 
-.pill-country {
-  background-color: #CDFFEA;
-  color: #06452A;
-}
-
-.pill-sex {
-  background-color: #FFE0CE;
-  color: #5E2505;
-}
-
-.pill-era {
-  background-color: #C2F5FE;
-  color: #095663;
-}
 
 /* ====================== */
 /* 8. Utility Layout Classes */
