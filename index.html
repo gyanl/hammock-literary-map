@@ -46,12 +46,12 @@
       <div class="header-link dropdown" id="continent-dropdown">
         Continents
         <div class="dropdown-content">
+          <label><input type="checkbox" id="africa-checkbox"> Africa</label>
+          <label><input type="checkbox" id="asia-checkbox"> Asia</label>
+          <label><input type="checkbox" id="australia-checkbox"> Australia</label>
           <label><input type="checkbox" id="europe-checkbox"> Europe</label>
           <label><input type="checkbox" id="north-america-checkbox"> North America</label>
-          <label><input type="checkbox" id="south-america-checkbox"> South America</label>
-          <label><input type="checkbox" id="africa-checkbox"> Africa</label>
-          <label><input type="checkbox" id="australia-checkbox"> Australia and Pacific</label>
-          <label><input type="checkbox" id="asia-checkbox"> Asia</label>
+          <label><input type="checkbox" id="latin-america-checkbox"> Latin America</label>
         </div>
       </div>
 
@@ -60,25 +60,79 @@
         <div class="dropdown-content">
           <label><input type="checkbox" id="male-checkbox"> Male</label>
           <label><input type="checkbox" id="female-checkbox"> Female</label>
-          <label><input type="checkbox" id="other-checkbox"> Other</label>
+          <label><input type="checkbox" id="nonbinary-checkbox"> Non-binary</label>
         </div>
       </div>
 
       <div class="header-link dropdown" id="awards-dropdown">
         Awards
         <div class="dropdown-content">
-          <label><input type="checkbox" id="nobel-checkbox"> Nobel Prize</label>
+          <label><input type="checkbox" id="prix-goncourt-checkbox"> Prix Goncourt</label>
+          <label><input type="checkbox" id="international-booker-checkbox"> International Booker Prize</label>
+          <label><input type="checkbox" id="neustadt-international-checkbox"> Neustadt International Prize</label>
+          <label><input type="checkbox" id="grand-prix-national-checkbox"> Grand Prix National des Lettres</label>
+          <label><input type="checkbox" id="camoes-checkbox"> Camoes Prize</label>
+          <label><input type="checkbox" id="impac-dublin-checkbox"> IMPAC Dublin Literary Award</label>
+          <label><input type="checkbox" id="cervantes-checkbox"> Cervantes Prize</label>
+          <label><input type="checkbox" id="prix-medicis-checkbox"> Prix Medicis</label>
           <label><input type="checkbox" id="pulitzer-checkbox"> Pulitzer Prize</label>
           <label><input type="checkbox" id="booker-checkbox"> Booker Prize</label>
+          <label><input type="checkbox" id="independent-foreign-checkbox"> Independent Foreign Fiction Prize</label>
+          <label><input type="checkbox" id="national-book-checkbox"> National Book Award</label>
+          <label><input type="checkbox" id="nobel-checkbox"> Nobel Prize</label>
+          <label><input type="checkbox" id="commonwealth-writers-checkbox"> Commonwealth Writers' Prize</label>
+          <label><input type="checkbox" id="buchner-checkbox"> Buchner Prize</label>
+          <label><input type="checkbox" id="buchner-returned-checkbox"> Buchner Prize (returned)</label>
+          <label><input type="checkbox" id="commonwealth-checkbox"> Commonwealth Prize</label>
         </div>
       </div>
 
       <div class="header-link dropdown" id="language-dropdown">
         Language
         <div class="dropdown-content">
+          <label><input type="checkbox" id="afrikaans-checkbox"> Afrikaans</label>
+          <label><input type="checkbox" id="albanian-checkbox"> Albanian</label>
+          <label><input type="checkbox" id="arabic-checkbox"> Arabic</label>
+          <label><input type="checkbox" id="bahasa-checkbox"> Bahasa</label>
+          <label><input type="checkbox" id="bengali-checkbox"> Bengali</label>
+          <label><input type="checkbox" id="bulgarian-checkbox"> Bulgarian</label>
+          <label><input type="checkbox" id="chinese-checkbox"> Chinese</label>
+          <label><input type="checkbox" id="croatian-checkbox"> Croatian</label>
+          <label><input type="checkbox" id="czech-checkbox"> Czech</label>
+          <label><input type="checkbox" id="danish-checkbox"> Danish</label>
+          <label><input type="checkbox" id="dutch-checkbox"> Dutch</label>
           <label><input type="checkbox" id="english-checkbox"> English</label>
-          <label><input type="checkbox" id="hindi-checkbox"> Hindi</label>
+          <label><input type="checkbox" id="finnish-checkbox"> Finnish</label>
           <label><input type="checkbox" id="french-checkbox"> French</label>
+          <label><input type="checkbox" id="georgian-checkbox"> Georgian</label>
+          <label><input type="checkbox" id="german-checkbox"> German</label>
+          <label><input type="checkbox" id="greek-checkbox"> Greek</label>
+          <label><input type="checkbox" id="hebrew-checkbox"> Hebrew</label>
+          <label><input type="checkbox" id="hindi-checkbox"> Hindi</label>
+          <label><input type="checkbox" id="hungarian-checkbox"> Hungarian</label>
+          <label><input type="checkbox" id="icelandic-checkbox"> Icelandic</label>
+          <label><input type="checkbox" id="italian-checkbox"> Italian</label>
+          <label><input type="checkbox" id="japanese-checkbox"> Japanese</label>
+          <label><input type="checkbox" id="kannada-checkbox"> Kannada</label>
+          <label><input type="checkbox" id="kiswahili-checkbox"> Kiswahili</label>
+          <label><input type="checkbox" id="korean-checkbox"> Korean</label>
+          <label><input type="checkbox" id="malayalam-checkbox"> Malayalam</label>
+          <label><input type="checkbox" id="norwegian-checkbox"> Norwegian</label>
+          <label><input type="checkbox" id="persian-checkbox"> Persian</label>
+          <label><input type="checkbox" id="polish-checkbox"> Polish</label>
+          <label><input type="checkbox" id="portuguese-checkbox"> Portuguese</label>
+          <label><input type="checkbox" id="punjabi-checkbox"> Punjabi</label>
+          <label><input type="checkbox" id="romanian-checkbox"> Romanian</label>
+          <label><input type="checkbox" id="russian-checkbox"> Russian</label>
+          <label><input type="checkbox" id="serbo-croatian-checkbox"> Serbo-Croatian</label>
+          <label><input type="checkbox" id="somali-checkbox"> Somali</label>
+          <label><input type="checkbox" id="spanish-checkbox"> Spanish</label>
+          <label><input type="checkbox" id="swedish-checkbox"> Swedish</label>
+          <label><input type="checkbox" id="tamil-checkbox"> Tamil</label>
+          <label><input type="checkbox" id="turkish-checkbox"> Turkish</label>
+          <label><input type="checkbox" id="ukrainian-checkbox"> Ukrainian</label>
+          <label><input type="checkbox" id="urdu-checkbox"> Urdu</label>
+          <label><input type="checkbox" id="yiddish-checkbox"> Yiddish</label>
         </div>
       </div>
 
@@ -263,7 +317,7 @@
         <div onclick="setAuthorDetails(${JSON.stringify(properties).replace(/"/g, '&quot;')}, ${coordinates[0]}, ${coordinates[1]})" 
              class="sidebar-author">
           <h3>${author_name}<br><span class="color-mid-green">${city_birth}</span></h3>
-          <p class="text-label padtop">Author of</p>
+          <p class="text-label padtop light-gray">Author of</p>
           <p>${work_1}</p>
           <p>${work_2 || ''}</p>
         </div>`;
@@ -343,22 +397,22 @@
           ${awardPills}
         </div>
 
-        <p class="text-label padtop">Author of</p>
+        <p class="text-label padtop mid-gray">Author of</p>
         <p class="book">${work_1}</p>
         ${work_2 ? `<p class="book">${work_2}</p>` : ''}
 
         <div class="flex-equal">
           <div class="flex-1">
-            <p class="text-label padtop">Birthplace</p>
+            <p class="text-label padtop mid-gray">Birthplace</p>
             <span class="color-mid-green">${city_birth}</span>
           </div>
           <div class="flex-1">
-            <p class="text-label padtop">Residence</p>
+            <p class="text-label padtop mid-gray">Residence</p>
             <span class="color-mid-green">${city_residence}</span>
           </div>
         </div>
 
-        ${bio ? `<p class="text-label padtop">Bio</p><p class="bio">${bio}</p>` : ''}
+        ${bio ? `<p class="text-label padtop mid-gray">Bio</p><p class="bio">${bio}</p>` : ''}
         ${featuredIn}
       `;
 

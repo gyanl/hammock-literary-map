@@ -15,6 +15,7 @@
   /* Base Colors */
   --color-background: #000000;
   --color-text-primary: #FFFFFF;
+  --color-light-gray: #F3F3F3;
   --color-mid-gray: #323232;
   --color-dark-gray: #232323;
   /* Transparent Colors */
@@ -585,7 +586,14 @@ header {
   padding-top: 12px;
   margin-bottom: 2px;
   font-size: 12px;
+}
+
+.mid-gray{
   color: var(--color-mid-gray);
+}
+
+.light-gray{
+  color: var(--color-light-gray);
 }
 
 .color-primary {
@@ -875,12 +883,15 @@ button {
   top: 100%;
   left: 0;
   margin-top: var(--pad-m);
-  min-width: 200px;
   background: var(--dropdown-bg);
   border-radius: var(--radius-l);
   padding: var(--pad-m);
   box-shadow: 0 4px 12px var(--dropdown-shadow);
   z-index: 1000;
+  max-height: 50vh !important;
+  min-width: 180px;
+  max-width: 600px;
+  overflow-y: scroll;
 }
 
 .dropdown-content label {
