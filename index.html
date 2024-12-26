@@ -189,13 +189,10 @@
     const sidebarauthordetails = document.getElementById('sidebar-author-details');
 
     const titlechevron = document.getElementById('chevron');
-
-
-
     const mobileBreakpoint = 768;
-
     const headerLinks = document.querySelector('.header-links');
 
+    // TODO: Add constants for zoom levels.
 
     // Function to toggle dropdown content visibility
     function toggleDropdown(dropdownId) {
@@ -283,12 +280,11 @@
     // Shows results in sidebar and zooms out on map
     function backToTheResults() {
       console.log('%c[backToTheResults] Called', 'color: #0af');
-
-      showSearchResults();
-      map.flyTo({
-        zoom: 4
+      map.easeTo({
+        zoom: map.getZoom() - 0.5
       });
       console.log('[backToTheResults] -> showSearchResults() called, map flyTo zoom=3');
+      showSearchResults();
     }
 
     // Update the addAuthorResult function to include more details
@@ -324,6 +320,7 @@
       searchresults.innerHTML += authorDetails;
     }
 
+    // TODO: Remove this and the getOrdinalSuffix function, not being used anymore.
     // Function to get the century of a year
     function getCentury(year) {
       const century = Math.ceil(year / 100);
@@ -338,6 +335,8 @@
       return suffix;
     }
 
+    // TODO: Remove country from this.
+    // TODO: Consider not putting every value in this generator function so that search is faster.
     // Update setAuthorDetails to show more information
     function setAuthorDetails(properties, lat, long) {
       const {
@@ -418,6 +417,7 @@
 
     }
 
+    // TODO: Obfuscate this access token somehow.
     // Mapbox access token
     mapboxgl.accessToken = 'pk.eyJ1IjoiZ3lhbmwiLCJhIjoiY2swNmNoY29kMDA2ZzNjbWN4MmRvbHlmYiJ9.HJHfadzLE1cNqce2G51BEQ';
 
@@ -664,8 +664,8 @@
 
       // Update event listeners
       document.getElementById('search-bar').addEventListener('input', handleSearch);
-      map.on('moveend', debounce(showVisibleFeatures, 200));
-      map.on('zoomend', debounce(showVisibleFeatures, 200));
+      map.on('moveend', debounce(showVisibleFeatures, 100));
+      map.on('zoomend', debounce(showVisibleFeatures, 100));
 
       // Initial load
       showVisibleFeatures();
