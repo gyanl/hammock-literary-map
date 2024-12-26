@@ -735,7 +735,7 @@
         const matchesLanguage = activeFilters.language.length === 0
             || (props.language && props.language
                                    .split(';')
-                                   .some(lang => activeFilters.language.includes(lang.trim().toLowerCase())));
+                                   .some(lang => activeFilters.language.includes(lang.trim())));
         const matchesAwards = activeFilters.awards.length === 0
             || (props.awards && props.awards
                                     .split(';')
