@@ -26,20 +26,48 @@
 <body>
 
   <h1 id="introText" class="landing header-fade-in-up">
-    Explore the Globe&rsquo;s Literary Legacy <br>One City at a Time
+    <img class="logo" src="hammock-white.png">
+    <p>
+      Explore the Globe&rsquo;s Literary Legacy <br>One City at a Time
+    </p>
   </h1>
 
-  <div class="center-align">
-    <button id="introButton" type="button" class="bottom-center button-tertiary header-fade-in-down">
-      Get Started
-    </button>
+  <div id="tutorial-bottom" class="center-align bottom-center header-fade-in-down">
+
+    <div class="tutorial-card-container">
+      <div class="tutorial-card">
+        <img src="icons/maximize-2.svg" alt="zoom">
+        Scroll or pinch to zoom in and out.
+      </div>
+
+      <div class="tutorial-card">
+        <img src="icons/move.svg" alt="zoom">
+        Click and drag to move around the globe.
+      </div>
+
+      <div class="tutorial-card">
+        <img src="icons/mouse-pointer.svg" alt="zoom">
+        Click on a green dot to see more about the authors from that region.
+      </div>
+    </div>
+
+    <div class="tutorial-card-container">
+      <a href="https://www.hammockmag.com">
+        <button type="button" class="button-quaternary">
+          About this Map
+        </button>
+      </a>
+      <button id="introButton" type="button" class="button-tertiary">
+        Get Started
+      </button>
+    </div>
   </div>
 
   <div id="map"></div>
 
 
-  <header class="glass">
-    <img id="logo" class="logo" src="hammock-white.png">
+  <header id="header" class="glass displaynone">
+    <a href="https://www.hammockmag.com"><img id="logo" class="logo" src="hammock-white.png"></a>
     <div class="header-links">
 
 
@@ -153,7 +181,7 @@
 
   <div id="sidebar" class="sidebar glass displaynone fade-in-up">
 
-    <div id="sidebar-search-title-container">
+    <div id="sidebar-search-title-container" class="glass">
       <span id="sidebar-search-title">
         Result
       </span>
@@ -163,7 +191,7 @@
 
     <div id="sidebar-search-results" class="sidebar-body"></div>
 
-    <div id="sidebar-author-title" class="sidebar-title fade-in-right" onclick="backToTheResults()">
+    <div id="sidebar-author-title" class="sidebar-title fade-in-right glass" onclick="backToTheResults()">
       <img class="icon-left" src="icons/chevron-left.svg" alt="back"> Back
     </div>
 
@@ -191,6 +219,10 @@
     const titlechevron = document.getElementById('chevron');
     const mobileBreakpoint = 768;
     const headerLinks = document.querySelector('.header-links');
+
+    const tutorialBottom = document.getElementById('tutorial-bottom');
+
+    let tutorialComplete = false;
 
     // TODO: Add constants for zoom levels.
 
@@ -241,14 +273,14 @@
     // Fetch the data.geojson file with the authors data
     fetch('data.geojson').then(response => response.json()).then(data => {
       window.data = data;
-      
+
       // Create and store markers
       data.features.forEach(feature => {
         const marker = new mapboxgl.Marker()
           .setLngLat(feature.geometry.coordinates)
           .setPopup(new mapboxgl.Popup().setHTML(createPopupContent(feature.properties)))
           .addTo(map);
-        
+
         // Store marker reference
         if (!feature.properties) feature.properties = {};
         feature.properties.marker = marker;
@@ -375,14 +407,14 @@
         center: [lat, long],
         zoom: 6
       });
-      
+
       showAuthorDetails();
 
       // Create awards pill if awards exist
       const awardPills = awards ? awards.split(';').map(award => `<span class="pill">${award}</span>`).join('') : '';
-      
+
       // Create language pill(s)
-      const languagePills = language.split(';').map(lang => 
+      const languagePills = language.split(';').map(lang =>
         `<span class="pill">${lang.trim()}</span>`
       ).join('');
 
@@ -396,7 +428,7 @@
           <span>${list_copy}</span>
         </div>
       ` : '';
-      
+
       sidebarauthordetails.innerHTML = `
         <h2>${author_name}</h2>
         <div class="lifetime">(${year_birth} - ${year_death ? year_death : 'Present'})</div>
@@ -443,29 +475,45 @@
 
     // Add this after map initialization
     map.on('load', function () {
-      // Animate to the desired zoom level
-      document.getElementById('introButton').addEventListener('click', function () {
 
-        // Animate out the intro button and text
-        introButton.classList.replace("header-fade-in-down", "goAwayBottom");
+
+      // If the user clicks intro buttom, start the experience
+      document.getElementById('introButton').addEventListener('click', startExperience);
+
+      // Start the experience by animating out the tutorial parts
+      function startExperience(lat, long) {
+        tutorialComplete = true;
         introText.classList.replace("header-fade-in-up", "goAwayTop");
+        tutorialBottom.classList.replace("header-fade-in-down", "goAwayBottom");
 
-        // Animate map to the desired zoom level
-        map.easeTo({
-          zoom: 4,
-          center: [78.0000, 29.0000],
-          duration: 1600 // Duration in milliseconds
-        });
+        // If lat and long are provided, use them. Otherwise use default coordinates
+        const targetCoords = (lat && long) 
+          ? [long, lat]
+          : [78.0000, 29.0000];
+
+        // Use easeTo for default case, flyTo for specific coordinates
+        if (lat && long) {
+          map.flyTo({
+            center: targetCoords,
+            zoom: 4,
+            duration: 1600
+          });
+        } else {
+          map.easeTo({
+            center: targetCoords,
+            zoom: 4,
+            duration: 1600
+          });
+        }
 
         // Wait some time and then show the sidebar and remove the intro button and text
-        // The invisible elements cause problems if they are not removed
         setTimeout(() => {
+          document.getElementById('header').classList.remove('displaynone');
           document.getElementById('sidebar').classList.remove('displaynone');
-          document.getElementById('introButton').style.display = 'none';
-          document.getElementById('introText').style.display = 'none';
-        }, 1000); // Duration in milliseconds
-
-      });
+          introText.style.display = 'none';
+          tutorialBottom.style.display = 'none';
+        }, 900);
+      }
 
       // Rest of your existing map.on('load') code...
       map.addSource('authors', {
@@ -527,6 +575,7 @@
 
       // Clicking on a point displays the author details in the sidebar
       map.on('click', 'unclustered-point', function (e) {
+
         var coordinates = e.features[0].geometry.coordinates.slice();
         var properties = e.features[0].properties;
 
@@ -542,6 +591,12 @@
 
       // Clicking on a cluster displays all points in cluster in sidebar
       map.on('click', 'clusters', function (e) {
+        if (!tutorialComplete) {
+          var lat = e.lngLat.lat;
+          var long = e.lngLat.lng;
+          startExperience(lat, long);
+        }
+
         var features = map.queryRenderedFeatures(e.point, {
           layers: ['clusters']
         });
@@ -586,7 +641,7 @@
         checkbox.addEventListener('change', () => {
           // Call applyFilters instead of handleSearch
           applyFilters();
-          
+
           // Update the count badge
           const dropdownId = checkbox.closest('.dropdown').id;
           updateDropdownCount(dropdownId);
@@ -598,16 +653,16 @@
         clearSidebar();
         const totalCount = features.length;
         const displayLimit = 100;
-        
+
         // Track authors we've already added
         const addedAuthors = new Set();
         let displayedCount = 0;
 
         for (const feature of features) {
           if (displayedCount >= displayLimit) break;
-          
-          if (feature.properties?.author_name && 
-              !addedAuthors.has(feature.properties.author_name)) {
+
+          if (feature.properties?.author_name &&
+            !addedAuthors.has(feature.properties.author_name)) {
             addAuthorResult(
               feature.properties,
               feature.geometry.coordinates
@@ -635,7 +690,7 @@
         // Handle unclustered points first (faster)
         const unclusteredFeatures = visibleFeatures
           .filter(feature => !feature.properties.cluster && feature.properties.author_name);
-        
+
         // If we already have enough unclustered points, we can skip cluster processing
         if (unclusteredFeatures.length >= displayLimit) {
           showResults(unclusteredFeatures);
@@ -685,78 +740,78 @@
       map.on('zoomend', debounce(showVisibleFeatures, 100));
 
       function getActiveFilters() {
-      const filters = {
-        gender: [],
-        continent: [],
-        language: [],
-        awards: []
-      };
+        const filters = {
+          gender: [],
+          continent: [],
+          language: [],
+          awards: []
+        };
 
-      // Collect checked values using label text instead of IDs
-      document.querySelectorAll('#gender-dropdown input:checked').forEach(checkbox => {
-        filters.gender.push(checkbox.closest('label').textContent.trim().toLowerCase());
-      });
-      
-      document.querySelectorAll('#continent-dropdown input:checked').forEach(checkbox => {
-        filters.continent.push(checkbox.closest('label').textContent.trim());
-      });
-      
-      document.querySelectorAll('#language-dropdown input:checked').forEach(checkbox => {
-        filters.language.push(checkbox.closest('label').textContent.trim());
-      });
-      
-      document.querySelectorAll('#awards-dropdown input:checked').forEach(checkbox => {
-        filters.awards.push(checkbox.closest('label').textContent.trim());
-      });
+        // Collect checked values using label text instead of IDs
+        document.querySelectorAll('#gender-dropdown input:checked').forEach(checkbox => {
+          filters.gender.push(checkbox.closest('label').textContent.trim().toLowerCase());
+        });
 
-      return filters;
-    }
+        document.querySelectorAll('#continent-dropdown input:checked').forEach(checkbox => {
+          filters.continent.push(checkbox.closest('label').textContent.trim());
+        });
 
-    function applyFilters() {
-      const searchValue = searchInput.value.toLowerCase();
-      const activeFilters = getActiveFilters();
+        document.querySelectorAll('#language-dropdown input:checked').forEach(checkbox => {
+          filters.language.push(checkbox.closest('label').textContent.trim());
+        });
 
-      // Build up the filtered list
-      const filteredFeatures = window.data.features.filter(f => {
-        const props = f.properties;
+        document.querySelectorAll('#awards-dropdown input:checked').forEach(checkbox => {
+          filters.awards.push(checkbox.closest('label').textContent.trim());
+        });
 
-        // Search text logic
-        const matchesSearch = 
+        return filters;
+      }
+
+      function applyFilters() {
+        const searchValue = searchInput.value.toLowerCase();
+        const activeFilters = getActiveFilters();
+
+        // Build up the filtered list
+        const filteredFeatures = window.data.features.filter(f => {
+          const props = f.properties;
+
+          // Search text logic
+          const matchesSearch =
             searchValue.length <= 1
             || (props.author_name.toLowerCase().includes(searchValue))
             || (props.work_1.toLowerCase().includes(searchValue))
             || (props.work_2 && props.work_2.toLowerCase().includes(searchValue));
 
-        // Filter logic
-        const matchesGender = activeFilters.gender.length === 0
+          // Filter logic
+          const matchesGender = activeFilters.gender.length === 0
             || activeFilters.gender.includes(props.gender.toLowerCase());
-        const matchesContinent = activeFilters.continent.length === 0
+          const matchesContinent = activeFilters.continent.length === 0
             || activeFilters.continent.includes(props.continent);
-        const matchesLanguage = activeFilters.language.length === 0
+          const matchesLanguage = activeFilters.language.length === 0
             || (props.language && props.language
-                                   .split(';')
-                                   .some(lang => activeFilters.language.includes(lang.trim())));
-        const matchesAwards = activeFilters.awards.length === 0
+              .split(';')
+              .some(lang => activeFilters.language.includes(lang.trim())));
+          const matchesAwards = activeFilters.awards.length === 0
             || (props.awards && props.awards
-                                    .split(';')
-                                    .some(award => activeFilters.awards.includes(award.trim())));
+              .split(';')
+              .some(award => activeFilters.awards.includes(award.trim())));
 
-        // Final check
-        return matchesSearch && matchesGender && matchesContinent && matchesLanguage && matchesAwards;
-      });
+          // Final check
+          return matchesSearch && matchesGender && matchesContinent && matchesLanguage && matchesAwards;
+        });
 
-      // Create a fresh GeoJSON with filtered features
-      const newData = {
-        ...window.data,
-        features: filteredFeatures
-      };
+        // Create a fresh GeoJSON with filtered features
+        const newData = {
+          ...window.data,
+          features: filteredFeatures
+        };
 
-      // Now update the map source with only the filtered data
-      map.getSource('authors').setData(newData);
+        // Now update the map source with only the filtered data
+        map.getSource('authors').setData(newData);
 
-      // Update sidebar, e.g. show the newly filtered features
-      showResults(filteredFeatures);
-    }
+        // Update sidebar, e.g. show the newly filtered features
+        showResults(filteredFeatures);
+      }
 
       // Initial load
       showVisibleFeatures();
@@ -839,92 +894,92 @@
         clearButton.style.display = searchInput.value ? 'block' : 'none';
       }
 
-    // When search bar is clicked, hide logo and filter on mobile
-    searchBar.addEventListener('click', () => {
-      if (window.innerWidth <= mobileBreakpoint) {
+      // When search bar is clicked, hide logo and filter on mobile
+      searchBar.addEventListener('click', () => {
+        if (window.innerWidth <= mobileBreakpoint) {
+          logo.style.display = 'none';
+          filter.style.display = 'none';
+          clearButton.style.display = 'block';
+        }
+      });
+
+      clearButton.addEventListener('click', () => {
+        console.log('%c[clearButton] Clicked', 'color: #0af');
+
+        console.log(
+          '[clearButton]',
+          'searchInput.value before clearing:',
+          searchInput.value
+        );
+
+        // Check if we have a value. If so, call backToTheResults().
+        if (searchInput.value !== '') {
+          console.log('[clearButton] Calling backToTheResults()');
+          backToTheResults();
+        }
+
+        // Remove focus from the input
+        searchInput.blur();
+
+        // Force an 'input' event to re-trigger search logic
+        console.log('[clearButton] Dispatching "input" event on searchInput');
+        searchInput.dispatchEvent(new Event('input'));
+
+        // Clear the search box
+        searchInput.value = '';
+
+        // Check the mobile breakpoint
+        console.log('[clearButton]', 'window.innerWidth:', window.innerWidth, 'mobileBreakpoint:', mobileBreakpoint);
+
+        // Debug the current inline display for logo and filter BEFORE we modify them
+        console.log(
+          '[clearButton]',
+          'logo.style.display BEFORE:', `"${logo.style.display}"`,
+          'filter.style.display BEFORE:', `"${filter.style.display}"`
+        );
+
+        // Depending on your intended logic, you might revert or set them to block here
+        if (window.innerWidth >= mobileBreakpoint) {
+          // Desktop
+          console.log('[clearButton] Desktop logic - setting display to block');
+          logo.style.display = 'block';
+          filter.style.display = 'block';
+          clearButton.style.display = 'none';
+        } else {
+          // Mobile
+          console.log('[clearButton] Mobile logic - removing inline display override');
+          logo.style.display = '';
+          filter.style.display = '';
+          clearButton.style.display = 'block';
+        }
+
+        // Debug the final inline display for logo and filter AFTER we modify them
+        console.log(
+          '[clearButton]',
+          'logo.style.display AFTER:', `"${logo.style.display}"`,
+          'filter.style.display AFTER:', `"${filter.style.display}"`
+        );
+      });
+
+      filter.addEventListener('click', showFilters);
+
+      function showFilters() {
+        console.log('%c[showFilters] Called', 'color: #0af');
+        console.log(
+          '[showFilters]',
+          'headerLinks.style.display before:', `"${headerLinks.style.display}"`,
+          'logo.style.display before:', `"${logo.style.display}"`
+        );
+
+        headerLinks.style.display = 'flex';
         logo.style.display = 'none';
-        filter.style.display = 'none';
-        clearButton.style.display = 'block';
+
+        console.log(
+          '[showFilters]',
+          'headerLinks.style.display after:', `"${headerLinks.style.display}"`,
+          'logo.style.display after:', `"${logo.style.display}"`
+        );
       }
-    });
-
-    clearButton.addEventListener('click', () => {
-      console.log('%c[clearButton] Clicked', 'color: #0af');
-
-      console.log(
-        '[clearButton]',
-        'searchInput.value before clearing:', 
-        searchInput.value
-      );
-
-      // Check if we have a value. If so, call backToTheResults().
-      if (searchInput.value !== '') {
-        console.log('[clearButton] Calling backToTheResults()');
-        backToTheResults();
-      }
-
-      // Remove focus from the input
-      searchInput.blur();
-
-      // Force an 'input' event to re-trigger search logic
-      console.log('[clearButton] Dispatching "input" event on searchInput');
-      searchInput.dispatchEvent(new Event('input'));
-
-      // Clear the search box
-      searchInput.value = '';
-
-      // Check the mobile breakpoint
-      console.log('[clearButton]', 'window.innerWidth:', window.innerWidth, 'mobileBreakpoint:', mobileBreakpoint);
-
-      // Debug the current inline display for logo and filter BEFORE we modify them
-      console.log(
-        '[clearButton]',
-        'logo.style.display BEFORE:', `"${logo.style.display}"`,
-        'filter.style.display BEFORE:', `"${filter.style.display}"`
-      );
-
-      // Depending on your intended logic, you might revert or set them to block here
-      if (window.innerWidth >= mobileBreakpoint) {
-        // Desktop
-        console.log('[clearButton] Desktop logic - setting display to block');
-        logo.style.display = 'block';
-        filter.style.display = 'block';
-        clearButton.style.display = 'none';
-      } else {
-        // Mobile
-        console.log('[clearButton] Mobile logic - removing inline display override');
-        logo.style.display = '';
-        filter.style.display = '';
-        clearButton.style.display = 'block';
-      }
-
-      // Debug the final inline display for logo and filter AFTER we modify them
-      console.log(
-        '[clearButton]',
-        'logo.style.display AFTER:', `"${logo.style.display}"`,
-        'filter.style.display AFTER:', `"${filter.style.display}"`
-      );
-    });
-
-    filter.addEventListener('click', showFilters);
-
-    function showFilters() {
-      console.log('%c[showFilters] Called', 'color: #0af');
-      console.log(
-        '[showFilters]',
-        'headerLinks.style.display before:', `"${headerLinks.style.display}"`,
-        'logo.style.display before:', `"${logo.style.display}"`
-      );
-
-      headerLinks.style.display = 'flex';
-      logo.style.display = 'none';
-
-      console.log(
-        '[showFilters]',
-        'headerLinks.style.display after:', `"${headerLinks.style.display}"`,
-        'logo.style.display after:', `"${logo.style.display}"`
-      );
-    }
 
     });
 
