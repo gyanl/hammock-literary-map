@@ -17,7 +17,6 @@
     href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;1,500&display=swap">
 
   <!-- Scripts -->
-
   <script src="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.js"></script>
   <script src="https://unpkg.com/@mapbox/mapbox-sdk/umd/mapbox-sdk.min.js"></script>
 
@@ -35,17 +34,17 @@
   <div id="tutorial-bottom" class="center-align bottom-center header-fade-in-down">
 
     <div class="tutorial-card-container">
-      <div class="tutorial-card">
+      <div class="tutorial-card glass">
         <img src="icons/maximize-2.svg" alt="zoom">
         Scroll or pinch to zoom in and out.
       </div>
 
-      <div class="tutorial-card">
+      <div class="tutorial-card glass">
         <img src="icons/move.svg" alt="zoom">
         Click and drag to move around the globe.
       </div>
 
-      <div class="tutorial-card">
+      <div class="tutorial-card glass">
         <img src="icons/mouse-pointer.svg" alt="zoom">
         Click on a green dot to see more about the authors from that region.
       </div>
@@ -224,6 +223,11 @@
 
     let tutorialComplete = false;
 
+    // Fetch the data.geojson file with the authors data
+    fetch('data.geojson').then(response => response.json()).then(data => {
+      window.data = data;
+    });
+
     // TODO: Add constants for zoom levels.
 
     // Function to toggle dropdown content visibility
@@ -269,23 +273,6 @@
     });
 
 
-
-    // Fetch the data.geojson file with the authors data
-    fetch('data.geojson').then(response => response.json()).then(data => {
-      window.data = data;
-
-      // Create and store markers
-      data.features.forEach(feature => {
-        const marker = new mapboxgl.Marker()
-          .setLngLat(feature.geometry.coordinates)
-          .setPopup(new mapboxgl.Popup().setHTML(createPopupContent(feature.properties)))
-          .addTo(map);
-
-        // Store marker reference
-        if (!feature.properties) feature.properties = {};
-        feature.properties.marker = marker;
-      });
-    });
 
     // Toggles the sidebar
     function toggleSidebar() {
@@ -420,9 +407,10 @@
 
       const featuredIn = list_title ? `
       
-        <div class="card-title"><a href="${list_url}" target="_blank">${list_title}</a>
+        <a href="${list_url}" target="_blank"><div class="card-title">${list_title}
           <img src="icons/arrow-up-right.svg" alt="arrow-up-right">
           </div>
+          </a>
         <div class="card-content">
           <span class="book-title">${list_bookname}</span>
           <span>${list_copy}</span>
@@ -576,6 +564,11 @@
       // Clicking on a point displays the author details in the sidebar
       map.on('click', 'unclustered-point', function (e) {
 
+        if (!tutorialComplete) {
+          startExperience(e.lngLat.lat, e.lngLat.lng);
+          return;
+        }
+
         var coordinates = e.features[0].geometry.coordinates.slice();
         var properties = e.features[0].properties;
 
@@ -592,9 +585,7 @@
       // Clicking on a cluster displays all points in cluster in sidebar
       map.on('click', 'clusters', function (e) {
         if (!tutorialComplete) {
-          var lat = e.lngLat.lat;
-          var long = e.lngLat.lng;
-          startExperience(lat, long);
+          startExperience(e.lngLat.lat, e.lngLat.lng);
         }
 
         var features = map.queryRenderedFeatures(e.point, {

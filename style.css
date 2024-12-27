@@ -141,7 +141,7 @@ body {
   justify-content: stretch;
   align-items: center;
   padding: var(--pad-xxl) var(--pad-xxl);
-  background-color: var(--color-dark-gray);
+  /* background-color: var(--color-dark-gray); */
   border-radius: var(--radius-l);
   color: var(--color-text-primary);
   width: 100%;
@@ -158,7 +158,7 @@ body {
 }
 
 .tutorial-card:hover{
-  background-color: var(--color-mid-gray);
+  /* background-color: var(--color-mid-gray); */
   transform: translateY(-2px);
 }
 
@@ -171,11 +171,13 @@ body {
   border-radius: var(--radius-l) var(--radius-l) 0 0;
 }
 
-.card-title a{
-  padding: var(--pad-l) var(--pad-s) var(--pad-l) var(--pad-xl);
+a{
   text-decoration: none;
+}
+
+a .card-title{
+  padding: var(--pad-l) var(--pad-xl);
   color: var(--color-text-primary);
-  display: block;
 }
 
 .card-title img{
@@ -185,7 +187,7 @@ body {
   transition: transform 0.2s ease-in-out;
 }
 
-.card-title a:hover + img {
+.card-title:hover img {
   transform: scale(1.1);
   border-radius: var(--radius-pill);
   background-color: var(--color-active-green);
