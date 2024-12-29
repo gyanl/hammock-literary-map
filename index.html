@@ -470,6 +470,7 @@
 
       // Start the experience by animating out the tutorial parts
       function startExperience(lat, long) {
+        clearSidebar(); //so that the sidebar doesn't show the no results message
         tutorialComplete = true;
         introText.classList.replace("header-fade-in-up", "goAwayTop");
         tutorialBottom.classList.replace("header-fade-in-down", "goAwayBottom");
@@ -662,10 +663,20 @@
             displayedCount++;
           }
         }
-
+        
         // Update sidebar title to show total count
-        setSidebarTitle(`${totalCount > displayLimit ? `${displayLimit}+ results` : totalCount + ' results'}`);
-      }
+        if (totalCount > 0) {
+          setSidebarTitle(`${totalCount > displayLimit ? `${displayLimit}+ results` : `${totalCount} results`}`);
+        } else {
+          setSidebarTitle("No results found");
+          searchresults.innerHTML = `
+        <div class="sidebar-author">
+          <h3>We couldn't find this book or author.</h3>
+          <p>If you think they should be there, fill out this form!</p>
+        </div>
+          `;
+        }
+    }
 
       // Optimized showVisibleFeatures function
       async function showVisibleFeatures() {
