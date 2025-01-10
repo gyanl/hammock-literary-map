@@ -408,6 +408,20 @@ header {
   margin: 6px 0;
 }
 
+.author-name{
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 0;
+  margin-block-start: 0.4em;
+}
+
+.author-birth{
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 0;
+  margin-top: 3px;
+}
+
 /* Typo fix: .sidebar-auther-details -> .sidebar-author-details? */
 .sidebar-auther-details p {
   margin: 6px 0;
