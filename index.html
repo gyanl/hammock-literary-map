@@ -462,6 +462,180 @@
       zoom: .5
     });
 
+    // Move this function outside of map.on('load')
+    async function showVisibleFeatures() {
+      clearSidebar();
+      const features = [];
+      const displayLimit = 100;
+
+      // Get visible features
+      const visibleFeatures = map.queryRenderedFeatures({
+        layers: ['clusters', 'unclustered-point']
+      });
+
+      // Handle unclustered points first (faster)
+      const unclusteredFeatures = visibleFeatures
+        .filter(feature => !feature.properties.cluster && feature.properties.author_name);
+
+      // If we already have enough unclustered points, we can skip cluster processing
+      if (unclusteredFeatures.length >= displayLimit) {
+        showResults(unclusteredFeatures);
+        return;
+      }
+
+      features.push(...unclusteredFeatures);
+
+      // Process clusters only if we need more results
+      const clusterPromises = visibleFeatures
+        .filter(feature => feature.properties.cluster)
+        .map(feature => {
+          return new Promise((resolve, reject) => {
+            map.getSource('authors').getClusterLeaves(
+              feature.properties.cluster_id,
+              displayLimit, // Only request up to displayLimit
+              0,
+              (err, leaves) => err ? reject(err) : resolve(leaves)
+            );
+          });
+        });
+
+      try {
+        const clusterResults = await Promise.all(clusterPromises);
+        clusterResults.forEach(clusterPoints => {
+          features.push(...clusterPoints);
+        });
+
+        // Deduplicate results
+        const seen = new Set();
+        const uniqueFeatures = features.filter(feature => {
+          const authorName = feature.properties.author_name;
+          if (!authorName || seen.has(authorName)) return false;
+          seen.add(authorName);
+          return true;
+        });
+
+        showResults(uniqueFeatures);
+      } catch (error) {
+        console.error('Error getting cluster data:', error);
+      }
+
+      console.log('[showVisibleFeatures] -> showResults() called, map flyTo zoom=3');
+    }
+
+    // Also move showResults function outside map.on('load')
+    function showResults(features) {
+      clearSidebar();
+      const totalCount = features.length;
+      const displayLimit = 100;
+
+      // Track authors we've already added
+      const addedAuthors = new Set();
+      let displayedCount = 0;
+
+      for (const feature of features) {
+        if (displayedCount >= displayLimit) break;
+
+        if (feature.properties?.author_name &&
+          !addedAuthors.has(feature.properties.author_name)) {
+          addAuthorResult(
+            feature.properties,
+            feature.geometry.coordinates
+          );
+          addedAuthors.add(feature.properties.author_name);
+          displayedCount++;
+        }
+      }
+      
+      // Update sidebar title to show total count
+      if (totalCount > 0) {
+        setSidebarTitle(`${totalCount > displayLimit ? `${displayLimit}+ results` : `${totalCount} results`}`);
+      } else {
+        setSidebarTitle("No results found");
+        searchresults.innerHTML = `
+          <div class="sidebar-author">
+            <h3>We couldn't find this book or author.</h3>
+            <p>If you think they should be there, fill out this form!</p>
+          </div>
+        `;
+      }
+    }
+
+    // Move applyFilters function outside map.on('load')
+    function applyFilters() {
+      const searchValue = searchInput.value.toLowerCase();
+      const activeFilters = getActiveFilters();
+
+      // Build up the filtered list
+      const filteredFeatures = window.data.features.filter(f => {
+        const props = f.properties;
+
+        // Search text logic
+        const matchesSearch =
+          searchValue.length <= 1
+          || (props.author_name.toLowerCase().includes(searchValue))
+          || (props.work_1.toLowerCase().includes(searchValue))
+          || (props.work_2 && props.work_2.toLowerCase().includes(searchValue));
+
+        // Filter logic
+        const matchesGender = activeFilters.gender.length === 0
+          || activeFilters.gender.includes(props.gender.toLowerCase());
+        const matchesContinent = activeFilters.continent.length === 0
+          || activeFilters.continent.includes(props.continent);
+        const matchesLanguage = activeFilters.language.length === 0
+          || (props.language && props.language
+            .split(';')
+            .some(lang => activeFilters.language.includes(lang.trim())));
+        const matchesAwards = activeFilters.awards.length === 0
+          || (props.awards && props.awards
+            .split(';')
+            .some(award => activeFilters.awards.includes(award.trim())));
+
+        // Final check
+        return matchesSearch && matchesGender && matchesContinent && matchesLanguage && matchesAwards;
+      });
+
+      // Create a fresh GeoJSON with filtered features
+      const newData = {
+        ...window.data,
+        features: filteredFeatures
+      };
+
+      // Update the map source with filtered data
+      map.getSource('authors').setData(newData);
+
+      // Update sidebar with the newly filtered features
+      showResults(filteredFeatures);
+    }
+
+    // Also move getActiveFilters outside map.on('load')
+    function getActiveFilters() {
+      const filters = {
+        gender: [],
+        continent: [],
+        language: [],
+        awards: []
+      };
+
+      // Collect checked values using label text instead of IDs
+      document.querySelectorAll('#gender-dropdown input:checked').forEach(checkbox => {
+        filters.gender.push(checkbox.closest('label').textContent.trim().toLowerCase());
+      });
+
+      document.querySelectorAll('#continent-dropdown input:checked').forEach(checkbox => {
+        filters.continent.push(checkbox.closest('label').textContent.trim());
+      });
+
+      document.querySelectorAll('#language-dropdown input:checked').forEach(checkbox => {
+        filters.language.push(checkbox.closest('label').textContent.trim());
+      });
+
+      document.querySelectorAll('#awards-dropdown input:checked').forEach(checkbox => {
+        filters.awards.push(checkbox.closest('label').textContent.trim());
+      });
+
+      return filters;
+    }
+
     // Add this after map initialization
     map.on('load', function () {
 
@@ -641,180 +815,11 @@
         });
       });
 
-      // Helper function to display results
-      function showResults(features) {
-        clearSidebar();
-        const totalCount = features.length;
-        const displayLimit = 100;
-
-        // Track authors we've already added
-        const addedAuthors = new Set();
-        let displayedCount = 0;
-
-        for (const feature of features) {
-          if (displayedCount >= displayLimit) break;
-
-          if (feature.properties?.author_name &&
-            !addedAuthors.has(feature.properties.author_name)) {
-            addAuthorResult(
-              feature.properties,
-              feature.geometry.coordinates
-            );
-            addedAuthors.add(feature.properties.author_name);
-            displayedCount++;
-          }
-        }
-        
-        // Update sidebar title to show total count
-        if (totalCount > 0) {
-          setSidebarTitle(`${totalCount > displayLimit ? `${displayLimit}+ results` : `${totalCount} results`}`);
-        } else {
-          setSidebarTitle("No results found");
-          searchresults.innerHTML = `
-        <div class="sidebar-author">
-          <h3>We couldn't find this book or author.</h3>
-          <p>If you think they should be there, fill out this form!</p>
-        </div>
-          `;
-        }
-    }
-
-      // Optimized showVisibleFeatures function
-      async function showVisibleFeatures() {
-        clearSidebar();
-        const features = [];
-        const displayLimit = 100;
-
-        // Get visible features
-        const visibleFeatures = map.queryRenderedFeatures({
-          layers: ['clusters', 'unclustered-point']
-        });
-
-        // Handle unclustered points first (faster)
-        const unclusteredFeatures = visibleFeatures
-          .filter(feature => !feature.properties.cluster && feature.properties.author_name);
-
-        // If we already have enough unclustered points, we can skip cluster processing
-        if (unclusteredFeatures.length >= displayLimit) {
-          showResults(unclusteredFeatures);
-          return;
-        }
-
-        features.push(...unclusteredFeatures);
-
-        // Process clusters only if we need more results
-        const clusterPromises = visibleFeatures
-          .filter(feature => feature.properties.cluster)
-          .map(feature => {
-            return new Promise((resolve, reject) => {
-              map.getSource('authors').getClusterLeaves(
-                feature.properties.cluster_id,
-                displayLimit, // Only request up to displayLimit
-                0,
-                (err, leaves) => err ? reject(err) : resolve(leaves)
-              );
-            });
-          });
-
-        try {
-          const clusterResults = await Promise.all(clusterPromises);
-          clusterResults.forEach(clusterPoints => {
-            features.push(...clusterPoints);
-          });
-
-          // Deduplicate results
-          const seen = new Set();
-          const uniqueFeatures = features.filter(feature => {
-            const authorName = feature.properties.author_name;
-            if (!authorName || seen.has(authorName)) return false;
-            seen.add(authorName);
-            return true;
-          });
-
-          showResults(uniqueFeatures);
-        } catch (error) {
-          console.error('Error getting cluster data:', error);
-        }
-      }
 
       // Update event listeners
       document.getElementById('search-bar').addEventListener('input', handleSearch);
       map.on('moveend', debounce(showVisibleFeatures, 100));
       map.on('zoomend', debounce(showVisibleFeatures, 100));
-
-      function getActiveFilters() {
-        const filters = {
-          gender: [],
-          continent: [],
-          language: [],
-          awards: []
-        };
-
-        // Collect checked values using label text instead of IDs
-        document.querySelectorAll('#gender-dropdown input:checked').forEach(checkbox => {
-          filters.gender.push(checkbox.closest('label').textContent.trim().toLowerCase());
-        });
-
-        document.querySelectorAll('#continent-dropdown input:checked').forEach(checkbox => {
-          filters.continent.push(checkbox.closest('label').textContent.trim());
-        });
-
-        document.querySelectorAll('#language-dropdown input:checked').forEach(checkbox => {
-          filters.language.push(checkbox.closest('label').textContent.trim());
-        });
-
-        document.querySelectorAll('#awards-dropdown input:checked').forEach(checkbox => {
-          filters.awards.push(checkbox.closest('label').textContent.trim());
-        });
-
-        return filters;
-      }
-
-      function applyFilters() {
-        const searchValue = searchInput.value.toLowerCase();
-        const activeFilters = getActiveFilters();
-
-        // Build up the filtered list
-        const filteredFeatures = window.data.features.filter(f => {
-          const props = f.properties;
-
-          // Search text logic
-          const matchesSearch =
-            searchValue.length <= 1
-            || (props.author_name.toLowerCase().includes(searchValue))
-            || (props.work_1.toLowerCase().includes(searchValue))
-            || (props.work_2 && props.work_2.toLowerCase().includes(searchValue));
-
-          // Filter logic
-          const matchesGender = activeFilters.gender.length === 0
-            || activeFilters.gender.includes(props.gender.toLowerCase());
-          const matchesContinent = activeFilters.continent.length === 0
-            || activeFilters.continent.includes(props.continent);
-          const matchesLanguage = activeFilters.language.length === 0
-            || (props.language && props.language
-              .split(';')
-              .some(lang => activeFilters.language.includes(lang.trim())));
-          const matchesAwards = activeFilters.awards.length === 0
-            || (props.awards && props.awards
-              .split(';')
-              .some(award => activeFilters.awards.includes(award.trim())));
-
-          // Final check
-          return matchesSearch && matchesGender && matchesContinent && matchesLanguage && matchesAwards;
-        });
-
-        // Create a fresh GeoJSON with filtered features
-        const newData = {
-          ...window.data,
-          features: filteredFeatures
-        };
-
-        // Now update the map source with only the filtered data
-        map.getSource('authors').setData(newData);
-
-        // Update sidebar, e.g. show the newly filtered features
-        showResults(filteredFeatures);
-      }
 
       // Initial load
       showVisibleFeatures();
@@ -907,61 +912,23 @@
       });
 
       clearButton.addEventListener('click', () => {
-        console.log('%c[clearButton] Clicked', 'color: #0af');
-
-        console.log(
-          '[clearButton]',
-          'searchInput.value before clearing:',
-          searchInput.value
-        );
-
-        // Check if we have a value. If so, call backToTheResults().
-        if (searchInput.value !== '') {
-          console.log('[clearButton] Calling backToTheResults()');
-          backToTheResults();
-        }
-
-        // Remove focus from the input
-        searchInput.blur();
-
-        // Force an 'input' event to re-trigger search logic
-        console.log('[clearButton] Dispatching "input" event on searchInput');
-        searchInput.dispatchEvent(new Event('input'));
-
         // Clear the search box
         searchInput.value = '';
+        searchInput.blur();
 
-        // Check the mobile breakpoint
-        console.log('[clearButton]', 'window.innerWidth:', window.innerWidth, 'mobileBreakpoint:', mobileBreakpoint);
+        // Reapply filters to update the map with filtered data
+        applyFilters();
 
-        // Debug the current inline display for logo and filter BEFORE we modify them
-        console.log(
-          '[clearButton]',
-          'logo.style.display BEFORE:', `"${logo.style.display}"`,
-          'filter.style.display BEFORE:', `"${filter.style.display}"`
-        );
-
-        // Depending on your intended logic, you might revert or set them to block here
+        // Handle display logic
         if (window.innerWidth >= mobileBreakpoint) {
-          // Desktop
-          console.log('[clearButton] Desktop logic - setting display to block');
           logo.style.display = 'block';
           filter.style.display = 'block';
           clearButton.style.display = 'none';
         } else {
-          // Mobile
-          console.log('[clearButton] Mobile logic - removing inline display override');
           logo.style.display = '';
           filter.style.display = '';
           clearButton.style.display = 'block';
         }
-
-        // Debug the final inline display for logo and filter AFTER we modify them
-        console.log(
-          '[clearButton]',
-          'logo.style.display AFTER:', `"${logo.style.display}"`,
-          'filter.style.display AFTER:', `"${filter.style.display}"`
-        );
       });
 
       filter.addEventListener('click', showFilters);
