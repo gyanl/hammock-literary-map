@@ -833,9 +833,28 @@
       const randomFeature = features[Math.floor(Math.random() * features.length)];
 
       if (randomFeature && randomFeature.geometry) {
+        // Clear author details first
+        sidebar.style.display = 'none';
+        
+        // Create one-time event listener for moveend
+        const onMoveEnd = () => {
+          setAuthorDetails(
+            randomFeature.properties,
+            randomFeature.geometry.coordinates[0],
+            randomFeature.geometry.coordinates[1]
+          );
+          sidebar.style.display = 'block';
+          // Remove the listener after it fires once
+          map.off('moveend', onMoveEnd);
+        };
+        
+        // Add the listener
+        map.on('moveend', onMoveEnd);
+
+        // Start the animation
         map.flyTo({
           center: randomFeature.geometry.coordinates,
-          zoom: 5
+          zoom: 6
         });
       }
     });
