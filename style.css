@@ -1164,12 +1164,22 @@ button {
 /* For screens <= 768px */
 @media (max-width: 768px) {
 
+
+  #introText {
+    margin-top: 20px;
+    font-size: 21px;
+  }
+
+  h1 {
+    font-size: 26px;
+  }
+
   .desktop-only {
     display: none;
   }
 
   .logo {
-    height: 20px;
+    height: 16px;
   }
 
   html {
@@ -1341,6 +1351,12 @@ button {
   }
 
   /* Tutorial Cards */
+
+  .bottom-center {
+    z-index: 100;
+    position: absolute;
+    bottom: 20px;
+}
 
   .tutorial-card-container {
     position: relative;
