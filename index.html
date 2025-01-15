@@ -163,8 +163,11 @@
       </div>
 
       <div class="header-link dropdown" id="century-slider">
-        Time Period
+        Years
         <div class="dropdown-content">
+          <div class="slider-labels">
+            Showing authors alive during <div id="yearValue">1800—2025</div>
+          </div>
           <div class="range-slider">
             <div class="slider-track-container">
               <div class="slider-track"></div>
@@ -172,7 +175,7 @@
             <input type="range" min="1800" max="2025" value="1800" class="slider" id="yearMin">
             <input type="range" min="1800" max="2025" value="2025" class="slider" id="yearMax">
           </div>
-          <p id="yearValue">1800 - 2025</p>
+
         </div>
       </div>
 
@@ -1018,7 +1021,7 @@
         const maxVal = parseInt(yearMax.value);
         const minPercent = ((minVal - 1800) / (2025 - 1800)) * 100;
         const maxPercent = ((maxVal - 1800) / (2025 - 1800)) * 100;
-        
+
         track.style.setProperty('--start-percent', `${minPercent}%`);
         track.style.setProperty('--end-percent', `${maxPercent}%`);
       }
@@ -1026,13 +1029,13 @@
       yearMin.addEventListener('input', (e) => {
         const minVal = parseInt(yearMin.value);
         const maxVal = parseInt(yearMax.value);
-        
+
         if (minVal > maxVal) {
           yearMin.value = maxVal;
           return;
         }
-        
-        yearValue.textContent = `${minVal} - ${maxVal}`;
+
+        yearValue.textContent = `${minVal}—${maxVal}`;
         updateTrack();
         debouncedApplyFilters();
       });
@@ -1040,13 +1043,13 @@
       yearMax.addEventListener('input', (e) => {
         const minVal = parseInt(yearMin.value);
         const maxVal = parseInt(yearMax.value);
-        
+
         if (maxVal < minVal) {
           yearMax.value = minVal;
           return;
         }
-        
-        yearValue.textContent = `${minVal} - ${maxVal}`;
+
+        yearValue.textContent = `${minVal}—${maxVal}`;
         updateTrack();
         debouncedApplyFilters();
       });
