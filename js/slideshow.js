@@ -135,7 +135,7 @@ class Slideshow {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
-    const tutorialContainer = document.querySelector('.tutorial-card-container');
+    const tutorialContainer = document.getElementById('slideshow-container');
     if (tutorialContainer) {
         new Slideshow(tutorialContainer);
     }
