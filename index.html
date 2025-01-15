@@ -1106,6 +1106,36 @@
     // Call setupYearRangeSlider when the page loads
     document.addEventListener('DOMContentLoaded', setupYearRangeSlider);
 
+    // Add this after your existing checkbox event listeners
+    document.querySelectorAll('#continent-dropdown input[type="checkbox"]').forEach(checkbox => {
+      checkbox.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          // Only fly to location if checkbox is being checked
+          const continent = e.target.closest('label').textContent.trim();
+          const continentCoordinates = {
+            'Africa': [17.5707, 3.8690],
+            'Asia': [100.6197, 34.0479],
+            'Australia': [133.7751, -25.2744],
+            'Europe': [15.2551, 54.5260],
+            'North America': [-105.2551, 54.5260],
+            'Latin America': [-58.9300, -23.4425]
+          };
+
+          if (continentCoordinates[continent]) {
+            map.flyTo({
+              center: continentCoordinates[continent],
+              zoom: 2.5,
+              duration: 1500
+            });
+          }
+        }
+        
+        // Apply filters regardless of checked state
+        applyFilters();
+        updateDropdownCount('continent-dropdown');
+      });
+    });
+
   </script>
 
 </body>
