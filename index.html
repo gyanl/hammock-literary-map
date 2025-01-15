@@ -327,12 +327,13 @@
 
     // Shows results in sidebar and zooms out on map
     function backToTheResults() {
-      console.log('%c[backToTheResults] Called', 'color: #0af');
-      map.easeTo({
-        zoom: map.getZoom() - 0.5
+      if (!searchresults.style.display || searchresults.style.display === 'none') {
+        map.easeTo({
+        zoom: map.getZoom() - 0.5,
+        duration: 500
       });
-      console.log('[backToTheResults] -> showSearchResults() called, map flyTo zoom=3');
-      showSearchResults();
+        showSearchResults();
+      }
     }
 
     // Update the addAuthorResult function to include more details
@@ -570,7 +571,7 @@
         setSidebarTitle("No results found");
         searchresults.innerHTML = `
           <div class="sidebar-author">
-            <h3>We couldn't find this book or author.</h3>
+            <h3>We couldn't find any matching books or authors in the area you are looking at. Try moving around the globe or changing your filters.</h3>
             <p>If you think they should be there, fill out this form!</p>
           </div>
         `;
@@ -598,7 +599,9 @@
         const matchesSearch = searchValue.length <= 1 ||
           props.author_name.toLowerCase().includes(searchValue) ||
           props.work_1.toLowerCase().includes(searchValue) ||
-          (props.work_2 && props.work_2.toLowerCase().includes(searchValue));
+          (props.work_2 && props.work_2.toLowerCase().includes(searchValue)) ||
+          props.city_birth.toLowerCase().includes(searchValue) ||
+          props.city_residence.toLowerCase().includes(searchValue);
 
         const matchesGender = activeFilters.gender.length === 0 ||
           activeFilters.gender.includes(props.gender.toLowerCase());
@@ -627,6 +630,7 @@
 
       // Update sidebar with the newly filtered features
       showResults(filteredFeatures);
+      backToTheResults();
     }
 
     // Also move getActiveFilters outside map.on('load')
@@ -819,17 +823,18 @@
         };
       }
 
-      // First, define handleSearch
-      const handleSearch = debounce((e) => {
+      // Debounced function to update results when any filter changes
+      const updateFilteredResults = debounce(() => {
         clearSidebar();
         backToTheResults();
         applyFilters();
       }, 150);
 
-      // Then, set up the event listeners
+      // Set up event listeners
+      searchInput.addEventListener('input', updateFilteredResults);
+
       document.querySelectorAll('.dropdown input[type="checkbox"]').forEach(checkbox => {
         checkbox.addEventListener('change', () => {
-          // Call applyFilters instead of handleSearch
           applyFilters();
 
           // Update the count badge
@@ -840,12 +845,35 @@
 
 
       // Update event listeners
-      document.getElementById('search-bar').addEventListener('input', handleSearch);
+      document.getElementById('search-bar').addEventListener('input', updateFilteredResults);
       map.on('moveend', debounce(showVisibleFeatures, 100));
       map.on('zoomend', debounce(showVisibleFeatures, 100));
 
       // Initial load
       showVisibleFeatures();
+
+      clearButton.addEventListener('click', () => {
+        // Clear the search box
+        searchInput.value = '';
+        searchInput.blur();
+
+        // Reapply filters to update the map with filtered data
+        applyFilters();
+        backToTheResults();
+
+        // Handle display logic
+        if (window.innerWidth >= mobileBreakpoint) {
+          logo.style.display = 'block';
+          filter.style.display = 'block';
+          clearButton.style.display = 'none';
+        } else {
+          logo.style.display = '';
+          filter.style.display = '';
+          clearButton.style.display = 'block';
+        }
+
+      });
+
     });
 
 
@@ -872,7 +900,9 @@
         const matchesSearch = searchValue.length <= 1 ||
           props.author_name.toLowerCase().includes(searchValue) ||
           props.work_1.toLowerCase().includes(searchValue) ||
-          (props.work_2 && props.work_2.toLowerCase().includes(searchValue));
+          (props.work_2 && props.work_2.toLowerCase().includes(searchValue)) ||
+          props.city_birth.toLowerCase().includes(searchValue) ||
+          props.city_residence.toLowerCase().includes(searchValue);
 
         const matchesGender = activeFilters.gender.length === 0 ||
           activeFilters.gender.includes(props.gender.toLowerCase());
@@ -997,25 +1027,7 @@
         }
       });
 
-      clearButton.addEventListener('click', () => {
-        // Clear the search box
-        searchInput.value = '';
-        searchInput.blur();
 
-        // Reapply filters to update the map with filtered data
-        applyFilters();
-
-        // Handle display logic
-        if (window.innerWidth >= mobileBreakpoint) {
-          logo.style.display = 'block';
-          filter.style.display = 'block';
-          clearButton.style.display = 'none';
-        } else {
-          logo.style.display = '';
-          filter.style.display = '';
-          clearButton.style.display = 'block';
-        }
-      });
 
       filter.addEventListener('click', showFilters);
 
@@ -1130,7 +1142,7 @@
             });
           }
         }
-        
+
         // Apply filters regardless of checked state
         applyFilters();
         updateDropdownCount('continent-dropdown');
