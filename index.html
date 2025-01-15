@@ -549,16 +549,21 @@
       const addedAuthors = new Set();
       let displayedCount = 0;
 
+      // Sort features by author name for consistent results
+      features.sort((a, b) => 
+        a.properties.author_name.localeCompare(b.properties.author_name)
+      );
+
       for (const feature of features) {
         if (displayedCount >= displayLimit) break;
 
-        if (feature.properties?.author_name &&
-          !addedAuthors.has(feature.properties.author_name)) {
+        const properties = feature.properties || feature;
+        if (properties?.author_name && !addedAuthors.has(properties.author_name)) {
           addAuthorResult(
-            feature.properties,
-            feature.geometry.coordinates
+            properties,
+            feature.geometry ? feature.geometry.coordinates : [0, 0]
           );
-          addedAuthors.add(feature.properties.author_name);
+          addedAuthors.add(properties.author_name);
           displayedCount++;
         }
       }
@@ -841,8 +846,16 @@
 
       // Update event listeners
       document.getElementById('search-bar').addEventListener('input', handleSearch);
-      map.on('moveend', debounce(showVisibleFeatures, 100));
-      map.on('zoomend', debounce(showVisibleFeatures, 100));
+      map.on('moveend', debounce(() => {
+        if (searchInput.value) {
+          applyFilters();
+        }
+      }, 100));
+      map.on('zoomend', debounce(() => {
+        if (searchInput.value) {
+          applyFilters();
+        }
+      }, 100));
 
       // Initial load
       showVisibleFeatures();
