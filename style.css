@@ -388,6 +388,7 @@ header {
   flex-direction: column;
   transition: 0.2s;
   line-height: 1.3em;
+  cursor: pointer;
 }
 
 .sidebar-author:hover {
@@ -988,7 +989,7 @@ button {
   box-shadow: 0 4px 12px var(--dropdown-shadow);
   z-index: 1000;
   max-height: 50vh !important;
-  min-width: 180px;
+  min-width: 225px;
   max-width: 600px;
   overflow-y: scroll;
 }
