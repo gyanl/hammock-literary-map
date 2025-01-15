@@ -822,6 +822,7 @@
       // First, define handleSearch
       const handleSearch = debounce((e) => {
         clearSidebar();
+        backToTheResults();
         applyFilters();
       }, 150);
 
