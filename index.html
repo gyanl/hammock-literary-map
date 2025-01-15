@@ -849,10 +849,54 @@
 
 
 
-    // Fly to a random location on the map when feeling lucky button is clicked
+    // Fly to a random filtered location on the map when feeling lucky button is clicked
     document.getElementById('btnRandom').addEventListener('click', () => {
-      const features = window.data.features;
-      const randomFeature = features[Math.floor(Math.random() * features.length)];
+      // Get currently filtered features based on active filters
+      const searchValue = searchInput.value.toLowerCase();
+      const activeFilters = getActiveFilters();
+      const minYear = parseInt(yearMin.value);
+      const maxYear = parseInt(yearMax.value);
+
+      const filteredFeatures = window.data.features.filter(f => {
+        const props = f.properties;
+
+        // Add year range filter
+        const birthYear = parseInt(props.year_birth);
+        const deathYear = props.year_death ? parseInt(props.year_death) : new Date().getFullYear();
+        const wasAliveInRange = (
+          (birthYear <= maxYear && deathYear >= minYear) // Check if author's life overlapped with selected range
+        );
+
+        // Existing filter checks
+        const matchesSearch = searchValue.length <= 1 ||
+          props.author_name.toLowerCase().includes(searchValue) ||
+          props.work_1.toLowerCase().includes(searchValue) ||
+          (props.work_2 && props.work_2.toLowerCase().includes(searchValue));
+
+        const matchesGender = activeFilters.gender.length === 0 ||
+          activeFilters.gender.includes(props.gender.toLowerCase());
+        const matchesContinent = activeFilters.continent.length === 0 ||
+          activeFilters.continent.includes(props.continent);
+        const matchesLanguage = activeFilters.language.length === 0 ||
+          (props.language && props.language.split(';').some(lang =>
+            activeFilters.language.includes(lang.trim())));
+        const matchesAwards = activeFilters.awards.length === 0 ||
+          (props.awards && props.awards.split(';').some(award =>
+            activeFilters.awards.includes(award.trim())));
+
+        return matchesSearch && matchesGender && matchesContinent &&
+          matchesLanguage && matchesAwards && wasAliveInRange;
+      });
+
+      if (filteredFeatures.length === 0) {
+        console.log('No filtered features found');
+        return;
+      }
+
+      // Select random feature from filtered ones
+      const randomFeature = filteredFeatures[
+        Math.floor(Math.random() * filteredFeatures.length)
+      ];
 
       if (randomFeature && randomFeature.geometry) {
         // Clear author details first
