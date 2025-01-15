@@ -162,6 +162,20 @@
         </div>
       </div>
 
+      <div class="header-link dropdown" id="century-slider">
+        Time Period
+        <div class="dropdown-content">
+          <div class="range-slider">
+            <div class="slider-track-container">
+              <div class="slider-track"></div>
+            </div>
+            <input type="range" min="1800" max="2025" value="1800" class="slider" id="yearMin">
+            <input type="range" min="1800" max="2025" value="2025" class="slider" id="yearMax">
+          </div>
+          <p id="yearValue">1800 - 2025</p>
+        </div>
+      </div>
+
     </div>
 
     <div id="search-bar">
@@ -544,7 +558,7 @@
           displayedCount++;
         }
       }
-      
+
       // Update sidebar title to show total count
       if (totalCount > 0) {
         setSidebarTitle(`${totalCount > displayLimit ? `${displayLimit}+ results` : `${totalCount} results`}`);
@@ -563,34 +577,39 @@
     function applyFilters() {
       const searchValue = searchInput.value.toLowerCase();
       const activeFilters = getActiveFilters();
+      const minYear = parseInt(yearMin.value);
+      const maxYear = parseInt(yearMax.value);
 
-      // Build up the filtered list
       const filteredFeatures = window.data.features.filter(f => {
         const props = f.properties;
 
-        // Search text logic
-        const matchesSearch =
-          searchValue.length <= 1
-          || (props.author_name.toLowerCase().includes(searchValue))
-          || (props.work_1.toLowerCase().includes(searchValue))
-          || (props.work_2 && props.work_2.toLowerCase().includes(searchValue));
+        // Add year range filter
+        const birthYear = parseInt(props.year_birth);
+        const deathYear = props.year_death ? parseInt(props.year_death) : new Date().getFullYear();
+        const wasAliveInRange = (
+          (birthYear <= maxYear && deathYear >= minYear) // Check if author's life overlapped with selected range
+        );
 
-        // Filter logic
-        const matchesGender = activeFilters.gender.length === 0
-          || activeFilters.gender.includes(props.gender.toLowerCase());
-        const matchesContinent = activeFilters.continent.length === 0
-          || activeFilters.continent.includes(props.continent);
-        const matchesLanguage = activeFilters.language.length === 0
-          || (props.language && props.language
-            .split(';')
-            .some(lang => activeFilters.language.includes(lang.trim())));
-        const matchesAwards = activeFilters.awards.length === 0
-          || (props.awards && props.awards
-            .split(';')
-            .some(award => activeFilters.awards.includes(award.trim())));
+        // Existing filter checks
+        const matchesSearch = searchValue.length <= 1 ||
+          props.author_name.toLowerCase().includes(searchValue) ||
+          props.work_1.toLowerCase().includes(searchValue) ||
+          (props.work_2 && props.work_2.toLowerCase().includes(searchValue));
 
-        // Final check
-        return matchesSearch && matchesGender && matchesContinent && matchesLanguage && matchesAwards;
+        const matchesGender = activeFilters.gender.length === 0 ||
+          activeFilters.gender.includes(props.gender.toLowerCase());
+        const matchesContinent = activeFilters.continent.length === 0 ||
+          activeFilters.continent.includes(props.continent);
+        const matchesLanguage = activeFilters.language.length === 0 ||
+          (props.language && props.language.split(';').some(lang =>
+            activeFilters.language.includes(lang.trim())));
+        const matchesAwards = activeFilters.awards.length === 0 ||
+          (props.awards && props.awards.split(';').some(award =>
+            activeFilters.awards.includes(award.trim())));
+
+        // Include year range in final check
+        return matchesSearch && matchesGender && matchesContinent &&
+          matchesLanguage && matchesAwards && wasAliveInRange;
       });
 
       // Create a fresh GeoJSON with filtered features
@@ -650,7 +669,7 @@
         tutorialBottom.classList.replace("header-fade-in-down", "goAwayBottom");
 
         // If lat and long are provided, use them. Otherwise use default coordinates
-        const targetCoords = (lat && long) 
+        const targetCoords = (lat && long)
           ? [long, lat]
           : [78.0000, 29.0000];
 
@@ -834,7 +853,7 @@
       if (randomFeature && randomFeature.geometry) {
         // Clear author details first
         sidebar.style.display = 'none';
-        
+
         // Create one-time event listener for moveend
         const onMoveEnd = () => {
           setAuthorDetails(
@@ -846,7 +865,7 @@
           // Remove the listener after it fires once
           map.off('moveend', onMoveEnd);
         };
-        
+
         // Add the listener
         map.on('moveend', onMoveEnd);
 
@@ -971,7 +990,73 @@
 
     });
 
+    // Add these constants with your other ones at the top
+    const yearMin = document.getElementById('yearMin');
+    const yearMax = document.getElementById('yearMax');
+    const yearValue = document.getElementById('yearValue');
 
+    // Add this debounce function with your other utility functions
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
+    // Modify the setupYearRangeSlider function
+    function setupYearRangeSlider() {
+      const debouncedApplyFilters = debounce(applyFilters, 250);
+      const track = document.querySelector('.slider-track');
+
+      function updateTrack() {
+        const minVal = parseInt(yearMin.value);
+        const maxVal = parseInt(yearMax.value);
+        const minPercent = ((minVal - 1800) / (2025 - 1800)) * 100;
+        const maxPercent = ((maxVal - 1800) / (2025 - 1800)) * 100;
+        
+        track.style.setProperty('--start-percent', `${minPercent}%`);
+        track.style.setProperty('--end-percent', `${maxPercent}%`);
+      }
+
+      yearMin.addEventListener('input', (e) => {
+        const minVal = parseInt(yearMin.value);
+        const maxVal = parseInt(yearMax.value);
+        
+        if (minVal > maxVal) {
+          yearMin.value = maxVal;
+          return;
+        }
+        
+        yearValue.textContent = `${minVal} - ${maxVal}`;
+        updateTrack();
+        debouncedApplyFilters();
+      });
+
+      yearMax.addEventListener('input', (e) => {
+        const minVal = parseInt(yearMin.value);
+        const maxVal = parseInt(yearMax.value);
+        
+        if (maxVal < minVal) {
+          yearMax.value = minVal;
+          return;
+        }
+        
+        yearValue.textContent = `${minVal} - ${maxVal}`;
+        updateTrack();
+        debouncedApplyFilters();
+      });
+
+      // Initialize track
+      updateTrack();
+    }
+
+    // Call setupYearRangeSlider when the page loads
+    document.addEventListener('DOMContentLoaded', setupYearRangeSlider);
 
   </script>
 
