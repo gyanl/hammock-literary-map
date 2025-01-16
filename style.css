@@ -15,6 +15,7 @@
   /* Base Colors */
   --color-background: #000000;
   --color-text-primary: #FFFFFF;
+  --color-pale-gray: #EFEFEF;
   --color-light-gray: #a7a7a7;
   --color-mid-gray: #323232;
   --color-dark-gray: #232323;
@@ -220,9 +221,45 @@ a .card-title {
 
 /* Utility classes */
 
+#aboutButton {
+  position: absolute;
+  top: var(--pad-xxl);
+  right: var(--pad-xxl);
+  transition: 0.15s;
+}
+
+#aboutButton:hover {
+  top: calc(var(--pad-xxl) - 2px);
+}
+
+#aboutCloseButton {
+  position: absolute;
+  top: var(--pad-xxl);
+  right: var(--pad-xxl);
+  transition: 0.15s;
+}
+
+#aboutCloseButton:hover {
+  top: calc(var(--pad-xxl) - 2px);
+}
+
+#aboutContainer {
+  z-index: 110;
+  font-size: 14px;
+  line-height: 1.4em;
+  text-align: left;
+  position: absolute;
+  width: 400px;
+  top: 72px;
+  right: var(--pad-xxl);
+  color: var(--color-dark-gray);
+  background-color: var(--color-text-primary);
+  border-radius: var(--radius-xl);
+  padding: 16px 24px 20px 24px;
+}
 
 #introText {
-  margin-top: 32px;
+  margin-top: 7vh;
   font-size: 26px;
 }
 
@@ -275,17 +312,12 @@ a .card-title {
 /* 3. Headings & Text */
 /* ====================== */
 
-/* Common heading styles */
-h1,
-h2,
-h3 {
-  line-height: 1.3em;
-}
 
 /* Individual heading styles */
 h1 {
   font-weight: var(--font-weight-regular);
   font-size: 36px;
+  line-height: 1.5em;
 }
 
 h2 {
@@ -293,12 +325,14 @@ h2 {
   font-size: var(--font-size-l);
   margin-block-start: 0.8em;
   margin-block-end: 0.1em;
+  line-height: 1.3em;
 }
 
 h3 {
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-m);
   margin-block: 0.8em;
+  line-height: 1.3em;
 }
 
 p {
@@ -524,6 +558,11 @@ header {
   animation-fill-mode: forwards;
 }
 
+.header-fade-in-down-fast {
+  animation: headerFadeInDown 0.4s;
+  animation-fill-mode: forwards;
+}
+
 .goAwayBottom {
   animation: headerFadeInDown 1s reverse;
   animation-fill-mode: forwards;
@@ -655,6 +694,15 @@ header {
 /* 8. Utility Layout Classes */
 /* ====================== */
 
+.max-width {
+  width: 600px;
+  max-width: 80%;
+  margin: 24px auto 0 auto;
+}
+
+.inline {
+  display: inline;
+}
 
 .landing {
   z-index: 100;
@@ -823,6 +871,20 @@ input[type="text"]:focus::placeholder {
   color: var(--color-text-primary);
 }
 
+.icon-circle-dark {
+  padding: var(--pad-s);
+  border-radius: var(--radius-pill);
+  color: var(--color-text-primary);
+  background: var(--color-dark-gray);
+}
+
+.icon-circle-white {
+  padding: var(--pad-s);
+  border-radius: var(--radius-pill);
+  background: var(--color-text-primary);
+  color: var(--color-background);
+}
+
 .icon-left {
   width: 20px;
   height: 20px;
@@ -832,6 +894,7 @@ input[type="text"]:focus::placeholder {
 /* ====================== */
 /* 10. Buttons */
 /* ====================== */
+
 
 button {
   line-height: 0;
@@ -881,11 +944,14 @@ button {
 }
 
 .button-tertiary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   line-height: 1;
-  font-size: 18px;
-  padding: var(--pad-xl) var(--pad-xxl);
-  background: var(--color-accent);
-  color: var(--color-background);
+  font-size: 14px;
+  padding: var(--pad-m) var(--pad-l) var(--pad-m) var(--pad-xl);
+  background: var(--color-mid-gray);
+  color: var(--color-text-primary);
   width: fit-content;
 
   border: 1px solid rgba(0, 0, 0, 0);
@@ -896,11 +962,11 @@ button {
 }
 
 .button-tertiary:hover {
-  -webkit-transform: translateY(-4px);
-  -moz-transform: translateY(-4px);
-  -ms-transform: translateY(-4px);
-  -o-transform: translateY(-4px);
-  transform: translateY(-4px);
+  -webkit-transform: translateY(-2px);
+  -moz-transform: translateY(-2px);
+  -ms-transform: translateY(-2px);
+  -o-transform: translateY(-2px);
+  transform: translateY(-2px);
   background: var(--color-active-green);
   border: 1px solid var(--color-accent);
   color: var(--color-text-primary);
@@ -930,6 +996,33 @@ button {
   background: var(--color-dark-gray);
   border: 1px solid var(--color-light-gray);
   color: var(--color-text-primary);
+}
+
+.button-gray {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 1.3;
+  padding: var(--pad-m) var(--pad-l) var(--pad-m) var(--pad-xl);
+  background: var(--color-pale-gray);
+  color: var(--color-dark-gray);
+  border: 1px solid var(--color-pale-gray);
+  -webkit-transition: 0.15s;
+  -moz-transition: 0.15s;
+  -o-transition: 0.15s;
+  transition: 0.15s;
+}
+
+.button-gray:hover {
+  -webkit-transform: translateY(-2px);
+  -moz-transform: translateY(-2px);
+  -ms-transform: translateY(-2px);
+  -o-transform: translateY(-2px);
+  transform: translateY(-2px);
+  background: var(--color-mid-gray);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-dark-gray);
 }
 
 /* ====================== */
@@ -1356,21 +1449,23 @@ button {
     z-index: 100;
     position: absolute;
     bottom: 20px;
-}
+  }
 
   .tutorial-card-container {
     position: relative;
     display: flex;
     justify-content: center;
     width: 100%;
-    overflow: visible;     /* Allows left & right partial visibility */
+    overflow: visible;
+    /* Allows left & right partial visibility */
     gap: 16px;
     margin-bottom: 20px;
   }
-  
+
   .tutorial-card {
     flex-direction: column;
-    width: 70vw;           /* The same width used in JavaScript transforms */
+    width: 70vw;
+    /* The same width used in JavaScript transforms */
     margin: 0;
     text-align: center;
     align-items: center;
@@ -1381,14 +1476,14 @@ button {
     backdrop-filter: none;
     max-width: none;
   }
-  
+
   .slideshow-indicator {
     display: flex;
     justify-content: center;
     gap: 8px;
     margin-top: 16px;
   }
-  
+
   .dot {
     width: 8px;
     height: 8px;
@@ -1396,7 +1491,7 @@ button {
     background: var(--color-mid-gray);
     transition: background 0.1s ease-out;
   }
-  
+
   .dot.active {
     background: var(--color-accent);
   }

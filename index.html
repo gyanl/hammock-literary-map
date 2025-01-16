@@ -24,22 +24,42 @@
 </head>
 
 <body>
+  <button type="button" class="button-tertiary landing header-fade-in-up" id="aboutButton">
+    About this Map <img class="icon-circle" src="icons/info.svg" width="16px" alt="info">
+  </button>
+  <div id="aboutContainer" class="about-container landing displaynone header-fade-in-down-fast">
+    <div class="about-content">
+      <p>At Hammock, one of the pillars of what we do is providing literary recommendations, lists and avenues for
+        discovering new books. So creating an interactive map that you can explore to get author recommendations felt
+        like a natural fit.
+      </p>
+      <p>It felt surprising and almost unbelievable that a tool like this didn't already exist. Although we found
+        specific versions or localised examples, the idea of one place where you could select a country or region of the
+        world and get specific literary fiction recommendations was appealing.
+      </p>
+      <p>Creating a database of nearly 800 authors from the 20th and 21st century with various criteria we selected, we
+        made this for you to browse, search and share.
+      </p>
+
+      <a href="https://www.hammockmag.com/about/methodology">
+        <button type="button" class="button-gray">
+          Read About Our Methodology
+          <img class="icon-circle-white" src="icons/arrow-up-right-gray.svg" width="16px" alt="info">
+        </button>
+      </a>
+    </div>
+  </div>
 
   <div id="introText" class="landing header-fade-in-up">
     <span class="bold">Literary Map</span> by
     <img class="logo" src="hammock-white.png">
-    <h1>
-      Discover great fiction writers<br>
-      from around the globe.
-    </h1>
-      <a href="https://www.hammockmag.com">
-        <button type="button" class="button-quaternary">
-          About this Map
-        </button>
-      </a>
-      <button id="introButton" type="button" class="button-tertiary">
-        Start Exploring
+    <h1 class="max-width">
+      Discover great fiction writers from around the globe
+      <button id="introButton" type="button" class="inline button-tertiary">
+        Start Exploring <img class="icon-circle-dark" src="icons/arrow-right.svg" width="16px" alt="chevron">
       </button>
+    </h1>
+
   </div>
 
   <div id="tutorial-bottom" class="center-align bottom-center header-fade-in-down">
@@ -237,6 +257,10 @@
     const mobileBreakpoint = 768;
     const headerLinks = document.querySelector('.header-links');
 
+    const aboutButton = document.getElementById('aboutButton');
+    const aboutContainer = document.getElementById('aboutContainer');
+    const aboutCloseButton = document.getElementById('aboutCloseButton');
+
     const tutorialBottom = document.getElementById('tutorial-bottom');
 
     let tutorialComplete = false;
@@ -330,9 +354,9 @@
     function backToTheResults() {
       if (!searchresults.style.display || searchresults.style.display === 'none') {
         map.easeTo({
-        zoom: map.getZoom() - 0.5,
-        duration: 500
-      });
+          zoom: map.getZoom() - 0.5,
+          duration: 500
+        });
         showSearchResults();
       }
     }
@@ -875,6 +899,13 @@
 
       });
 
+      aboutButton.addEventListener('click', () => {
+        aboutContainer.classList.toggle('displaynone');
+      });
+
+      aboutCloseButton.addEventListener('click', () => {
+        aboutContainer.classList.add('displaynone');
+      });
     });
 
 
