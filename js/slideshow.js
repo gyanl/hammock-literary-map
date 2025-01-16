@@ -34,7 +34,7 @@ class Slideshow {
     moveLeft() {
         // Animate slides left
         Array.from(this.slides).forEach(slide => {
-            slide.style.transition = 'transform 0.3s ease-out';
+            slide.style.transition = 'transform 0.3s linear';
             slide.style.transform = 'translateX(calc(-70vw - 16px))';
         });
 
@@ -58,16 +58,16 @@ class Slideshow {
             // Re-enable transitions
             setTimeout(() => {
                 Array.from(this.slides).forEach(slide => {
-                    slide.style.transition = 'transform 0.3s ease-out';
+                    slide.style.transition = 'transform 0.3s linear';
                 });
-            }, 50);
-        }, 300);
+            }, 100);
+        }, 350);
     }
 
     moveRight() {
         // Animate slides right
         Array.from(this.slides).forEach(slide => {
-            slide.style.transition = 'transform 0.3s ease-out';
+            slide.style.transition = 'transform 0.3s linear';
             slide.style.transform = 'translateX(calc(70vw + 16px))';
         });
 
@@ -91,17 +91,17 @@ class Slideshow {
             // Re-enable transitions
             setTimeout(() => {
                 Array.from(this.slides).forEach(slide => {
-                    slide.style.transition = 'transform 0.3s ease-out';
+                    slide.style.transition = 'transform 0.3s linear';
                 });
-            }, 50);
-        }, 300);
+            }, 100);
+        }, 350);
     }
 
     positionSlides() {
         // Position slides: left, center, right
-        this.slides[0].style.transform = 'translateX(calc(-70vw - 16px))';
+        this.slides[0].style.transform = 'translateX(0)';
         this.slides[1].style.transform = 'translateX(0)';
-        this.slides[2].style.transform = 'translateX(calc(70vw + 16px))';
+        this.slides[2].style.transform = 'translateX(0)';
     }
 
     updateDots() {
