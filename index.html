@@ -706,7 +706,7 @@
         tutorialComplete = true;
         introText.classList.replace("header-fade-in-up", "goAwayTop");
         tutorialBottom.classList.replace("header-fade-in-down", "goAwayBottom");
-
+        aboutButton.style.display = 'none';
         // If lat and long are provided, use them. Otherwise use default coordinates
         const targetCoords = (lat && long)
           ? [long, lat]
@@ -906,7 +906,16 @@
       });
 
       aboutButton.addEventListener('click', () => {
+        const isHidden = aboutContainer.classList.contains('displaynone');
         aboutContainer.classList.toggle('displaynone');
+        
+        if (isHidden) {
+          // Only add the document listener when opening the container
+          document.addEventListener('click', handleOutsideClick);
+        } else {
+          // Remove the listener when closing the container
+          document.removeEventListener('click', handleOutsideClick);
+        }
       });
 
       aboutCloseButton.addEventListener('click', () => {
@@ -1186,6 +1195,13 @@
         updateDropdownCount('continent-dropdown');
       });
     });
+
+    // Add single event listener for clicks outside aboutContainer
+    const handleOutsideClick = (event) => {
+      if (!event.target.closest('#aboutContainer') && !event.target.closest('#aboutButton')) {
+        aboutContainer.classList.add('displaynone');
+      }
+    };
 
   </script>
 
