@@ -77,8 +77,9 @@
   --mobile-padding: 16px;
   --mobile-dropdown-width: calc(100% - 32px);
 
+  /* Font Weight */
   --font-weight-regular: 400;
-  --font-weight-bold: 600;
+  --font-weight-bold: 500;
 }
 
 /* Respect user preference: reduced motion */
