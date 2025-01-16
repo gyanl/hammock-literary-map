@@ -1468,7 +1468,6 @@ button {
   .tutorial-card {
     flex-direction: row;
     width: 70vw;
-    /* The same width used in JavaScript transforms */
     margin: 0;
     text-align: left;
     align-items: center;

@@ -32,10 +32,15 @@ class Slideshow {
     }
 
     moveLeft() {
+        // Calculate the exact width of a card including its spacing
+        const cardWidth = this.slides[0].offsetWidth;
+        const cardSpacing = 16; // if this is your gap between cards
+        const moveDistance = cardWidth + cardSpacing;
+
         // Animate slides left
         Array.from(this.slides).forEach(slide => {
             slide.style.transition = 'transform 0.3s linear';
-            slide.style.transform = 'translateX(calc(-70vw - 16px))';
+            slide.style.transform = `translateX(${-moveDistance}px)`;
         });
 
         // After animation, reset positions
@@ -60,15 +65,20 @@ class Slideshow {
                 Array.from(this.slides).forEach(slide => {
                     slide.style.transition = 'transform 0.3s linear';
                 });
-            }, 100);
-        }, 350);
+            }, 50);
+        }, 299);
     }
 
     moveRight() {
+        // Calculate the exact width of a card including its spacing
+        const cardWidth = this.slides[0].offsetWidth;
+        const cardSpacing = 16; // if this is your gap between cards
+        const moveDistance = cardWidth + cardSpacing;
+
         // Animate slides right
         Array.from(this.slides).forEach(slide => {
             slide.style.transition = 'transform 0.3s linear';
-            slide.style.transform = 'translateX(calc(70vw + 16px))';
+            slide.style.transform = `translateX(${moveDistance}px)`;
         });
 
         // After animation, reset positions
@@ -93,8 +103,8 @@ class Slideshow {
                 Array.from(this.slides).forEach(slide => {
                     slide.style.transition = 'transform 0.3s linear';
                 });
-            }, 100);
-        }, 350);
+            }, 50);
+        }, 299);
     }
 
     positionSlides() {
