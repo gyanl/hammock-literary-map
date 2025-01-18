@@ -8,6 +8,7 @@
   --color-secondary: #00ff00;
   --color-green-mid: #2E9A6D;
   --color-green-light: #67FAAF;
+  --color-green-pale: #E1FEEF;
   --color-active-green: #28493C;
   --color-accent: #67FAAF;
   --color-pill-bg: #F3F3F3;
@@ -167,6 +168,20 @@ body {
   transform: translateY(-2px);
 }
 
+.pale-green-help {
+  background-color: var(--color-green-pale);
+  padding: var(--pad-xl);
+  border-radius: var(--radius-l);
+  margin: 4px -4px;
+}
+
+.help-instruction {
+  padding-top: var(--pad-m);
+  display: flex;
+  align-items: center;
+  gap: var(--pad-m);
+}
+
 .card-title {
   padding-right: var(--pad-l);
   display: flex;
@@ -254,7 +269,7 @@ a .card-title {
   top: calc(var(--pad-xxl) - 2px);
 }
 
-#aboutContainer {
+.about-container {
   z-index: 110;
   font-size: 14px;
   line-height: 1.4em;
@@ -814,6 +829,7 @@ input[type="text"] {
   font-weight: var(--font-weight-regular);
   font-style: normal;
   font-variation-settings: "wdth" 100;
+  transition: .2s;
 }
 
 input[type="text"]::placeholder {
@@ -1033,7 +1049,6 @@ button {
   -moz-transition: 0.15s;
   -o-transition: 0.15s;
   transition: 0.15s;
-  margin-top: 20px;
   margin-left: -4px;
 }
 
@@ -1281,8 +1296,8 @@ button {
 /* 12. Media Queries (Mobile) */
 /* ====================== */
 
-/* Small laptop */
-@media (max-width: 1280px) {
+/* Small laptop responsive styles */
+@media (max-width: 1279px) {
   .dropdown {
     padding: var(--pad-m);
     border-radius: 0;
@@ -1311,7 +1326,29 @@ button {
   }
 }
 
-@media (max-width: 1100px) {
+
+@media (max-width: 1210px) {
+
+  /* Smaller search bar */
+  input[type="text"] {
+    width: 48px;
+  }
+}
+
+
+@media (max-width: 1000px) {
+
+  /* Hide secondary button text */
+  .button-secondary {
+    font-size: 0;
+    padding: var(--pad-m) 8px var(--pad-m) 0;
+  }
+}
+
+
+@media (max-width: 906px) {
+
+  /* Smaller header logo */
   .header-logo {
     margin-left: 12px;
     height: 28px;
@@ -1324,12 +1361,6 @@ button {
   }
 }
 
-@media (max-width: 1000px) {
-  .button-secondary {
-    font-size: 0;
-    padding: var(--pad-m) 8px var(--pad-m) 0;
-  }
-}
 
 /* Tablet */
 @media (max-width: 800px) and (min-width: 500px) {
@@ -1416,7 +1447,7 @@ button {
     height: var(--header-height-mobile);
   }
 
-  
+
 
   .icon-x {
     width: 20px;
@@ -1649,7 +1680,7 @@ button {
     transform: translateY(-2px);
   }
 
-  #aboutContainer {
+  .about-container {
     z-index: 110;
     font-size: 14px;
     line-height: 1.4em;

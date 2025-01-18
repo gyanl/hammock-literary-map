@@ -27,7 +27,7 @@
   <button type="button" class="button-tertiary landing header-fade-in-up" id="aboutButton">
     About this Map <img class="icon-circle" src="icons/info.svg" width="16px" alt="info">
   </button>
-  <div id="aboutContainer" class="about-container landing displaynone header-fade-in-down-fast">
+  <div id="aboutContainer" class="about-container displaynone header-fade-in-down-fast">
     <div class="about-content">
       <p>At Hammock, one of the pillars of what we do is providing literary recommendations, lists and avenues for
         discovering new books. So creating an interactive map that you can explore to get author recommendations felt
@@ -215,10 +215,59 @@
         <div class="icon-circle"><img width="16px" src="icons/shuffle.svg" alt="Shuffle icon"></div>
       </button>
 
-      <button class="button-secondary desktop-only" id="btnAbout">
-        <span>About</span>
+      <button class="button-secondary desktop-only" id="helpButton">
+        <span>Help</span>
         <div class="icon-circle"><img width="16px" src="icons/info.svg" alt="info"></div>
       </button>
+    </div>
+
+    <div id="helpContainer" class="about-container displaynone header-fade-in-down-fast">
+      <div class="about-content">
+
+        <a href="https://www.hammockmag.com/about/methodology">
+          <button type="button" class="button-gray">
+            Read About Our Methodology
+            <img class="icon-circle-white" src="icons/arrow-up-right-gray.svg" width="16px" alt="info">
+          </button>
+        </a>
+
+        <p>
+          At Hammock, one of our core pillars is providing thoughtful literary recommendations and curated lists to help
+          readers discover new books. This interactive map is our latest endeavour to make exploring the world of
+          literature both engaging and intuitive.
+        </p>
+        <p>
+          With this tool, you can journey across the globe and uncover nearly 800 fiction authors from the 20th and 21st
+          centuries, offering a unique glimpse into the geographical roots of some of the world’s most compelling
+          writers.
+        </p>
+
+        <div class="pale-green-help">
+
+          <div class="color-primary bold">How to use the map</div>
+          <div class="help-instruction">
+            <img width="16px" src="icons/maximize-2.svg" alt="info">
+            Scroll or pinch to zoom in and out
+          </div>
+
+          <div class="help-instruction">
+            <img width="16px" src="icons/maximize-2.svg" alt="info">
+            Click and drag to move on the map
+          </div>
+
+          <div class="help-instruction">
+            <img width="16px" src="icons/maximize-2.svg" alt="info">
+            Click on a green dot to see author details
+          </div>
+
+          <div class="help-instruction">
+            <img width="16px" src="icons/maximize-2.svg" alt="info">
+            Scroll or pinch to zoom in and out
+          </div>
+          
+        </div>
+
+      </div>
     </div>
 
   </header>
@@ -266,7 +315,9 @@
 
     const aboutButton = document.getElementById('aboutButton');
     const aboutContainer = document.getElementById('aboutContainer');
-    const aboutCloseButton = document.getElementById('aboutCloseButton');
+
+    const helpButton = document.getElementById('helpButton');
+    const helpContainer = document.getElementById('helpContainer');
 
     const tutorialBottom = document.getElementById('tutorial-bottom');
 
@@ -909,7 +960,7 @@
       aboutButton.addEventListener('click', () => {
         const isHidden = aboutContainer.classList.contains('displaynone');
         aboutContainer.classList.toggle('displaynone');
-        
+
         if (isHidden) {
           // Only add the document listener when opening the container
           document.addEventListener('click', handleOutsideClick);
@@ -919,9 +970,19 @@
         }
       });
 
-      aboutCloseButton.addEventListener('click', () => {
-        aboutContainer.classList.add('displaynone');
+      helpButton.addEventListener('click', () => {
+        const isHidden = helpContainer.classList.contains('displaynone');
+        helpContainer.classList.toggle('displaynone');
       });
+
+      if (isHidden) {
+        // Only add the document listener when opening the container
+        document.addEventListener('click', handleOutsideClick);
+      } else {
+        // Remove the listener when closing the container
+        document.removeEventListener('click', handleOutsideClick);
+      }
+
     });
 
 
