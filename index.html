@@ -60,7 +60,7 @@
         <button type="button" class="button-pk cool-effect" id="aboutPkButton">
           <img class="icon-circle-transparent rotate-on-hover" src="icons/pk.svg" width="24px" alt="info">
           Public Knowledge Studio
-          <img class="icon-circle-transparent on-hover-red" src="icons/arrow-up-right-red.svg" width="16px" alt="info">
+          <img class="icon-circle-transparent on-hover-colorful" src="icons/arrow-up-right-red.svg" width="16px" alt="info">
         </button>
       </a>
 
@@ -311,9 +311,9 @@
         <span class="light-gray text-small">Crafted by</span>
         <a href="https://www.publicknowledge.co">
           <button type="button" class="button-pk">
-            <img class="icon-circle-transparent rotate-on-hover" src="icons/pk.svg" width="24px" alt="info">
+            <img class="icon-circle-transparent rotate-on-hover on-hover-colorful" src="icons/pk.svg" width="20px" alt="info">
             Public Knowledge Studio
-            <img class="icon-circle-transparent on-hover-red" src="icons/arrow-up-right-red.svg" width="16px"
+            <img class="icon-circle-transparent on-hover-colorful" src="icons/arrow-up-right-red.svg" width="16px"
               alt="info">
           </button>
         </a>
@@ -359,7 +359,7 @@
     
     const searchBar = document.querySelector('#search-bar');
     const searchInput = document.getElementById('search-input');
-    const clearButton = document.getElementById('search-clear');
+    const searchClearButton = document.getElementById('search-clear');
 
     const searchtitle = document.getElementById('sidebar-search-title');
     const searchtitlecontainer = document.getElementById('sidebar-search-title-container');
@@ -1010,7 +1010,7 @@
         aboutPk.classList.add('displaynone');
       });
 
-      clearButton.addEventListener('click', () => {
+      searchClearButton.addEventListener('click', () => {
         // Clear the search box
         searchInput.value = '';
         searchInput.blur();
@@ -1021,15 +1021,7 @@
 
         // Handle display logic for mobile when search clear button is clicked
         // todo
-        if (window.innerWidth >= MOBILE_WIDTH) {
-          logo.style.display = 'block';
-          filter.style.display = 'block';
-          clearButton.style.display = 'none';
-        } else {
-          logo.style.display = '';
-          filter.style.display = '';
-          clearButton.style.display = 'block';
-        }
+          logo.style.display = 'flex';
 
       });
 
@@ -1207,35 +1199,31 @@
       // Show/hide clear button based on input content
       searchInput.addEventListener('input', () => {
         if (window.innerWidth >= MOBILE_WIDTH) {
-          clearButton.style.display = searchInput.value ? 'block' : 'none';
+          searchClearButton.style.display = searchInput.value ? 'block' : 'none';
         }
       });
 
       // Initialize clear button visibility
       if (window.innerWidth >= MOBILE_WIDTH) {
-        clearButton.style.display = searchInput.value ? 'block' : 'none';
+        searchClearButton.style.display = searchInput.value ? 'block' : 'none';
       }
 
       // When search bar is clicked, hide logo and filter on mobile
       searchBar.addEventListener('click', () => {
-        if (window.innerWidth <= MOBILE_WIDTH) {
-          logo.style.display = 'none';
-          filter.style.display = 'none';
-          clearButton.style.display = 'block';
-        }
+          searchClearButton.style.display = 'block';
       });
 
-
+      //todo
 
       showFilters.addEventListener('click', () => {
-        filterContainer.style.display = 'flex';
+        filterContainer.classList.remove('only-on-big-screens');
         logo.style.display = 'none';
         headerButtons.style.display = 'none';
         searchBar.style.display = 'none';
       });
 
       filterBackButton.addEventListener('click', () => {
-        filterContainer.style.display = 'none';
+        filterContainer.classList.add('only-on-big-screens');
         logo.style.display = 'flex';
         headerButtons.style.display = 'flex';
         searchBar.style.display = 'flex';
