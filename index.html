@@ -24,12 +24,17 @@
 </head>
 
 <body>
+
+  <div id="aboutPk" class="about-pk displaynone">
+    We're <span class="red">Public Knowledge Studio</span>, a design and development studio based out of <span class="red">New Delhi, India</span>. We specialize in imaginative and <span class="red">hand-crafted digital experiences.</span>
+  </div>
+
   <button type="button" class="button-tertiary landing header-fade-in-up" id="aboutButton">
     About this Map <img class="icon-circle" src="icons/info.svg" width="16px" alt="info">
   </button>
   <div id="aboutContainer" class="about-container displaynone header-fade-in-down-fast">
 
-    <h3>About this Map</h3>
+    <h3>About this Map</h3> 
 
     <div class="about-content">
       <p>
@@ -87,13 +92,15 @@
 
       </div>
 
-      Crafted by <a href="https://www.hammockmag.com/about/methodology">
-        <button type="button" class="button-gray">
+      <span class="light-gray text-small">Crafted by</span>
+      <a href="https://www.publicknowledge.co">
+        <button type="button" class="button-pk" id="aboutPkButton">
+          <img class="icon-circle-transparent rotate-on-hover" src="icons/pk.svg" width="24px" alt="info">
           Public Knowledge Studio
-          <img class="icon-circle-white" src="icons/arrow-up-right-gray.svg" width="16px" alt="info">
+          <img class="icon-circle-transparent on-hover-red" src="icons/arrow-up-right-red.svg" width="16px" alt="info">
         </button>
       </a>
-
+      
     </div>
   </div>
 
@@ -275,47 +282,77 @@
     </div>
 
     <div id="helpContainer" class="about-container displaynone header-fade-in-down-fast">
+      <h3>About this Map</h3> 
+      <button type="button" class="button-tertiary" id="aboutCloseButton">
+        <img class="icon-circle-transparent" src="icons/x.svg" width="16px" alt="info">
+      </button> 
+  
       <div class="about-content">
-
+        <p>
+          At Hammock, one of our core pillars is curating thoughtful literary recommendations to help readers discover new
+          writer and books. This interactive map is our latest endeavour to make exploring the world of literature both
+          engaging and intuitive. By highlighting the birthplaces of nearly 800 fiction writers, we're offering our
+          readers a unique way of exploring the geographical origins of some of the most compelling literary voices from
+          the 20th and 21st centuries.
+        </p>
+  
         <a href="https://www.hammockmag.com/about/methodology">
           <button type="button" class="button-gray">
             Read About Our Methodology
             <img class="icon-circle-white" src="icons/arrow-up-right-gray.svg" width="16px" alt="info">
           </button>
         </a>
-
-        <p>
-          At Hammock, one of our core pillars is curating thoughtful literary recommendations to help readers discover
-          new writer and books. This interactive map is our latest endeavour to make exploring the world of literature
-          both engaging and intuitive. By highlighting the birthplaces of nearly 800 fiction writers, we're offering our
-          readers a unique way of exploring the geographical origins of some of the most compelling literary voices from
-          the 20th and 21st centuries.
-        </p>
-
+  
         <div class="pale-green-help">
-
-          <div class="color-primary bold">How to use the map</div>
+  
+          <div class="color-primary bold">How to Use this Map</div>
           <div class="help-instruction">
-            <img width="16px" src="icons/maximize-2.svg" alt="info">
-            Scroll or pinch to zoom in and out
+            <div class="icon-circle-mint">
+              <img src="icons/green/maximize-2.svg" alt="Zoom icon">
+            </div>
+            Scroll and pinch to zoom in and out. Click and drag to move.
           </div>
-
+  
           <div class="help-instruction">
-            <img width="16px" src="icons/maximize-2.svg" alt="info">
-            Click and drag to move on the map
+            <div class="icon-circle-mint">
+              <img src="icons/green/mouse-pointer.svg" alt="Mouse pointer icon">
+            </div>
+            Click green dots to find authors born in that area.
           </div>
-
+  
           <div class="help-instruction">
-            <img width="16px" src="icons/maximize-2.svg" alt="info">
-            Click on a green dot to see author details
+            <div class="icon-circle-mint">
+              <img src="icons/green/filter.svg" alt="Filter icon">
+            </div>
+            Use the top filters to refine results by continent, language, gender, awards and year-periods.
           </div>
-
+  
           <div class="help-instruction">
-            <img width="16px" src="icons/maximize-2.svg" alt="info">
-            Scroll or pinch to zoom in and out
+            <div class="icon-circle-mint">
+              <img src="icons/green/search.svg" alt="Search icon">
+            </div>
+            Type an author's name or book name in the search bar to see matching results
           </div>
-
+  
+          <div class="help-instruction">
+            <div class="icon-circle-mint">
+              <img src="icons/green/shuffle.svg" alt="Shuffle icon">
+            </div>
+            Click on 'Feeling Lucky' for a random author recommendation
+          </div>
+  
         </div>
+  
+        <span class="light-gray text-small">Crafted by</span>
+        <a href="https://www.publicknowledge.co">
+          <button type="button" class="button-pk">
+            <img class="icon-circle-transparent rotate-on-hover" src="icons/pk.svg" width="24px" alt="info">
+            Public Knowledge Studio
+            <img class="icon-circle-transparent on-hover-red" src="icons/arrow-up-right-red.svg" width="16px" alt="info">
+          </button>
+        </a>
+  
+      </div>
 
       </div>
     </div>
@@ -345,6 +382,10 @@
   <script>
 
     // Convenient names for the elements
+
+    const aboutPkButton = document.getElementById('aboutPkButton');
+    const aboutPk = document.getElementById('aboutPk');
+
     const logo = document.getElementById('logo');
     const filter = document.getElementById('filter');
 
@@ -360,7 +401,6 @@
     const sidebarauthordetails = document.getElementById('sidebar-author-details');
 
     const titlechevron = document.getElementById('chevron');
-    const mobileBreakpoint = 768;
     const headerLinks = document.querySelector('.header-links');
 
     const aboutButton = document.getElementById('aboutButton');
@@ -370,6 +410,8 @@
     const helpContainer = document.getElementById('helpContainer');
 
     const tutorialBottom = document.getElementById('tutorial-bottom');
+
+    const MOBILE_WIDTH = 500;
 
     let tutorialComplete = false;
 
@@ -985,6 +1027,17 @@
       // Initial load
       showVisibleFeatures();
 
+      aboutPkButton.addEventListener('mouseover', () => {
+        // Only for desktop
+        if (window.innerWidth >= MOBILE_WIDTH) {
+          aboutPk.classList.remove('displaynone');
+        }
+      });
+
+      aboutPkButton.addEventListener('mouseout', () => {
+        aboutPk.classList.add('displaynone');
+      });
+
       clearButton.addEventListener('click', () => {
         // Clear the search box
         searchInput.value = '';
@@ -995,7 +1048,7 @@
         backToTheResults();
 
         // Handle display logic
-        if (window.innerWidth >= mobileBreakpoint) {
+        if (window.innerWidth >= MOBILE_WIDTH) {
           logo.style.display = 'block';
           filter.style.display = 'block';
           clearButton.style.display = 'none';
@@ -1131,7 +1184,7 @@
 
     // Handling mobile dropdowns differently
     function setupMobileDropdowns() {
-      if (window.innerWidth <= 768) {
+      if (window.innerWidth <= MOBILE_WIDTH) {
         // Close dropdown when clicking outside
         document.addEventListener('click', (event) => {
           if (!event.target.closest('.dropdown')) {
@@ -1167,19 +1220,19 @@
 
       // Show/hide clear button based on input content
       searchInput.addEventListener('input', () => {
-        if (window.innerWidth >= mobileBreakpoint) {
+        if (window.innerWidth >= MOBILE_WIDTH) {
           clearButton.style.display = searchInput.value ? 'block' : 'none';
         }
       });
 
       // Initialize clear button visibility
-      if (window.innerWidth >= mobileBreakpoint) {
+      if (window.innerWidth >= MOBILE_WIDTH) {
         clearButton.style.display = searchInput.value ? 'block' : 'none';
       }
 
       // When search bar is clicked, hide logo and filter on mobile
       searchBar.addEventListener('click', () => {
-        if (window.innerWidth <= mobileBreakpoint) {
+        if (window.innerWidth <= MOBILE_WIDTH) {
           logo.style.display = 'none';
           filter.style.display = 'none';
           clearButton.style.display = 'block';

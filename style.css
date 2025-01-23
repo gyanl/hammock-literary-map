@@ -13,6 +13,10 @@
   --color-green-pale: #E8FEF3;
   --color-pill-bg: #F3F3F3;
 
+  --color-pk-red: #FF4343;
+  --color-pk-mid: #f8bcbc;
+  --color-pk-pale: #FFF6F6;
+
   /* Base Colors */
   --color-background: #000000;
   --color-text-primary: #FFFFFF;
@@ -279,6 +283,7 @@ a .card-title {
   position: absolute;
   width: 400px;
   top: 72px;
+
   right: var(--pad-xxl);
   color: var(--color-dark-gray);
   background-color: var(--color-text-primary);
@@ -766,6 +771,14 @@ header {
   font-size: 12px;
 }
 
+.white {
+  color: var(--color-text-primary);
+}
+
+.red {
+  color: var(--color-pk-red);
+}
+
 .mid-gray {
   color: var(--color-mid-gray);
 }
@@ -780,6 +793,10 @@ header {
 
 .color-mid-green {
   color: var(--color-green-mid);
+}
+
+.text-small {
+  font-size: 12px;
 }
 
 /* ====================== */
@@ -924,14 +941,22 @@ input[type="text"]:focus::placeholder {
   color: var(--color-background);
 }
 
+.icon-circle-transparent {
+  padding: var(--pad-s);
+  border-radius: var(--radius-pill);
+  background: transparent;
+}
+
 .icon-circle-mint {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 34px;  /* Adjusted to account for padding */
-  height: 34px; /* Adjusted to account for padding */
+  width: 34px;
+  /* Adjusted to account for padding */
+  height: 34px;
+  /* Adjusted to account for padding */
   border-radius: var(--radius-pill);
   background: var(--color-mint);
 }
@@ -1081,6 +1106,82 @@ button {
   background: var(--color-mid-gray);
   color: var(--color-text-primary);
   border: 1px solid var(--color-dark-gray);
+}
+
+.about-pk{
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-top: 48px;
+  padding-left: 48px;
+  padding-right: 40vw;
+  font-size: 56px;
+  line-height: 1.3em;
+  z-index: 1000;
+  animation-fill-mode: forwards;
+  animation: fadeInLeft 1.2s ease-in-out;
+}
+
+.button-pk {
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  line-height: 1.3;
+  padding: var(--pad-s) var(--pad-m) var(--pad-s) var(--pad-m);
+  background: var(--color-text-primary);
+  color: var(--color-dark-gray);
+  border: 1px solid var(--color-pale-gray);
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+  margin-left: -4px;
+  margin-top: 4px;
+  outline: 0px solid rgba(255, 0, 0, 0.15);
+}
+
+.button-pk:hover {
+  background: var(--color-pk-pale);
+  border: 1px solid var(--color-pk-pale);
+  -webkit-transform: translateY(-12px);
+  -moz-transform: translateY(-12px);
+  -ms-transform: translateY(-12px);
+  -o-transform: translateY(-12px);
+  transform: translateY(-12px);
+  outline: 2000px solid rgba(20, 20, 20, 0.96);
+  transition: 1.8s;
+}
+
+.on-hover-red {
+  filter: grayscale(100%);
+}
+
+.button-pk:hover .on-hover-red {
+  filter: none;
+}
+
+.rotate-on-hover {
+  transition: transform 1s ease;
+}
+
+.button-pk:hover .rotate-on-hover {
+  animation: spin 4s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 #btnRandom {
@@ -1683,8 +1784,11 @@ button {
     transform: translateX(calc(80vw + 16px));
   }
 
-
-
+  .button-gray {
+    font-weight: var(--font-weight-bold);
+    font-size: 12px;
+    padding: var(--pad-s) 4px var(--pad-s) var(--pad-l);
+  }
 
   .button-tertiary {
     font-weight: var(--font-weight-bold);
@@ -1708,6 +1812,8 @@ button {
     position: absolute;
     width: auto;
     top: 52px;
+    bottom: 52px;
+    overflow-y: scroll;
     right: 16px;
     left: 16px;
     color: var(--color-dark-gray);
