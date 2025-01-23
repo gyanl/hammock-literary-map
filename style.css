@@ -479,6 +479,15 @@ header {
   justify-content: space-between;
 }
 
+.sidebar-empty {
+  padding: 12px 20px;
+  border-top: 1px solid var(--color-foreground-2);
+  display: block;
+  flex-direction: column;
+  transition: 0.2s;
+  line-height: 1.3em;
+}
+
 .sidebar-author {
   animation: fadeInUp 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
   padding: 12px 20px;

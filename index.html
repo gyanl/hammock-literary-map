@@ -21,6 +21,12 @@
   <script src="https://unpkg.com/@mapbox/mapbox-sdk/umd/mapbox-sdk.min.js"></script>
   <script src="js/slideshow.js"></script>
 
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="Literary Map by Hammock">
+  <meta property="og:description" content="Discover great fiction writers from around the globe.">
+  <meta property="og:image" content="https://gyanl.com/hammock/img/hammock-og.jpg">
+  <meta property="og:url" content="https://gyanl.com/hammock">
+
 </head>
 
 <body>
@@ -717,7 +723,7 @@
       } else {
         setSidebarTitle("No results found");
         searchresults.innerHTML = `
-          <div class="sidebar-author">
+          <div class="sidebar-empty">
             <h3>We couldn't find any matching books or authors in the area you are looking at. Try moving around the globe or changing your filters.</h3>
             <p>If you think they should be there, fill out this form!</p>
           </div>
