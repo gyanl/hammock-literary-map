@@ -108,7 +108,7 @@
     <a href="https://www.hammockmag.com" id="logo" class="header-logo"></a>
     
     
-    <div class="header-links only-on-big-screens">
+    <div id="filter-container" class="header-links only-on-big-screens">
       <div class="header-link dropdown" id="continent-dropdown">
         Continents
         <div class="dropdown-content">
@@ -226,9 +226,9 @@
         <img class="icon-x" src="icons/x.svg"></button>
     </div>
 
-    <div class="header-controls">
+    <div id="header-buttons" class="header-controls">
 
-      <button class="button-secondary only-on-small-screens" id="toggleFilters">
+      <button class="button-secondary only-on-small-screens" id="show-filters">
         <span>Filters</span>
         <div class="icon-circle"><img width="16px" src="icons/filter.svg" alt="Filter icon"></div>
       </button>
@@ -352,7 +352,8 @@
     const aboutPk = document.getElementById('aboutPk');
 
     const logo = document.getElementById('logo');
-    const filter = document.getElementById('filter');
+    const showFilters = document.getElementById('show-filters');
+    const filterContainer = document.getElementById('filter-container');
 
     const searchBar = document.querySelector('#search-bar');
     const searchInput = document.getElementById('search-input');
@@ -366,7 +367,7 @@
     const sidebarauthordetails = document.getElementById('sidebar-author-details');
 
     const titlechevron = document.getElementById('chevron');
-    const headerLinks = document.querySelector('.header-links');
+    const headerButtons = document.getElementById('header-buttons');
 
     const aboutButton = document.getElementById('aboutButton');
     const aboutContainer = document.getElementById('aboutContainer');
@@ -375,6 +376,10 @@
     const helpContainer = document.getElementById('helpContainer');
 
     const tutorialBottom = document.getElementById('tutorial-bottom');
+
+    const yearMin = document.getElementById('yearMin');
+    const yearMax = document.getElementById('yearMax');
+    const yearValue = document.getElementById('yearValue');
 
     const MOBILE_WIDTH = 500;
 
@@ -1012,7 +1017,8 @@
         applyFilters();
         backToTheResults();
 
-        // Handle display logic
+        // Handle display logic for mobile when search clear button is clicked
+        // todo
         if (window.innerWidth >= MOBILE_WIDTH) {
           logo.style.display = 'block';
           filter.style.display = 'block';
@@ -1206,20 +1212,15 @@
 
 
 
-      filter.addEventListener('click', showFilters);
-
-      function showFilters() {
-
-        headerLinks.style.display = 'flex';
+      showFilters.addEventListener('click', () => {
+        filterContainer.style.display = 'flex';
         logo.style.display = 'none';
-      }
+        headerButtons.style.display = 'none';
+        searchBar.style.display = 'none';
+      });
 
     });
 
-    // Add these constants with your other ones at the top
-    const yearMin = document.getElementById('yearMin');
-    const yearMax = document.getElementById('yearMax');
-    const yearValue = document.getElementById('yearValue');
 
     // Add this debounce function with your other utility functions
     function debounce(func, wait) {
