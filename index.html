@@ -28,17 +28,16 @@
     About this Map <img class="icon-circle" src="icons/info.svg" width="16px" alt="info">
   </button>
   <div id="aboutContainer" class="about-container displaynone header-fade-in-down-fast">
+
+    <h3>About this Map</h3>
+
     <div class="about-content">
-      <p>At Hammock, one of the pillars of what we do is providing literary recommendations, lists and avenues for
-        discovering new books. So creating an interactive map that you can explore to get author recommendations felt
-        like a natural fit.
-      </p>
-      <p>It felt surprising and almost unbelievable that a tool like this didn't already exist. Although we found
-        specific versions or localised examples, the idea of one place where you could select a country or region of the
-        world and get specific literary fiction recommendations was appealing.
-      </p>
-      <p>Creating a database of nearly 800 authors from the 20th and 21st century with various criteria we selected, we
-        made this for you to browse, search and share.
+      <p>
+        At Hammock, one of our core pillars is curating thoughtful literary recommendations to help readers discover new
+        writer and books. This interactive map is our latest endeavour to make exploring the world of literature both
+        engaging and intuitive. By highlighting the birthplaces of nearly 800 fiction writers, we're offering our
+        readers a unique way of exploring the geographical origins of some of the most compelling literary voices from
+        the 20th and 21st centuries.
       </p>
 
       <a href="https://www.hammockmag.com/about/methodology">
@@ -47,6 +46,54 @@
           <img class="icon-circle-white" src="icons/arrow-up-right-gray.svg" width="16px" alt="info">
         </button>
       </a>
+
+      <div class="pale-green-help">
+
+        <div class="color-primary bold">How to Use this Map</div>
+        <div class="help-instruction">
+          <div class="icon-circle-mint">
+            <img src="icons/green/maximize-2.svg" alt="Zoom icon">
+          </div>
+          Scroll and pinch to zoom in and out. Click and drag to move.
+        </div>
+
+        <div class="help-instruction">
+          <div class="icon-circle-mint">
+            <img src="icons/green/mouse-pointer.svg" alt="Mouse pointer icon">
+          </div>
+          Click green dots to find authors born in that area.
+        </div>
+
+        <div class="help-instruction">
+          <div class="icon-circle-mint">
+            <img src="icons/green/filter.svg" alt="Filter icon">
+          </div>
+          Use the top filters to refine results by continent, language, gender, awards and year-periods.
+        </div>
+
+        <div class="help-instruction">
+          <div class="icon-circle-mint">
+            <img src="icons/green/search.svg" alt="Search icon">
+          </div>
+          Type an author's name or book name in the search bar to see matching results
+        </div>
+
+        <div class="help-instruction">
+          <div class="icon-circle-mint">
+            <img src="icons/green/shuffle.svg" alt="Shuffle icon">
+          </div>
+          Click on 'Feeling Lucky' for a random author recommendation
+        </div>
+
+      </div>
+
+      Crafted by <a href="https://www.hammockmag.com/about/methodology">
+        <button type="button" class="button-gray">
+          Public Knowledge Studio
+          <img class="icon-circle-white" src="icons/arrow-up-right-gray.svg" width="16px" alt="info">
+        </button>
+      </a>
+
     </div>
   </div>
 
@@ -210,6 +257,12 @@
     </div>
 
     <div class="header-controls">
+
+      <button class="button-secondary desktop-only" id="toggleFilters">
+        <span>Filters</span>
+        <div class="icon-circle"><img width="16px" src="icons/filter.svg" alt="Filter icon"></div>
+      </button>
+
       <button class="button-secondary desktop-only" id="btnRandom">
         <span>Feeling lucky</span>
         <div class="icon-circle"><img width="16px" src="icons/shuffle.svg" alt="Shuffle icon"></div>
@@ -232,14 +285,11 @@
         </a>
 
         <p>
-          At Hammock, one of our core pillars is providing thoughtful literary recommendations and curated lists to help
-          readers discover new books. This interactive map is our latest endeavour to make exploring the world of
-          literature both engaging and intuitive.
-        </p>
-        <p>
-          With this tool, you can journey across the globe and uncover nearly 800 fiction authors from the 20th and 21st
-          centuries, offering a unique glimpse into the geographical roots of some of the world’s most compelling
-          writers.
+          At Hammock, one of our core pillars is curating thoughtful literary recommendations to help readers discover
+          new writer and books. This interactive map is our latest endeavour to make exploring the world of literature
+          both engaging and intuitive. By highlighting the birthplaces of nearly 800 fiction writers, we're offering our
+          readers a unique way of exploring the geographical origins of some of the most compelling literary voices from
+          the 20th and 21st centuries.
         </p>
 
         <div class="pale-green-help">
@@ -264,7 +314,7 @@
             <img width="16px" src="icons/maximize-2.svg" alt="info">
             Scroll or pinch to zoom in and out
           </div>
-          
+
         </div>
 
       </div>
@@ -1141,21 +1191,9 @@
       filter.addEventListener('click', showFilters);
 
       function showFilters() {
-        console.log('%c[showFilters] Called', 'color: #0af');
-        console.log(
-          '[showFilters]',
-          'headerLinks.style.display before:', `"${headerLinks.style.display}"`,
-          'logo.style.display before:', `"${logo.style.display}"`
-        );
 
         headerLinks.style.display = 'flex';
         logo.style.display = 'none';
-
-        console.log(
-          '[showFilters]',
-          'headerLinks.style.display after:', `"${headerLinks.style.display}"`,
-          'logo.style.display after:', `"${logo.style.display}"`
-        );
       }
 
     });
