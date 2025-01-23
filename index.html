@@ -1217,16 +1217,16 @@
 
       showFilters.addEventListener('click', () => {
         filterContainer.classList.remove('only-on-big-screens');
-        logo.style.display = 'none';
-        headerButtons.style.display = 'none';
-        searchBar.style.display = 'none';
+        logo.classList.add('only-on-big-screens');
+        headerButtons.classList.add('only-on-big-screens');
+        searchBar.classList.add('only-on-big-screens');
       });
 
       filterBackButton.addEventListener('click', () => {
         filterContainer.classList.add('only-on-big-screens');
-        logo.style.display = 'flex';
-        headerButtons.style.display = 'flex';
-        searchBar.style.display = 'flex';
+        logo.classList.remove('only-on-big-screens');
+        headerButtons.classList.remove('only-on-big-screens');
+        searchBar.classList.remove('only-on-big-screens');
       });
 
     });
