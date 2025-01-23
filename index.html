@@ -109,6 +109,7 @@
     
     
     <div id="filter-container" class="header-links only-on-big-screens">
+      <div id="filter-back-button" class="icon-circle only-on-small-screens"><img width="20px" src="icons/arrow-left.svg" alt="back"></div>
       <div class="header-link dropdown" id="continent-dropdown">
         Continents
         <div class="dropdown-content">
@@ -354,7 +355,8 @@
     const logo = document.getElementById('logo');
     const showFilters = document.getElementById('show-filters');
     const filterContainer = document.getElementById('filter-container');
-
+    const filterBackButton = document.getElementById('filter-back-button');
+    
     const searchBar = document.querySelector('#search-bar');
     const searchInput = document.getElementById('search-input');
     const clearButton = document.getElementById('search-clear');
@@ -1151,6 +1153,19 @@
         dropdown.removeAttribute('data-count');
         dropdown.classList.remove('has-count');
       }
+
+      // Add total count to showFilters if it exists
+      if (showFilters) {
+        // Get all checked boxes across all dropdowns
+        const totalCheckedBoxes = document.querySelectorAll('.dropdown input[type="checkbox"]:checked').length;
+        if (totalCheckedBoxes > 0) {
+          showFilters.setAttribute('data-count', totalCheckedBoxes);
+          showFilters.classList.add('has-count');
+        } else {
+          showFilters.removeAttribute('data-count');
+          showFilters.classList.remove('has-count');
+        }
+      }
     }
 
     // Handling mobile dropdowns differently
@@ -1217,6 +1232,13 @@
         logo.style.display = 'none';
         headerButtons.style.display = 'none';
         searchBar.style.display = 'none';
+      });
+
+      filterBackButton.addEventListener('click', () => {
+        filterContainer.style.display = 'none';
+        logo.style.display = 'flex';
+        headerButtons.style.display = 'flex';
+        searchBar.style.display = 'flex';
       });
 
     });

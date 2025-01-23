@@ -1455,7 +1455,7 @@ button {
   }
 
     /* Pills become one */
-  .header-link:first-child {
+  .header-link:nth-child(1), .header-link:nth-child(2) {
     border-radius: var(--radius-pill) 0 0 var(--radius-pill);
     padding-left: var(--pad-xl);
   }
@@ -1521,6 +1521,18 @@ button {
 
   input[type="text"] {
     width: 100%;
+  }
+
+  #filter-back-button {
+    transition: 0.2s;
+    margin-right: var(--pad-l);
+    box-shadow: 0 0 0px var(--color-green-light);
+
+  }
+
+  #filter-back-button:hover {
+    transform: translateX(-2px);
+    box-shadow: 0 0 8px var(--color-green-light);
   }
 }
 
@@ -1703,14 +1715,16 @@ button {
   }
 
   .header-link {
+    font-size: 12px;
     border-radius: 0;
+    padding: 8px;
   }
 
   .header-link:hover {
     transform: none;
   }
 
-  .header-link:first-child {
+  .header-link:first-child, .header-link:nth-child(2) {
     border-radius: var(--radius-l) 0 0 var(--radius-l);
   }
 
@@ -1724,6 +1738,7 @@ button {
   }
 
   .dropdown-content {
+    font-size: 14px;
     top: 72px;
     left: 20px;
     right: 20px;
@@ -1902,5 +1917,12 @@ button {
     max-height: calc(100vh - 200px);
   }
 
+  #showFilters.has-count::after {
+    background-color: var(--color-mid-gray);
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    z-index: 1001;
+  }
 
 }
