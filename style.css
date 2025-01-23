@@ -1281,7 +1281,7 @@ button {
   padding: var(--pad-m);
   box-shadow: 0 4px 12px var(--dropdown-shadow);
   z-index: 1000;
-  max-height: 50vh !important;
+  max-height: 50vh;
   min-width: 225px;
   max-width: 600px;
   overflow-y: scroll;
@@ -1706,6 +1706,10 @@ button {
     border-radius: 0;
   }
 
+  .header-link:hover {
+    transform: none;
+  }
+
   .header-link:first-child {
     border-radius: var(--radius-l) 0 0 var(--radius-l);
   }
@@ -1720,13 +1724,14 @@ button {
   }
 
   .dropdown-content {
-    top: 50px;
+    top: 72px;
     left: 20px;
     right: 20px;
     z-index: 1000;
-    position: fixed !important;
+    position: fixed;
     border-radius: var(--radius-l);
-    max-height: 200px;
+    max-height: 240px;
+    margin: 0;
     overflow-y: scroll;
     text-align: left;
   }
@@ -1741,9 +1746,11 @@ button {
   }
 
   .dropdown.has-count::after {
+    background-color: var(--color-mid-gray);
     position: absolute;
     top: -8px;
     right: -8px;
+    z-index: 1001;
   }
 
   .dropdown.header-link-active::before {
