@@ -37,7 +37,7 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZ3TJ4YXFD"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  function gtag() { dataLayer.push(arguments); }
   gtag('js', new Date());
 
   gtag('config', 'G-ZZ3TJ4YXFD');
@@ -61,11 +61,15 @@
 
     <div class="about-content">
       <p>
-        At Hammock, one of our core pillars is curating thoughtful literary recommendations to help readers discover new
-        writer and books. This interactive map is our latest endeavour to make exploring the world of literature both
-        engaging and intuitive. By highlighting the birthplaces of nearly 800 fiction writers, we're offering our
-        readers a unique way of exploring the geographical origins of some of the most compelling literary voices from
-        the 20th and 21st centuries.
+        At Hammock, one of our core pillars is providing literary <a href="https://www.hammockmag.com/recommendations-lists/" target="_blank">recommendations</a> and curated lists to help readers
+        discover new books. This interactive map is our latest endeavor to make exploring the world of literature
+        engaging and intuitive.
+      </p>
+      <p>
+        With this tool, you can journey across the globe and uncover nearly 800 fiction authors from the 20th and 21st
+        centuries, offering a unique glimpse into the geographical roots and top books of some of the world&rsquo;s most
+        celebrated writers. Using a range of awards, panel suggestions and other criteria, we&rsquo;ve picked out who we think
+        are amongst the most essential writers of the past century and a half for you to explore.
       </p>
 
       <a href="https://www.hammockmag.com/about/methodology">
@@ -81,7 +85,8 @@
         <button type="button" class="button-pk cool-effect" id="aboutPkButton">
           <img class="icon-circle-transparent rotate-on-hover" src="icons/pk.svg" width="24px" alt="info">
           Public Knowledge Studio
-          <img class="icon-circle-transparent on-hover-colorful" src="icons/arrow-up-right-red.svg" width="16px" alt="info">
+          <img class="icon-circle-transparent on-hover-colorful" src="icons/arrow-up-right-red.svg" width="16px"
+            alt="info">
         </button>
       </a>
 
@@ -127,11 +132,13 @@
 
   <header id="header" class="glass displaynone">
     <a href="https://www.hammockmag.com" id="logo" class="header-logo"></a>
-    
-    
+
+
     <div id="filter-container" class="header-links only-on-big-screens">
-      <div id="filter-back-button" class="icon-circle only-on-small-screens"><img width="20px" src="icons/arrow-left.svg" alt="back"></div>
+      <div id="filter-back-button" class="icon-circle only-on-small-screens"><img width="20px"
+          src="icons/arrow-left.svg" alt="back"></div>
       <div class="header-link dropdown" id="continent-dropdown">
+        <img class="filter-category-icon" src="icons/green/map.svg" alt="Continents Icon">
         Continents
         <div class="dropdown-content">
           <label><input type="checkbox"> Africa</label>
@@ -144,6 +151,7 @@
       </div>
 
       <div class="header-link dropdown" id="gender-dropdown">
+        <img class="filter-category-icon" src="icons/green/users.svg" alt="Gender Icon">
         Gender
         <div class="dropdown-content">
           <label><input type="checkbox"> Male</label>
@@ -153,6 +161,7 @@
       </div>
 
       <div class="header-link dropdown" id="awards-dropdown">
+        <img class="filter-category-icon" src="icons/green/award.svg" alt="Awards Icon">
         Awards
         <div class="dropdown-content">
           <label><input type="checkbox"> Booker Prize</label>
@@ -175,6 +184,7 @@
       </div>
 
       <div class="header-link dropdown" id="language-dropdown">
+        <img class="filter-category-icon" src="icons/green/globe.svg" alt="Language Icon">
         Language
         <div class="dropdown-content">
           <label><input type="checkbox"> Afrikaans</label>
@@ -224,6 +234,7 @@
       </div>
 
       <div class="header-link dropdown" id="century-slider">
+        <img class="filter-category-icon" src="icons/green/calendar.svg" alt="Calendar Icon">
         Years
         <div class="dropdown-content">
           <div class="slider-labels">
@@ -239,6 +250,8 @@
 
         </div>
       </div>
+      <div id="filter-clear-button" class="glass"><img width="16px" src="icons/x.svg"
+          alt="Clear Filters"></div>
 
     </div>
 
@@ -274,12 +287,15 @@
 
       <div class="about-content">
         <p>
-          At Hammock, one of our core pillars is curating thoughtful literary recommendations to help readers discover
-          new
-          writer and books. This interactive map is our latest endeavour to make exploring the world of literature both
-          engaging and intuitive. By highlighting the birthplaces of nearly 800 fiction writers, we're offering our
-          readers a unique way of exploring the geographical origins of some of the most compelling literary voices from
-          the 20th and 21st centuries.
+          At Hammock, one of our core pillars is providing literary <a href="https://www.hammockmag.com/recommendations-lists/" target="_blank">recommendations</a> and curated lists to help readers
+          discover new books. This interactive map is our latest endeavor to make exploring the world of literature
+          engaging and intuitive.
+        </p>
+        <p>
+          With this tool, you can journey across the globe and uncover nearly 800 fiction authors from the 20th and 21st
+          centuries, offering a unique glimpse into the geographical roots and top books of some of the world&rsquo;s most
+          celebrated writers. Using a range of awards, panel suggestions and other criteria, we&rsquo;ve picked out who we think
+          are amongst the most essential writers of the past century and a half for you to explore.
         </p>
 
         <a href="https://www.hammockmag.com/about/methodology">
@@ -332,7 +348,8 @@
         <span class="light-gray text-small">Crafted by</span>
         <a href="https://www.publicknowledge.co">
           <button type="button" class="button-pk">
-            <img class="icon-circle-transparent rotate-on-hover on-hover-colorful" src="icons/pk.svg" width="20px" alt="info">
+            <img class="icon-circle-transparent rotate-on-hover on-hover-colorful" src="icons/pk.svg" width="20px"
+              alt="info">
             Public Knowledge Studio
             <img class="icon-circle-transparent on-hover-colorful" src="icons/arrow-up-right-red.svg" width="16px"
               alt="info">
@@ -377,7 +394,8 @@
     const showFilters = document.getElementById('show-filters');
     const filterContainer = document.getElementById('filter-container');
     const filterBackButton = document.getElementById('filter-back-button');
-    
+    const filterClearButton = document.getElementById('filter-clear-button');
+
     const searchBar = document.querySelector('#search-bar');
     const searchInput = document.getElementById('search-input');
     const searchClearButton = document.getElementById('search-clear');
@@ -1042,7 +1060,7 @@
 
         // Handle display logic for mobile when search clear button is clicked
         // todo
-          logo.style.display = 'flex';
+        logo.style.display = 'flex';
 
       });
 
@@ -1231,7 +1249,7 @@
 
       // When search bar is clicked, hide logo and filter on mobile
       searchBar.addEventListener('click', () => {
-          searchClearButton.style.display = 'block';
+        searchClearButton.style.display = 'block';
       });
 
       //todo
@@ -1250,6 +1268,36 @@
         searchBar.classList.remove('only-on-big-screens');
       });
 
+      filterClearButton.addEventListener('click', () => {
+        // Uncheck all checkbox filters
+        document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+          checkbox.checked = false;
+        });
+
+        document.querySelectorAll('.dropdown').forEach(dropdown => {
+          const checkedBoxes = dropdown.querySelectorAll('input[type="checkbox"]:checked').length;
+          if (checkedBoxes > 0) {
+            dropdown.setAttribute('data-count', checkedBoxes);
+            dropdown.classList.add('has-count');
+          } else {
+            dropdown.removeAttribute('data-count');
+            dropdown.classList.remove('has-count');
+          }
+        });
+
+        // Reset the year range slider to its initial state
+        yearMin.value = '1800';
+        yearMax.value = '2025';
+        yearValue.textContent = '1800—2025';
+        
+        // Trigger input event to update the track UI
+        yearMin.dispatchEvent(new Event('input'));
+        yearMax.dispatchEvent(new Event('input'));
+
+        applyFilters();
+        backToTheResults();
+      });
+
     });
 
 
@@ -1257,7 +1305,7 @@
     function debounce(func, wait) {
       let timeout;
       return function executedFunction(...args) {
-        const later = () => {
+        const later = () => { d
           clearTimeout(timeout);
           func(...args);
         };
@@ -1274,7 +1322,7 @@
       function updateTrack() {
         const minVal = parseInt(yearMin.value);
         const maxVal = parseInt(yearMax.value);
-        const minPercent = ((minVal - 1800) / (2025 - 1800)) * 100;
+        const minPercent = ((minVal - 1800) / (2025 - 1800)) * 100; 
         const maxPercent = ((maxVal - 1800) / (2025 - 1800)) * 100;
 
         track.style.setProperty('--start-percent', `${minPercent}%`);

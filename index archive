@@ -1,5 +1,0 @@
-    <div id="filter" class="header-controls mobile-only">
-      <button onclick="toggleFilters()" class="button-primary mobile-only">
-        <img width="16px" src="icons/filter.svg">
-      </button>
-    </div>
