@@ -1347,7 +1347,7 @@ button {
   text-align: center;
   line-height: 20px;
   margin-left: var(--pad-s);
-  margin-bottom: 1px;
+  margin-bottom: -1px;
   font-size: var(--font-size-xs);
   box-shadow: 0px 4px 4px var(--dropdown-shadow);
 }
