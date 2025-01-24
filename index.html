@@ -285,10 +285,12 @@
     </div>
 
     <div id="helpContainer" class="about-container about-container-scrollable displaynone header-fade-in-down-fast">
-      <h3>About this Map</h3>
-      <button type="button" class="button-tertiary" id="aboutCloseButton">
-        <img class="icon-circle-transparent" src="icons/x.svg" width="16px" alt="info">
+
+      <button type="button" id="helpCloseButton">
+        <img class="icon-circle-dark icon-circle-hover-mid-gray" src="icons/x.svg" width="20px" alt="info">
       </button>
+
+      <h3 class="block-start-margin-0">About this Map</h3>
 
       <div class="about-content">
         <p>
@@ -357,7 +359,7 @@
         <span class="light-gray text-small">Crafted by</span>
         <a href="https://www.publicknowledge.co">
           <button type="button" class="button-pk">
-            <img class="icon-circle-transparent rotate-on-hover on-hover-colorful" src="icons/pk.svg" width="20px"
+            <img class="icon-circle-transparent rotate-on-hover on-hover-colorful" src="icons/pk.svg" width="22px"
               alt="info">
             Public Knowledge Studio
             <img class="icon-circle-transparent on-hover-colorful" src="icons/arrow-up-right-red.svg" width="16px"
@@ -426,8 +428,11 @@
     const aboutButton = document.getElementById('aboutButton');
     const aboutContainer = document.getElementById('aboutContainer');
 
+
     const helpButton = document.getElementById('helpButton');
     const helpContainer = document.getElementById('helpContainer');
+    const helpCloseButton = document.getElementById('helpCloseButton');
+
 
     const tutorialBottom = document.getElementById('tutorial-bottom');
 
@@ -1093,15 +1098,20 @@
       helpButton.addEventListener('click', () => {
         const isHidden = helpContainer.classList.contains('displaynone');
         helpContainer.classList.toggle('displaynone');
+
+
+        if (isHidden) {
+          // Only add the document listener when opening the container
+          document.addEventListener('click', handleOutsideClick);
+        } else {
+          // Remove the listener when closing the container
+          document.removeEventListener('click', handleOutsideClick);
+        }
       });
 
-      if (isHidden) {
-        // Only add the document listener when opening the container
-        document.addEventListener('click', handleOutsideClick);
-      } else {
-        // Remove the listener when closing the container
-        document.removeEventListener('click', handleOutsideClick);
-      }
+      helpCloseButton.addEventListener('click', () => {
+        helpContainer.classList.add('displaynone');
+      });
 
     });
 
