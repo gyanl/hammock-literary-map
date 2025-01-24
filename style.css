@@ -342,6 +342,11 @@ hr {
   bottom: 60px;
 }
 
+.link-green {
+  color: var(--color-green-mid);
+  text-decoration: underline;
+}
+
 /* Basic default scrollbar styling */
 .scrollbar {
   scrollbar-width: thin;
@@ -1758,6 +1763,13 @@ button {
     flex-shrink: 0;
   }
 
+  .button-pk {
+    font-weight: var(--font-weight-bold);
+    font-size: 12px;
+    padding: 1px 8px 1px 2px;
+    gap: 3px;
+  }
+
   /* Dropdown mobile styles */
 
   .header-links {
@@ -2002,11 +2014,6 @@ button {
   .about-container-scrollable {
     box-shadow: 0 2px 16px var(--color-dark-gray);
     max-height: calc(100vh - 200px);
-  }
-
-  .about-content a {
-    color: var(--color-green-mid);
-    text-decoration: underline;
   }
 
   #showFilters.has-count::after {
