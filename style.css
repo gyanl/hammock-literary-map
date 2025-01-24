@@ -1889,6 +1889,12 @@ button {
     overflow-y: scroll;
   }
 
+  .sidebar-author-details {
+    height: 300px;
+    overflow-y: scroll;
+    padding-bottom: 100px;
+  }
+
   .mobile-only {
     display: block;
   }
