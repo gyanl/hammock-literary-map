@@ -1136,7 +1136,7 @@ button {
   border: 1px solid var(--color-dark-gray);
 }
 
-.about-pk{
+.about-pk {
   font-weight: var(--font-weight-regular);
   color: var(--color-text-primary);
   position: absolute;
@@ -1447,7 +1447,7 @@ button {
   line-height: 1.5;
 }
 
-.filter-category-icon{
+.filter-category-icon {
   display: none;
 }
 
@@ -1492,13 +1492,15 @@ button {
     margin: 0;
   }
 
-    /* Pills become one */
-  .header-link:nth-child(1), .header-link:nth-child(2) {
+  /* Pills become one */
+  .header-link:nth-child(1),
+  .header-link:nth-child(2) {
     border-radius: var(--radius-pill) 0 0 var(--radius-pill);
     padding-left: var(--pad-xl);
   }
 
-  .header-link:last-child, .header-link:nth-last-child(2) {
+  .header-link:last-child,
+  .header-link:nth-last-child(2) {
     border-radius: 0 var(--radius-pill) var(--radius-pill) 0;
     padding-right: var(--pad-xl);
   }
@@ -1785,12 +1787,14 @@ button {
     filter: none;
   }
 
-  .header-link:first-child, .header-link:nth-child(2) {
+  .header-link:first-child,
+  .header-link:nth-child(2) {
     border-radius: 0;
     padding-left: 6px;
   }
 
-  .header-link:last-child, .header-link:nth-last-child(2) {
+  .header-link:last-child,
+  .header-link:nth-last-child(2) {
     border-radius: 0;
     padding-right: 6px;
   }
@@ -1843,7 +1847,7 @@ button {
     z-index: -1;
   }
 
-  .filter-category-icon{
+  .filter-category-icon {
     display: inline;
     width: 20px;
     height: 20px;
@@ -1875,9 +1879,13 @@ button {
     margin-top: 80px;
     border-radius: 12px 12px 0 0;
     background-color: var(--color-foreground);
-
     scrollbar-width: thin;
     scrollbar-color: var(--color-primary) transparent;
+    overflow-y: hidden;
+  }
+
+  .sidebar-body {
+    height: 300px;
     overflow-y: scroll;
   }
 
