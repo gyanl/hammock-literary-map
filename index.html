@@ -61,14 +61,17 @@
 
     <div class="about-content">
       <p>
-        At Hammock, one of our core pillars is providing literary <a href="https://www.hammockmag.com/recommendations-lists/" target="_blank">recommendations</a> and curated lists to help readers
+        At Hammock, one of our core pillars is providing literary <a
+          href="https://www.hammockmag.com/recommendations-lists/" target="_blank">recommendations</a> and curated lists
+        to help readers
         discover new books. This interactive map is our latest endeavor to make exploring the world of literature
         engaging and intuitive.
       </p>
       <p>
         With this tool, you can journey across the globe and uncover nearly 800 fiction authors from the 20th and 21st
         centuries, offering a unique glimpse into the geographical roots and top books of some of the world&rsquo;s most
-        celebrated writers. Using a range of awards, panel suggestions and other criteria, we&rsquo;ve picked out who we think
+        celebrated writers. Using a range of awards, panel suggestions and other criteria, we&rsquo;ve picked out who we
+        think
         are amongst the most essential writers of the past century and a half for you to explore.
       </p>
 
@@ -250,8 +253,7 @@
 
         </div>
       </div>
-      <div id="filter-clear-button" class="glass"><img width="16px" src="icons/x.svg"
-          alt="Clear Filters"></div>
+      <div id="filter-clear-button" class="glass"><img width="16px" src="icons/x.svg" alt="Clear Filters"></div>
 
     </div>
 
@@ -287,14 +289,18 @@
 
       <div class="about-content">
         <p>
-          At Hammock, one of our core pillars is providing literary <a href="https://www.hammockmag.com/recommendations-lists/" target="_blank">recommendations</a> and curated lists to help readers
+          At Hammock, one of our core pillars is providing literary <a
+            href="https://www.hammockmag.com/recommendations-lists/" target="_blank">recommendations</a> and curated
+          lists to help readers
           discover new books. This interactive map is our latest endeavor to make exploring the world of literature
           engaging and intuitive.
         </p>
         <p>
           With this tool, you can journey across the globe and uncover nearly 800 fiction authors from the 20th and 21st
-          centuries, offering a unique glimpse into the geographical roots and top books of some of the world&rsquo;s most
-          celebrated writers. Using a range of awards, panel suggestions and other criteria, we&rsquo;ve picked out who we think
+          centuries, offering a unique glimpse into the geographical roots and top books of some of the world&rsquo;s
+          most
+          celebrated writers. Using a range of awards, panel suggestions and other criteria, we&rsquo;ve picked out who
+          we think
           are amongst the most essential writers of the past century and a half for you to explore.
         </p>
 
@@ -370,7 +376,11 @@
         Result
       </span>
       <button onclick="toggleSidebar()" class="button-primary">
-        <img id="chevron" width="16px" src="icons/chevron-up.svg"></button>
+        <picture>
+          <source media="(max-width: 500px)" srcset="icons/chevron-down.svg">
+          <img id="chevron" width="20px" src="icons/chevron-up.svg">
+        </picture>
+      </button>
     </div>
 
     <div id="sidebar-search-results" class="sidebar-body"></div>
@@ -1289,7 +1299,7 @@
         yearMin.value = '1800';
         yearMax.value = '2025';
         yearValue.textContent = '1800—2025';
-        
+
         // Trigger input event to update the track UI
         yearMin.dispatchEvent(new Event('input'));
         yearMax.dispatchEvent(new Event('input'));
@@ -1322,7 +1332,7 @@
       function updateTrack() {
         const minVal = parseInt(yearMin.value);
         const maxVal = parseInt(yearMax.value);
-        const minPercent = ((minVal - 1800) / (2025 - 1800)) * 100; 
+        const minPercent = ((minVal - 1800) / (2025 - 1800)) * 100;
         const maxPercent = ((maxVal - 1800) / (2025 - 1800)) * 100;
 
         track.style.setProperty('--start-percent', `${minPercent}%`);
