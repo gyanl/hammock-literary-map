@@ -1215,7 +1215,7 @@ button {
   -ms-transform: translateY(-12px);
   -o-transform: translateY(-12px);
   transform: translateY(-12px);
-  outline: 1200px solid rgba(20, 20, 20, 0.96);
+  outline: 1600px solid rgba(20, 20, 20, 0.96);
   transition: 1.8s;
 }
 
@@ -2055,6 +2055,11 @@ button {
 
   .search-clear {
     padding: 1px;
+  }
+
+  .cool-effect:hover {
+    /* Remove outline on hover */
+    outline: 1px solid transparent;
   }
 
 }
