@@ -50,9 +50,14 @@
 <body>
 
   <div id="aboutPk" class="about-pk displaynone">
-    We're <span class="red">Public Knowledge Studio</span>, a design and development studio based out of <span
-      class="red">New Delhi, India</span>. We specialize in imaginative and <span class="red">hand-crafted digital
-      experiences.</span>
+    <p>
+      We're <span class="white">Public Knowledge Studio</span>, a design and development studio based out of <span
+        class="white">New Delhi, India</span>.
+    </p>
+
+    <p>We specialize in imaginative and <span class="white">hand-crafted digital
+        experiences.</span>
+    </p>
   </div>
 
   <button type="button" class="button-tertiary landing header-fade-in-up" id="aboutButton">
@@ -775,8 +780,9 @@
         setSidebarTitle("No results found");
         searchresults.innerHTML = `
           <div class="sidebar-empty">
-            <h3>We couldn't find any matching books or authors in the area you are looking at. Try moving around the globe or changing your filters.</h3>
-            <p>If you think they should be there, fill out this form!</p>
+            <h3>No matching results in this area.</h3>
+            <p>Try zooming out for a wider view, exploring other regions, or adjusting the filters.</p>
+            <p>If you believe an author from this area should be in our database, fill out this <a class="link-green-light" href="https://forms.gle/234567890" target="_blank">form</a> to let us know!</p>
           </div>
         `;
       }

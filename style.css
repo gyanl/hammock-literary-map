@@ -349,6 +349,11 @@ hr {
   text-decoration: underline;
 }
 
+.link-green-light {
+  color: var(--color-green-light);
+  text-decoration: underline;
+}
+
 /* Basic default scrollbar styling */
 .scrollbar {
   scrollbar-width: thin;
@@ -493,8 +498,12 @@ header {
   flex-direction: column;
   transition: 0.2s;
   line-height: 1.3em;
+  font-size: 14px;
 }
 
+.sidebar-empty p {
+  opacity: .8;
+}
 .sidebar-author {
   animation: fadeInUp 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
   padding: 12px 20px;
@@ -1156,12 +1165,12 @@ button {
 
 .about-pk {
   font-weight: var(--font-weight-regular);
-  color: var(--color-text-primary);
+  color: var(--color-light-gray);
   position: absolute;
-  top: 48px;
+  top: 20px;
   left: 48px;
-  right: 40vw;
-  font-size: 56px;
+  right: 50vw;
+  font-size: 32px;
   line-height: 1.3em;
   z-index: 1000;
   animation-fill-mode: forwards;
@@ -1196,7 +1205,7 @@ button {
 
 .cool-effect {
   border: 1px solid var(--color-pale-gray);
-  outline: 0px solid rgba(255, 0, 0, 0.15);
+  outline: 0px solid rgba(255, 0, 0, 0.2);
 }
 
 .cool-effect:hover {
@@ -1206,7 +1215,7 @@ button {
   -ms-transform: translateY(-12px);
   -o-transform: translateY(-12px);
   transform: translateY(-12px);
-  outline: 2000px solid rgba(20, 20, 20, 0.96);
+  outline: 1200px solid rgba(20, 20, 20, 0.96);
   transition: 1.8s;
 }
 
@@ -1316,7 +1325,7 @@ button {
   box-shadow: 0 4px 12px var(--dropdown-shadow);
   z-index: 1000;
   max-height: 50vh;
-  min-width: 225px;
+  min-width: 240px;
   max-width: 600px;
   overflow-y: scroll;
 }
@@ -1376,10 +1385,11 @@ button {
 
 .range-slider {
   position: relative;
-  width: 225px;
+  width: auto;
   height: 35px;
   margin-bottom: 12px;
-  margin-right: 3px;
+  margin-right: 12px;
+  margin-left: 8px;
 }
 
 .range-slider input[type="range"] {
@@ -1463,6 +1473,12 @@ button {
   color: var(--color-text-primary);
   margin: 8px 12px 0px 12px;
   line-height: 1.5;
+}
+
+#yearValue {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-green-light);
 }
 
 .filter-category-icon {
