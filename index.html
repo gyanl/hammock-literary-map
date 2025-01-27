@@ -26,9 +26,15 @@
 
   <!-- Open Graph Tags -->
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://map.hammockmag.com/img/hammock-og.jpg" />
+  <meta name="twitter:title" content="Literary Map by Hammock" />
+  <meta name="twitter:description" content="Discover great fiction writers from around the globe." />
+  
   <meta property="og:title" content="Literary Map by Hammock">
   <meta property="og:description" content="Discover great fiction writers from around the globe.">
   <meta property="og:image" content="https://map.hammockmag.com/img/hammock-og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://map.hammockmag.com/">
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Literary Map by Hammock" />
@@ -396,7 +402,13 @@
     <div id="sidebar-search-results" class="sidebar-body"></div>
 
     <div id="sidebar-author-title" class="sidebar-title fade-in-right glass" onclick="backToTheResults()">
-      <img class="icon-left" src="icons/chevron-left.svg" alt="back"> Back
+      <div class="flex-left">
+        <img class="icon-left" src="icons/chevron-left.svg" alt="back">
+        Back
+      </div>
+      <div class="icon-share" onclick="event.stopPropagation(); shareAuthor()">
+        <img width="20px" class="icon-right" src="icons/green/share-2.svg" alt="share">
+      </div>
     </div>
 
     <div id="sidebar-author-details" class="sidebar-author-details"></div>
@@ -1302,6 +1314,9 @@
         document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
           checkbox.checked = false;
         });
+      
+        // Alert user that filters have been cleared
+        showToast('All filters cleared.');
 
         document.querySelectorAll('.dropdown').forEach(dropdown => {
           const checkedBoxes = dropdown.querySelectorAll('input[type="checkbox"]:checked').length;
@@ -1443,6 +1458,110 @@
     // Also trigger it on load
     window.dispatchEvent(new Event('resize'));
 
+
+    function shareAuthor() {
+      const authorName = document.querySelector('.sidebar-author-details h2').textContent;
+      const shareText = `I just discovered ${authorName} on the Literary Map by Hammock Magazine. Find incredible authors from around the world at`;
+      const shareUrl = 'https://map.hammockmagazine.com/';
+
+      // 1. Web Share API (modern browsers, mobile-friendly)
+      if (navigator.share) {
+        navigator.share({
+          title: 'Literary Map by Hammock',
+          text: shareText,
+          url: shareUrl
+        }).catch(console.error);
+        return;
+      }
+
+      // 2. Platform-specific share URLs (fallback)
+      const sharePlatforms = {
+        twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
+        linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
+        whatsapp: `https://wa.me/?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`
+      };
+
+      // Create and show a sharing menu
+      const menu = document.createElement('div');
+      menu.className = 'share-menu glass';
+      menu.innerHTML = `
+        <div class="share-menu-title">Share this author</div>
+        <button onclick="window.open('${sharePlatforms.twitter}', '_blank')" class="share-button">
+          <img src="icons/twitter.svg" alt="Twitter">Twitter
+        </button>
+        <button onclick="window.open('${sharePlatforms.facebook}', '_blank')" class="share-button">
+          <img src="icons/facebook.svg" alt="Facebook">Facebook
+        </button>
+        <button onclick="window.open('${sharePlatforms.linkedin}', '_blank')" class="share-button">
+          <img src="icons/linkedin.svg" alt="LinkedIn">LinkedIn
+        </button>
+        <button onclick="window.open('${sharePlatforms.whatsapp}', '_blank')" class="share-button">
+          <img src="icons/whatsapp.svg" alt="WhatsApp">WhatsApp
+        </button>
+        <button onclick="copyToClipboard('${shareText} ${shareUrl}')" class="share-button">
+          <img src="icons/copy.svg" alt="Copy">Copy Link
+        </button>
+      `;
+
+      // Position and show the menu
+      document.body.appendChild(menu);
+
+      // Close menu when clicking outside
+      const closeMenu = (e) => {
+        if (!menu.contains(e.target) && !e.target.closest('.icon-share')) {
+          menu.remove();
+          document.removeEventListener('click', closeMenu);
+        }
+      };
+      
+      // Add small delay before adding click listener to prevent immediate closing
+      setTimeout(() => {
+        document.addEventListener('click', closeMenu);
+      }, 0);
+    }
+
+    function copyToClipboard(text) {
+      // Try using the modern Clipboard API first
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => showToast('Link copied to clipboard'));
+        return;
+      }
+
+      // Fallback: Create temporary textarea element
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      textArea.style.top = '-999999px';
+      document.body.appendChild(textArea);
+      
+      // Select and copy
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        showToast('Link copied to clipboard');
+      } catch (err) {
+        console.error('Failed to copy text: ', err);
+        showToast('Failed to copy link');
+      }
+      
+      // Cleanup
+      textArea.remove();
+    }
+
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.className = 'toast-notification glass';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.classList.add('fade-out');
+        setTimeout(() => toast.remove(), 300);
+      }, 2000);
+    }
   </script>
 
 </body>
