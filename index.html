@@ -787,9 +787,9 @@
 
       // Update sidebar title to show total count
       if (totalCount > 0) {
-        setSidebarTitle(`${totalCount > displayLimit ? `${displayLimit}+ results` : `${totalCount} results`}`);
+        setSidebarTitle(`${totalCount > displayLimit ? `${displayLimit}+ authors` : `${totalCount} authors`}`);
       } else {
-        setSidebarTitle("No results found");
+        setSidebarTitle("No authors found");
         searchresults.innerHTML = `
           <div class="sidebar-empty">
             <h3>No matching results in this area.</h3>
@@ -1021,7 +1021,7 @@
             return console.error('Error getting leaves of cluster: ', err);
           }
           clearSidebar();
-          setSidebarTitle(leaves.length + " results");
+          setSidebarTitle(leaves.length + " authors");
           leaves.forEach(function (leaf) {
             addAuthorResult(
               leaf.properties,
